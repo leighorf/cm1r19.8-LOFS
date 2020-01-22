@@ -1168,12 +1168,12 @@
         call stopcm1
       ENDIF
       !-----
-      IF( bbc.lt.1 .or. bbc.gt.3 )THEN
+      IF( bbc.lt.1 .or. bbc.gt.3 .and. bbc.ne.11)THEN
         if(myid.eq.0)then
         print *
         print *,'  bbc = ',bbc
         print *
-        print *,'  bbc must be 1, 2, or 3'
+        print *,'  bbc must be 1, 2, 3, or 11'
         print *
         print *,'   stopping model .... '
         print *
@@ -1184,12 +1184,12 @@
         call stopcm1
       ENDIF
       !-----
-      IF( tbc.lt.1 .or. tbc.gt.2 )THEN
+      IF( tbc.lt.1 .or. tbc.gt.2 .and. tbc.ne.11 )THEN
         if(myid.eq.0)then
         print *
         print *,'  tbc = ',tbc
         print *
-        print *,'  tbc must be 1 or 2'
+        print *,'  tbc must be 1, 2 or 11'
         print *
         print *,'   stopping model .... '
         print *
