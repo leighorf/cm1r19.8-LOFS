@@ -1,0 +1,718 @@
+
+ CM1 Numerical Model, release 19.8  (cm1r19.8)
+ 31 March 2019
+
+ Summary of changes.
+
+-------------------------------------------------------------
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+-------------------------------------------------------------
+1.  New options/features.
+
+
+ - Added the RRTMG radiation scheme. 
+   (Set radopt = 2 to use this scheme.) 
+
+
+ - Added code to calculate and write out turbulence diagnostics for 
+   large-eddy simulations (LES) and direct numerical simulations (DNS) 
+   during CM1 integration.  Variables include domain-averaged vertical 
+   profiles, variance profiles, resolved/parameterized vertical flux 
+   profiles, etc.  See namelist variable "doturbdiag" and see output 
+   file contents for more information.
+
+
+ - Added code to calculate and write out azimuthally averaged fields 
+   during CM1 integration.  This option is useful for simulations of 
+   rotating flow (eg, tropical cyclones, tornadoes).  See namelist 
+   variable "doazimavg" and see output file contents for more information.
+
+
+ - Added the option for CM1 users to specify the location of grid points
+   (including vertical levels) in an external ascii file.  In this case, 
+   users do not need to modify CM1 source code (eg, param.F) to specify 
+   the distribution of vertical levels, or the location of horizontally 
+   stretched grid points.  Also, users do not need to use the pre-defined 
+   stretching functions within CM1.  See options stretch_x=3, stretch_y=3,
+   stretch_z=3 in README.namelist for more information.  
+
+
+ - Added new advection options.  In addition to the existing schemes 
+   from previous versions of CM1 (5th-oder, 6th-order, and WENO-5)
+   users can now use:  2nd-order, 3rd-order, 4th-order, 7th-order, 
+   8th-order, 9th-order, 10th-order, WENO-3, WENO-7, WENO-9.  
+   See README.namelist for more information.
+
+
+ - Added a new variable to the CM1 namelist called "cm1setup" which makes 
+   it easier to configure and use CM1.  The focus is on how turbulence 
+   is handled.  Valid options are:  
+
+    0 = no subgrid turbulence model & no explicit diffusion
+        (essentially integrate the Euler equations)
+
+    1 = large-eddy simulation (LES)
+        (integrate the filtered Navier-Stokes equations, aka, LES equations)
+
+    2 = mesoscale modeling with planetary boundary layer (PBL) parameterization
+        (essentially uses Reynolds-averaged Navier-Stokes, RANS, equations)
+
+    3 = direct numerical simulation (DNS)
+        (integrate Navier-Stokes equations with constant viscosity/diffusivity)
+
+
+ - Added all pre-configured namelists and input files in a new subdirectory 
+   within the CM1 distribution.  See the "run/config_files" subdirectory for 
+   more information. 
+
+
+ - Direct Numerical Simulations (DNS) with CM1 can now make use of terrain. 
+
+
+ - Added several well-documented and common "test cases" from the literature.
+   (See variable "testcase" in README.namelist)  These cases use simplified 
+   physical parameterizations and/or specified tendency terms and/or special
+   settings, which are coded into CM1 and used only when appropriate.  Options
+   for "testcase" are:
+
+    0  =  Default.  (no special physics, forcings, or configutation)
+          - Most users will use testcase=0.
+
+    1  =  Convective Boundary Layer (CBL) using Large Eddy Simulation (LES)
+          - Based on Sullivan and Patton (2011, JAS, pg 2395)
+          - See namelist.input in directory run/config_files/les_ConvBoundLayer
+
+    2  =  Sheared Boundary Layer (SBL) using Large Eddy Simulation (LES)
+          - (i.e., neutral boundary layer)
+          - Based on Moeng and Sullivan (1994, JAS, pg 999)
+          - See namelist.input in directory run/config_files/les_ShearBoundLayer
+
+    3  =  Shallow cumulus clouds using Large Eddy Simulation (LES)
+          - Based on Siebesma et al (2003, JAS, pg 1201)
+          - See namelist.input in directory run/config_files/les_ShallowCu
+
+    4  =  Nonprecipitating stratocumulus clouds using Large Eddy Simulation (LES)
+          - Based on Stevens et al (2005, MWR, pg 1443)
+          - See namelist.input in directory run/config_files/les_StratoCuNoPrecip
+
+    5  =  Drizzling stratocumulus clouds using Large Eddy Simulation (LES)
+          - Based on Ackerman et al (2009, MWR, pg 1083)
+          - See namelist.input in directory run/config_files/les_StratoCuDrizzle
+
+    6  =  Hurricane Boundary Layer (HBL) using Large Eddy Simulation (LES)
+          - Based on Bryan et al (2017, BLM, pg 475)
+          - See namelist.input in directory run/config_files/les_HurrBoundLayer
+
+
+ - Added pre-configured settings and namelist.input for a Direct Numerical 
+   Simulation (DNS) case based on Rayleigh-Benard convection, following 
+   Moneg and Rotunno (1990, JAS).  See files in directory 
+   run/config_files/dns_RayleighBenard for more information. 
+
+
+ - Added the option to use a vertically explicit formulation for turbulence
+   tendencies in the CM1 subgrid turbulence/diffusion scheme.  (Does not apply 
+   to ipbl=1, i.e., the YSU PBL scheme.)  The default option is still to use 
+   vertically implicit diffusion (doimpl=1), which is absolutely stable, but
+   now users can use doimpl=0 for simple explicit diffusion calculations.
+
+
+ - Renamed the "perturbation Coriolis" scheme from "pertcor" to "lspgrad" to 
+   acknowledge that this method actually applies a large-scale pressure 
+   gradient tednency to the horizontal velocity equations.  Also added two 
+   new options:  lspgrad=2, which allows the user to specify geostrophic wind
+   profiles that differ from the base-state wind profiles;  and lspgrad=3, 
+   which applies a gradient-wind balance formulation to determine large-scale 
+   pressure gradient (following Bryan et al, 2017, BLM).  See README.namelist 
+   file for more information.   
+
+
+ - Added several options to the CM1 surface layer scheme (sfclay=1) to 
+   more easily accommodate idealized simulations:
+
+     set_flx - impose constant surface heat fluxes
+     cnst_shflx  - value for surface sensible heat flux for set_flx=1
+     cnst_lhflx - value for surface latent heat flux for set_flx=1
+
+     set_znt - impose constant surface roughness length
+     cnst_znt - value of surface roughness length for set_znt=1
+
+     set_ust - impose constant surface friction velocity
+     cnst_ust - value of surface friction velocity for set_ust=1
+
+
+ - Added the ability to run large eddy simulations (LES) without an explicit
+   subgrid turbulence model (often called Implicit LES or ILES) without 
+   requiring users to modify CM1 code.  Simply set cm1setup=1 with sgsmodel=0 
+   to run CM1 in this configuration. 
+
+
+ - New output variables:
+
+       2D:  - Convective Available Potential Energy (CAPE)
+              (see output_cape in namelist.input)
+
+            - Convective Inhibition (CIN)
+              (see output_cin in namelist.input)
+
+            - Lifted Condensation Level (LCL)
+              (see output_lcl in namelist.input)
+
+            - Level of Free Convection (LFC)
+              (see output_lfc in namelist.input)
+
+            - Precipitable water
+              (see output_pwat in namelist.input)
+
+            - Liquid water path and cloud water path
+              (see output_lwp in namelist.input)
+
+
+       3D:  - Budget variables:  includes tendencies due to advection, turbulence,
+              microphysics, radiation, pbl scheme, buoyancy, pressure-gradient 
+              acceleration, etc, as calculated within CM1.  See output files for 
+              more information.
+
+              (see output_thbudget, output_qvbudget, output_ubudget,
+               output_vbudget, and output_wbudget in namelist.input)
+
+
+       stats:  - Max/Min vertical velocity at five different levels: 
+                 0.5, 1, 2.5, 5, 10 km AGL 
+                   (see output_wlevs in namelist.input)
+
+
+   -------------------
+    cm1r19.2:
+
+ - For simulations with Coriolis acceleration (icor=1), added the ability 
+   to use a beta plane.  The f plane approximation is still used by 
+   default.  See the variable "betaplane" in the param.F file. 
+
+ - Added the ability to turn off the Rayleigh damper near lateral boundaries
+   when hrdamp=1.  See variables hrdamp_west, hrdamp_east, hrdamp_south, and 
+   hrdamp_north in the param.F file. 
+
+ - Added subgrid-scale tke budget terms and a preliminary version of 
+   resolved-scale tke budget terms to the diagnostic turbulence code
+   (doturbdiag = .true.).
+
+
+   -------------------
+    cm1r19.3:
+
+ - Added the updraft nudging initialization scheme of Naylor and Gilmore 
+   (2012, MWR, pg 3699).  See iinit=12 in init3d.F for more information.
+
+ - The anelastic and incompressible solvers (psolver=4,5) can now be used 
+   with open lateral boundary conditions.  These codes have also been
+   optimized for efficiency, and the pressure variable "phi" is now included 
+   in output files. 
+
+
+   -------------------
+    cm1r19.4:
+
+ - Added the option to either apply the Rayleigh damper to the perturbation 
+   from the base state (irdamp,hrdamp = 1, which was the only option in 
+   CM1 previously) or to apply Rayleigh damper to the perturbation from the 
+   domain-average profiles (irdamp,hrdamp = 2).  The new option is useful 
+   for very long simulations (roughly, >10 days). 
+
+ - Added the RICO precipitating cumulus test case as testcase=7.  See 
+   README file in the run/config_files/les_ShallowCuPrecip subdirectory
+   and/or VanZanten et al (2011, JAMES) for more information. 
+
+ - Added a radiative-convective equilibrium (RCE) test case as testcase=8.
+   See README file in the run/config_files/cpm_RadConvEquil subdirectory
+   and/or Bretherton et al (2005, JAS) for more information. 
+
+ - Added a single-column version of the hurricane boundary layer test case
+   (testcase=6).  See README file in the run/config_files/scm_HurrBoundLayer 
+   subdirectory for more information. 
+
+ - When writing budgets variables (output_thbudget, output_ubudget, etc)
+   and an odd-ordered advection scheme is used (3rd, 5th, 7th, 9th-order 
+   advection) or a WENO advection scheme is used, then the advection 
+   tendencies are separated into a non-diffusive component and the component 
+   attributable to implicit diffusion.  
+   (Note: in some previous versions of CM1, implicit diffusion tendencies 
+    were previously written when output_impdiften=1.  These output fields 
+    have now been restored as part of the "budget" output variables introduced
+    in cm1r19.) 
+
+ - Explicit diffusion tendencies are now added to the budget variables, 
+   including tendencies from the sixth-order horizontal diffusion scheme 
+   (idiff >=1 with difforder=6). 
+
+ - Added the option to write pressure decomposition variables to output files.  
+   Three diagnostic variables are determined: buoyancy pressure perturbation, 
+   non-linear dynamic pressure perturbation, and linear dynamic pressure 
+   perturbation (based on the base-state wind profiles). 
+   Note: this code does not work with distributed-memory parallelization (MPI)
+   yet.  
+   See output_pdcomp in the namelist and README.namelist for more info.
+
+ - Added the ability to more easily write any output field to a CM1 output 
+   file.  Specifically, the arbitrary arrays "out3d" and "out2d" have been 
+   added to CM1.  These arrays are allocated at the beginning of a CM1 
+   simulation, and have arbitrary sizes based on the "nout3d" and "nout2d" 
+   variables which can be set near the top of the cm1.F file.  As long as 
+   nout3d and/or nout2d are >= 1, then the contents of these arrays will be 
+   added to CM1 output files, and named "out1" and "out2" and "out3" etc. 
+   The only thing the users needs to do is:  1) set values for nout3d and 
+   nout3d in cm1.F;  2) make sure the out(i,j,k,1) and out(i,j,k,2) etc 
+   arrays are filled with the information/variable/diagnostic that the 
+   use wants to output.  See also the brief description near the top of 
+   the cm1.F file.  
+
+ - Added additional variables to CM1 output files:
+
+      - arbitrary 3d and 2d output arrays (see item above)
+      - vgrad (gradient wind) when the axisymmetric model is used (axisymm=1)
+      - wspd, the wind speed in the surface layer (including gust) used to 
+        calculate surface fluxes for some surface-layer schemes
+      - pressure decomposition variables (see "pressure decomposition" item
+        above;  user must set output_pdcomp in the namelist;  (Note: does not
+        work with distributed memory MPI simulations, yet)
+
+ - Added additional variables to the azimuthal averaging code:
+
+      - satfrac (fraction of saturated gridpoints)
+      - vgrad (gradient wind)
+      - buoyancy (wrt base state)
+      - pressure decomposition fields (eg, buoyancy and dynamic prs perts)
+      - vertical accel due to pressure decomposition fields
+
+ - Added many, many new variables to the turbdiag (turbulence diagnostics)
+   output files.  See cm1out_turbdiag* files for more information. 
+
+ - Added max/min PBL depth as a "stats" variable.
+
+
+   -------------------
+    cm1r19.5:
+
+ - Added even more variables to the turbdiag (turbulence diagnostics)
+   output files.  See cm1out_turbdiag* files for more information.
+
+
+   -------------------
+    cm1r19.6:
+
+ - Added isnd=17 option, which is the same as isnd=7 (external file) except 
+   the wind profiles are neglected, and the iwnd option can be used to specify
+   base-state/initial wind profile.  See README.namelist for more information.
+
+ - Added several options to the tropical cyclone initialization scheme 
+   (iinit=7), including the ability to locate the vortex anywhere in the 
+   domain, and the option to use a modified Rankine analytic vortex.  See the
+   iinit=7 section of init3d.F for more information.
+
+ - Added the ability to use Thompson microphysics scheme with eqtset=2 (the
+   energy-conserving equations that account for the heat capacity of 
+   hydrometeors).
+
+ - When using the YSU PBL scheme, all three eddy diffusivities (for heat, 
+   moisture, and momentum) are now included in output files. 
+
+
+   -------------------
+    cm1r19.7:
+
+ - (nothing new)
+
+
+   -------------------
+    cm1r19.8:
+
+ - Added new stats output variables:
+
+      - maximum surface precipitation rate
+      - level of maximum/minimum vertical velocity
+      - level of maximum/minimum horizontal wind speed
+
+ - Added new turbdiag output variables:
+
+      - maximum and minimum vertical velocity
+      - maximum and minimum horizontal wind speed
+      - maximum and minimum vertical vorticity
+      - total upward and downward mass flux profiles
+      - domain-average profiles of passive tracers and fluxes when iptra=1
+
+ - Added output variables:
+
+      - surface roughness length for temperature and moisture when
+        sfcmodel = 2,3. 
+
+ - Added ability to nudge inflow velocity profiles towards base-state 
+   profiles.  This option can keep inflow profiles nearly constant 
+   throughout simulations.  See the variables "nudgeobc" and "alphobc"  
+   in README.namelist for more information.
+
+ - Added stretch_z = 4 option, which allows users to specify the model's 
+   full levels (aka, w levels) via an external file, input_grid_z.  See
+   the variable "stretch_z" in README.namelist for more information. 
+
+
+-------------------------------------------------------------
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+-------------------------------------------------------------
+2.  Changes, fixes, modifications, etc.
+
+ - The CM1 solver was simplified, slightly, to increase performance. 
+   A roughly 10% decrease in computational cost may be seen on some 
+   platforms and with some compilers.  Largest improvement (for cm1r19
+   relative to cm1r18) seems to come when using the GNU compiler 
+   (gfortran).
+   (solve.F, sound.F, sounde.F)
+
+ - The calculation of horizontal pressure gradient terms with terrain-
+   following coordinates (terrain_flag = .true.) has been substantially 
+   improved.  
+   (many files)
+
+ - Some calls to subroutines that are not directly related to integrating 
+   CM1 (eg, statpack, writeout) were moved out of solve.F;  the cm1.F 
+   file was re-organized to accommodate this change, and to simpify I/O 
+   routines and diagnostic code.  Long-time users of CM1 will need to 
+   look in cm1.F instead of solve.F to find certain code. 
+   (many files)
+
+ - The cm1 "include" directory was eliminated.  Instead, more Fortran 
+   modules are used to specify variables and constants.  See, especially, 
+   the new files input.F and constants.F in the "src" directory.  
+   (many files)
+
+ - Made many changes to the I/O routines to make it easier to write out 
+   new variables and diagnostics.  See, especially, the new *_output, 
+   *_stat, and *_prcl arrays in cm1.F, writeout.F, writeout_nc.F, 
+   statpack.F, and parcel.F.  
+   (many files)
+
+ - The cm1 variable "nsound" has been removed from the namelist.  Users no 
+   longer need to specify "nsound" (the number of "small" time steps per 
+   "big" time step), which is now calculated diagnostically during CM1
+   integrations.  
+   (many files)
+
+ - To make the parcel code run much faster, the array structure of certain 
+   variables (eg, pdata) was re-ordered.  The code also uses different 
+   MPI calls for distributed-memory parallelization.
+   (many files, including parcel.F)
+
+ - Made some minor modifications / bug fixes in the Morrison microphysics 
+   code.  
+   (morrison.F)
+
+ - The Thompson microphysics code has been updated.  It is now the same 
+   version that is in WRF 3.9.  
+   (thompson.F, solve.F)
+
+ - The YSU PBL scheme has been updated. 
+   (ysu.F)
+
+ - A potentially major bug when using the YSU PBL scheme with the 
+   axisymmetric version of CM1 (axisymm=1) has been flushed out and fixed. 
+   The turbulent tendency to tangential velocity was underestimated 
+   previously. 
+   (turb.F)
+
+ - The CM1 variable "eqtset" (for using traditional or Bryan-Fritsch moist 
+   equation sets) has been fully incorporated into the calculations of 
+   radiation tendencies.  Previously, only the eqtset=2 option was 
+   technically valid for CM1 simulations with radiation. 
+   (many files)
+
+ - Fixed a minor bug in the calculation of potential vorticity (PV). 
+   The bug only affected simulations without terrain, and did not affect 
+   model integrations (i.e., it was only a problem for output files). 
+   Thanks to Xiaoming Shi (Univ Cal-Berkeley) for finding this bug. 
+   (misclibs.F)
+
+ - Fixed some problems with the standard text output at the beginning of 
+   simulations.  (Does not affect simulations;  merely affects some text 
+   diagnostics.)  Thanks to Teddie Keller of NCAR/RAL for finding these 
+   bugs.  
+   (param.F, base.F)
+
+ - Updated the CM1 Makefile.  Default settings are appropriate for NCAR's 
+   new supercomputer, cheyenne. 
+   (Makefile) 
+
+
+   -------------------
+    cm1r19.2:
+
+ - Updated the NSSL microphysics code.  See documentation near the top of 
+   module_mp_nssl_2mom.F for more information.  Thanks to Ted Mansell of 
+   NOAA/NSSL. 
+   (module_mp_nssl_2mom.F)
+
+ - Fixed a bug with the goddard microphysics module that was causing certain 
+   compilers to crash.  (Does not change results.)  Thanks to Dan Stern of NRL.
+   (goddard.F)
+
+ - Fixed a bug with the netcdf-format stats output routine, which was 
+   crashing for long simulations.  (Does not change results.)  Thanks to Dan 
+   Kirshbaum of McGill University. 
+   (writeout_nc.F)
+
+ - Fixed a bug with the RRTMG shortwave radiation code that was causing  
+   some long simulations to crash.  Thanks to Stipo Sentic of New Mexico Tech.
+   (module_ra_rrtmg_sw.F)
+
+ - Tweaked the Deardroff/Lilly TKE subgrid model for LES (sgsmodel=1) to 
+   better handle the subgrid length scale in stable conditions.  Thanks to 
+   Xiaoming Shi of the University of California Berkeley. 
+   (turb.F) 
+
+ - Fixed a bug with the diagnostic calculation of horizontal pressure gradient
+   (output_ubudget = 1 and/or output_vbudget = 1) when using terrain.  Does 
+   not affect simulations (only affects diagnostic budget output). 
+   (solve.F)
+
+ - Fixed some minor bugs with I/O when the output frequency is not exactly 
+   divisible by the time step.  No change on results;  merely affects the 
+   times when output is written. 
+   (cm1.F)
+
+
+   -------------------
+    cm1r19.3:
+
+ - Updated the Thompson microphysics scheme (ptype=3).  The version is now
+   the same as that in WRF3.9.1.
+   (thompson.F)
+
+ - Updated the revised surface layer scheme (sfcmodel=3).  The version is now
+   the same as that in WRF3.9.1.
+   (sfclayrev.F)
+
+ - Fixed a few minor bugs with the compressible-Boussinesq solver (psolver=6)
+   and added the pressure variable "phi" to output files.
+   (soundcb.F, writeout.F, restart.F)
+
+
+   -------------------
+    cm1r19.4:
+
+ - Added more documentation for the input_sounding option (isnd=7).  See the 
+   relevant section of code in base.F or the webpage 
+
+       http://www2.mmm.ucar.edu/people/bryan/cm1/soundings/ 
+
+   for more information.  
+   (base.F)
+
+ - Fixed a bug with the compressible-Boussinesq solver (psolver=6) when using
+   terrain.
+   (soundcb.F)
+
+ - Modified the calculation of saturation vapor pressure for very cold 
+   temperatures (< -100 C) to avoid Bad Things.  Only relevant for very
+   deep domains (> 30 km).
+   (many files)
+
+ - Replaced the old crude calculation of PBL depth with a slightly less crude
+   calculation based on critical Richardson number.  The new code prevents 
+   ridiculously large values (> 20 km) of PBL depth.  Note1: as before, use 
+   this diagnostic code with caution.  Note2: diagnosed PBL depth is 
+   unchanged when using the YSU PBL scheme (ipbl=1). 
+   (turb.F, sfcphys.F)
+
+ - For calculation of squared moist Brunt-Vaisala frequency (nm array) the 
+   saturation condition is changed from simply the presence of qc and/or qi 
+   to a condition based on saturation state.  This changed was made primarily 
+   because there are regions where the air can very dry (wrt saturation) but 
+   can have cloud ice due to sedimentation of qi from above.  This change 
+   affects all the LES subgrid turbulence parameterizations, as well as 
+   ipbl = 1,2 (YSU and simple CM1 PBL schemes). 
+   (turb.F, ysu.F)
+
+ - Physical constants in RRTMG radiation scheme are changed to be consistent 
+   with the rest of CM1. 
+   (module_ra_rrtmg_lw.F, module_ra_rrtmg_sw.F, radiation_driver.F)
+
+ - OpenMP parallelization (shared memory parallelization) can now be used for 
+   the RRTMG radiation scheme. 
+   (module_ra_rrtmg_lw.F, module_ra_rrtmg_sw.F, radiation_driver.F)
+
+ - Fixed a bug that didn't allow the simple CM1 PBL scheme (ipbl=2) to be 
+   used without moisture (imoist=0).  Thanks to Thomas Kloetzke of the 
+   University of Queensland.  
+   (param.F)
+
+ - Fixed a bug with netcdf-format restart files and sfcmodel=1.  Thanks to 
+   Dan Stern (NRL). 
+   (writeout_nc.F)
+
+ - Other minor bug fixes have been applied.  
+   (solve.F, turb.F, cm1.F, etc)
+
+
+   -------------------
+    cm1r19.5:
+
+ - Adaptive time stepping (adapt_dt=1) has been modified to account for 
+   numerical stability of horizontal turbulence/diffusion.  This change will 
+   not affect most simulations, but fixes a problem with CM1 crashing for very 
+   strong hurricanes.  
+   Thanks to Dan Stern of UCAR/NRL. 
+   (cm1.F, misclibs.F, turb.F)
+
+ - Some code has been rearranged to increase efficiency.  No change on results,
+   but on some platforms run times will be lower by about 5% (relative to 
+   cm1r19.4). 
+   (many files)
+
+ - The YSU PBL (ipbl=1) and the revised surface layer scheme (sfcmodel=3) can
+   now be parallelized using OpenMP (shared-memory parallelization).  
+   (ysu.F, sfcmodelrev.F)
+
+ - A few bugs were fixed for set_ust=1 (specified surface friction velocity). 
+   The retrieved values of roughness length and drag coefficient are now 
+   accurate.  Minor affect on results.  
+   (sfcphys.F)
+
+ - A potential problem writing GrADS descriptor files has been fixed. (The 
+   problem only occurred when certain descriptor files had no content, but 
+   the code was trying to write to them anyway.)  
+   Thanks to Casey Davenport of University of North Carolina at Charlotte.
+   (writeout.F)
+
+ - A problem with netcdf-format parcel output files ("pdata files") was fixed.
+   When "output_path" was modified in the namelist (and thus output files are 
+   not written in the same place as cm1.exe) the parcel files was not written 
+   in the proper location.  Now, all netcdf-format files should be written 
+   in the directory specified by "output_path".
+   Thanks to Stacey Hitchcock of Colorado State University. 
+   (writeout_nc.F)
+
+ - A problem with netcdf-format restart files was fixed.  When the namelist 
+   variable "restart_file_diags" was set to .true., then attempts to write 
+   restart files would fail.  This problem has been fixed.  
+   Thanks to Bruno Melli of Colorado State University. 
+   (writeout_nc.F)
+
+
+   -------------------
+    cm1r19.6:
+
+ - Updated the surface layer schemes from the WRF model (sfcmodel=2,3).  They
+   are now the same as that in WRF4.0.
+   (sfclay.F, sfclayrev.F)
+
+ - Updated the Thompson microphysics scheme (ptype=3).  It is now the same as 
+   the code in WRF4.0.
+   (thompson.F)
+
+ - Updated the NSSL microphysics code.  Thanks to Ted Mansell (NOAA/NSSL).
+   (module_mp_nssl_2mom.F)
+
+ - Fixed a bug with iinit=7 (tropical cyclone initialization) wherein the 
+   base-state wind profile was ignored. 
+   (init3d.F)
+
+ - Fixed some minor bugs with the moving-domain option (imove=1).
+   (param.F, solve.F, parcel.F, diff2.F, turb.F)
+
+ - For imove=1, some descriptors in output files have been modified to 
+   clarify whether the variable is grid-relative or ground-relative. 
+   (writeout.F, statpack.F, azimavg.F, turbdiag.F)
+
+ - Modified the lateral Rayleigh damping scheme (hrdamp=1) so that it is 
+   only applied to vertical velocity. 
+   (param.F)
+
+ - Fixed a very minor bug when using the YSU PBL scheme and dissipative
+   heating. 
+   (turb.F)
+
+ - Modified the code to estimate PBL depth (for diagnostic purposes only) 
+   to be very similar to that in the YSU scheme.  Reduces PBL depths by 
+   a factor of 2-3. 
+   (sfcphys.F)
+
+ - Modified calculations of domain-average profiles (u,v,t,q) to use 
+   grid-area-weighted averages instead of simple arithmetic averages; this
+   modification is needed to account for horizontal grid stretching in CM1
+   (little-to-no change in results if horiz grid stretching is not used). 
+   (testcase_simple_phys.F)
+
+ - Several changes were made to the azimuthal averaging code:
+     - Grid-area-weighted averages are now used instead of simple arithmetic 
+       averages to account for horizontal grid stretching in CM1.
+     - A new two-step methodology is used to determine the center of a storm;
+       the first pass locates the location of minimum surface pressure 
+       perturbation; the second step is the same as before (ie, finds the 
+       point that yields the maximum possible azimuthally averaged tangential
+       velocity).  This code was needed to account for very fast moving storms
+       (because the old method used the last known centerpoint as a first 
+       guess). 
+     - The code was modified to account for cases when the storm is near a 
+       lateral boundary. 
+     - Wind speeds at z=10m have been added as output variables.
+     - PBL depth has been added as an output variable. 
+     - Radiative tendencies have been added as output variables. 
+     - Eddy diffusivities from the YSU PBL scheme have been added as output 
+       variables.
+   (azimavg.F)
+
+ - Fixed a bug with the calculation of resolved TKE tendency terms in the 
+   turbulence diagnostic code. 
+   (turbdiag.F)
+
+
+   -------------------
+    cm1r19.7:
+
+ - Several technical problems with the parcel option (iprcl=1) when using 
+   terrain (terrain_flag=.true.) have been fixed in this version.  The code 
+   now parallelizes correctly, and can be used with restarts.  Thanks to 
+   Dan Kirshbaum (McGill Univ) for identifying and fixing some of these 
+   problems. 
+   (parcel.F, init3d.F)
+
+ - Documentation for the output_pdcomp option has been added to README.namelist. 
+   (README.namelist)
+
+ - Updated the variables in the tropical cyclone initialization scheme 
+   (iinit=7).  Those variables specific to the Rotunno-Emanuel 1987 vortex 
+   now have variable names ending in "_re87". 
+   (init3d.F)
+
+ - Updated the Thompson microphysics scheme (ptype=3).  It is now the same as 
+   the code in WRF4.0.1.
+   (thompson.F)
+
+ - Fixed a very minor problem with the apmasscon=1 option to ensure 
+   bit-identical parallelization with MPI. 
+   (solve.F)
+
+
+   -------------------
+    cm1r19.8:
+
+ - Modified MPI communications so that CM1 will work with default software
+   on NCAR's Cheyenne supercomputer.  (Does not change results or performance.) 
+   (various files)
+
+ - Fixed error with surface flux in turbdiag output. 
+   (turbdiag.F)
+
+ - Fixed a minor bug with the NSSL microphysics schemes that was causing 
+   slightly different results when output frequency was changed.  (Thanks to 
+   Ted Mansell of NOAA/NSSL.)
+   (module_mp_nssl_2mom.F)
+
+ - Added a check at startup to ensure that all grid points (in all three 
+   dimensions) have grid spacing > 0.  
+   (param.F)
+
+ - Modified the method to extrapolate velocity near the surface when isnd = 7. 
+   (Thanks to Glen Romine, NCAR/MMM, for noting potential problems with the 
+    old method.) 
+   (base.F)
+
+
