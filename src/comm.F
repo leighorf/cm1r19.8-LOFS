@@ -7055,7 +7055,7 @@
       call bcs2(s)
 #endif
 
-      IF( bbc.eq.1 .or. bbc.eq.2 .or. bbc.eq.3 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 .or. bbc.eq.2 .or. bbc.eq.3 )THEN
         ! extrapolate:
 !$omp parallel do default(shared)  &
 !$omp private(i,j)
@@ -7066,7 +7066,7 @@
         enddo
       ENDIF
 
-      IF( tbc.eq.1 .or. tbc.eq.2 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 .or. tbc.eq.2 )THEN
         ! extrapolate:
 !$omp parallel do default(shared)  &
 !$omp private(i,j)
