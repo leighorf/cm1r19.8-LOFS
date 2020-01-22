@@ -1222,7 +1222,6 @@
           enddo
           enddo
         endif
-        endif
 
         ! mult t13,t23 by density:
 !$omp parallel do default(shared)  &
