@@ -93,6 +93,15 @@
       endif
     ELSEIF(bbc.eq.3)THEN
       ! u,v near sfc are determined below using log-layer equations
+    ELSEIF(bbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        ua(i,j,0) = ua(i, j, 1) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        va(i,j,0) = va(i, j, 1) 
+      enddo
     ENDIF
 
 !----------
@@ -116,6 +125,15 @@
       ENDIF
       do i=ib,ie
         va(i,j,nk+1) = 0.0
+      enddo
+    ELSEIF(tbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        ua(i,j,nk+1) = ua(i, j, nk) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        va(i,j,nk+1) = va(i, j, nk) 
       enddo
     ENDIF
 
@@ -931,6 +949,15 @@
       endif
     ELSEIF(bbc.eq.3)THEN
       ! u,v near sfc are determined below using log-layer equations
+    ELSEIF(bbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        u3d(i,j,0) = u3d(i, j, 1) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        v3d(i,j,0) = v3d(i, j, 1) 
+      enddo
     ENDIF
 
 !----------
@@ -954,6 +981,15 @@
       ENDIF
       do i=ib,ie
         v3d(i,j,nk+1) = 0.0
+      enddo
+    ELSEIF(tbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        u3d(i,j,nk+1) = u3d(i, j, nk) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        v3d(i,j,nk+1) = v3d(i, j, nk) 
       enddo
     ENDIF
 
