@@ -963,6 +963,18 @@
                               +(ust(i,j  )**2)*(v1(i,j  )/max(s1(i,j  ),0.01)) )
           enddo
           enddo
+        elseif(bbc.eq.11)then
+          ! zero-flux b.c.
+          do j=1,nj
+          do i=1,ni+1
+            t13(i,j,1)=0.0
+          enddo
+          enddo
+          do j=1,nj+1
+          do i=1,ni
+            t23(i,j,1)=0.0
+          enddo
+          enddo
         endif
 
         if(tbc.eq.1)then
@@ -987,6 +999,18 @@
           do j=1,nj+1
           do i=1,ni
             t23(i,j,nk+1)=-coef*2.0*va(i,j,nk)*rdz*mf(1,1,nk+1)
+          enddo
+          enddo
+        elseif(tbc.eq.11)then
+          ! zero-flux b.c.
+          do j=1,nj
+          do i=1,ni+1
+            t13(i,j,nk+1)=0.0
+          enddo
+          enddo
+          do j=1,nj+1
+          do i=1,ni
+            t23(i,j,nk+1)=0.0
           enddo
           enddo
         endif
@@ -1147,6 +1171,18 @@
             t23(i,j,1) = (ust(i,j)**2)*(v1(i,j)/max(s1(i,j),0.01))
           enddo
           enddo
+        elseif(bbc.eq.11)then
+          ! zero-flux b.c.
+          do j=1,nj
+          do i=1,ni+1
+            t13(i,j,1)=0.0
+          enddo
+          enddo
+          do j=1,nj
+          do i=1,ni
+            t23(i,j,1)=0.0
+          enddo
+          enddo
         endif
 
         if(tbc.eq.1)then
@@ -1173,6 +1209,19 @@
             t23(i,j,nk+1)=-coef*2.0*va(i,j,nk)*rdz*mf(1,1,nk+1)
           enddo
           enddo
+        elseif(tbc.eq.11)then
+          ! zero-flux b.c.
+          do j=1,nj
+          do i=1,ni+1
+            t13(i,j,nk+1)=0.0
+          enddo
+          enddo
+          do j=1,nj
+          do i=1,ni
+            t23(i,j,nk+1)=0.0
+          enddo
+          enddo
+        endif
         endif
 
         ! mult t13,t23 by density:
