@@ -1435,7 +1435,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1462,7 +1462,7 @@
         enddo
       endif
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1528,7 +1528,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1545,7 +1545,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1608,7 +1608,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1625,7 +1625,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1673,7 +1673,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1700,7 +1700,7 @@
         enddo
       endif
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1766,7 +1766,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1783,7 +1783,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
