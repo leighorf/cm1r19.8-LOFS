@@ -5,7 +5,7 @@
       subroutine maxmin(izz,jzz,kzz,f,nstat,rstat,kmin,kmax,amax,amin)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -127,7 +127,7 @@
       subroutine maxmin2d(izz,jzz,f,nstat,rstat,amax,amin)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
         

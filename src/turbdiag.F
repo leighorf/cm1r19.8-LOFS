@@ -59,7 +59,7 @@
     use cm1libs , only : rslf,rsif
     use getcape_module
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -6749,7 +6749,7 @@
       use constants
       use interp_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -6991,7 +6991,7 @@
       use constants
       use interp_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -7233,7 +7233,7 @@
     subroutine getavg2d(s2d,savg2d)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7267,7 +7267,7 @@
     subroutine getavg3d(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7314,7 +7314,7 @@
     subroutine getmax(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7356,7 +7356,7 @@
     subroutine getmin(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 

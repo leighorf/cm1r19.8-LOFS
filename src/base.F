@@ -40,7 +40,7 @@
       use cm1libs , only : rslf,rsif
       use getcape_module
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

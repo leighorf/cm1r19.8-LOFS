@@ -73,6 +73,10 @@
                         pta,pt3d,ptten,                                   &
                         pdata,cfb,cfa,cfc,ad1,ad2,pdt,lgbth,lgbph,rhs,trans)
 
+!begin LOFS
+!We initialize our swath arrays here
+      use module_lofs
+!end LOFS
       use input
       use constants
       use misclibs
@@ -81,9 +85,10 @@
       use module_mp_nssl_2mom, only: ccn, lccn
       use poiss_module
       use parcel_module , only : getparcelzs
-#ifdef MPI
-      use mpi
-#endif
+!LOFS already above in module_lofs
+!#ifdef MPI
+!      use mpi
+!#endif
 
       implicit none
  
@@ -202,6 +207,10 @@
       enddo
       enddo
       enddo
+
+!begin LOFS
+      call initialize_lofs_swaths
+!end LOFS
 
 !-----------------------------------------------------------------------
 !  Set winds to base-state values:
@@ -1923,7 +1932,7 @@
       use comm_module
       use parcel_module , only : getparcelzs
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  

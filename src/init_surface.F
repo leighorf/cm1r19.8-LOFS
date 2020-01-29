@@ -286,7 +286,7 @@
       subroutine getlanduse(season,myid,ib,ie,jb,je,ibl,iel,jbl,jel,   &
                             lu_index,xland,emiss,thc,albedo,znt,mavail)
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

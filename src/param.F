@@ -26,9 +26,13 @@
       use init_terrain_module
       use bc_module
       use comm_module
-#ifdef MPI
-      use mpi
-#endif
+!Begin LOFS
+      use mpi_newcomm
+      use module_lofs
+!#ifdef MPI
+!      use mpi
+!#endif
+!end LOFS
       use module_mp_thompson , only : thompson_init
       use module_mp_graupel
       use module_mp_nssl_2mom, only:    &
@@ -174,9 +178,15 @@
       if(myid.eq.0)then
 #endif
 
-      open(unit=20,file='namelist.input',form='formatted',status='old',    &
-           access='sequential',err=8000)
+!LOFS
+      open(unit=20,file=trim(namelist_cmdline),form='formatted',status='old',access='sequential',err=8000)
+!     open(unit=20,file='namelist.input',form='formatted',status='old',    &
+!          access='sequential',err=8000)
       read(20,nml=param1)
+!begin LOFS 
+      read(20,nml=lofs_io)
+      read(20,zfp_accuracy)
+!end LOFS
       read(20,nml=param2)
       read(20,nml=param3)
       read(20,nml=param11)
@@ -201,7 +211,12 @@
 
 #ifdef MPI
       endif  myid0
+#endif
+!begin LOFS
+      call bcast_lofs
+!end LOFS
 
+#ifdef MPI
       call MPI_BCAST(dx    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(dy    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(dz    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
@@ -1438,6 +1453,8 @@
         call stopcm1
       ENDIF
       !-----
+#define LOFS
+#ifndef LOFS
       IF( (output_format.le.0) .or. (output_format.ge.3) )THEN
         if(myid.eq.0)then
         print *
@@ -1453,6 +1470,7 @@
 #endif
         call stopcm1
       ENDIF
+#endif
       !-----
       IF( (axisymm.eq.1) .and. (iorigin.ne.1) )THEN
         if(myid.eq.0)then

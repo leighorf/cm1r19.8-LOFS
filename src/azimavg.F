@@ -40,7 +40,7 @@
     use constants
     use cm1libs , only : rslf,rsif
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1698,7 +1698,7 @@
     use input
     use constants , only : grads_undef
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1748,7 +1748,7 @@
     use input
     use constants , only : grads_undef
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1879,7 +1879,7 @@
     use constants
 #ifdef MPI
       use comm_module
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
     implicit none
 

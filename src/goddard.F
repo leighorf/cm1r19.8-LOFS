@@ -40,7 +40,7 @@
       use constants
     use cm1libs , only : rslf,rsif
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

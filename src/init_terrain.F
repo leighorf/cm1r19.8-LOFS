@@ -21,7 +21,8 @@
       use adv_routines , only : zsgrad
       use comm_module
 #ifdef MPI
-      use mpi
+!NOTE: LOFS does not currently work with terrain
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

@@ -27,7 +27,7 @@
       use writeout_nc_module, only : writestat_nc
 #endif
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

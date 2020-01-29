@@ -19,9 +19,10 @@
 !        http://www2.mmm.ucar.edu/people/bryan/cm1/cm1_equations.pdf
 !
 !-----------------------------------------------------------------------------
+
 !begin LOFS
 #define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
-      use mpi_newcomm
+      use mpi_newcomm !use mpi in here
       use module_lofs
 !end LOFS
 
@@ -35,8 +36,10 @@
       use diff2_module
       use turb_module
       use statpack_module
-      use writeout_module
-      use restart_module
+!begin LOFS
+!     use writeout_module
+!     use restart_module
+!end LOFS
       use radiation_module, only : radiation_driver
       use radtrns3d_module, only : nrad2d,n2d_radiat,n3d_radiat
       use turbdiag_module, only : turbdiag
@@ -45,9 +48,19 @@
       use parcel_module
       use init_physics_module
       use init_surface_module
-#ifdef MPI
-      use mpi
-#endif
+!begin LOFS
+!MPI is always true for LOFS (-DMPI set in makefile)
+!
+!More importantly, MPI is required for LOFS and there is no serial
+!version of LOFS (what is the point??). There are things that I may do
+!that will not be bracketed by #ifdef MPI because there is no use in
+!checking, it's hardwired.
+!
+!mpi module is loaded in mpi_newcomm
+!#ifdef MPI
+!      use mpi
+!#endif
+!end LOFS
       implicit none
 
       integer :: nstep,nstep0
@@ -303,8 +316,13 @@
 
 #ifdef MPI
       call MPI_INIT( ierr )
-      call MPI_COMM_RANK( MPI_COMM_CM1, myid, ierr )
-      call MPI_COMM_SIZE( MPI_COMM_CM1, numprocs, ierr )
+!begin LOFS
+!We need to do this right away for cleaner error handling with the command
+!line options, so we only print usage data at the root rank
+      call MPI_COMM_RANK( MPI_COMM_WORLD, myid, ierr )
+      call MPI_COMM_SIZE( MPI_COMM_WORLD, numprocs, ierr )
+      call get_command_line_arguments
+!end LOFS
 #endif
 
 !----------------------------------------------------------------------
@@ -314,6 +332,8 @@
         print *,'|---------------------------------------------------------------|'
         print *,'|                                                               |'
         print *,'|          You are using CM1, Release 19.8  (cm1r19.8)          |'
+        print *,'|                  with LOFS patches                            |'
+        print *,'|                  http://lofs.io                               |'
         print *,'|                                                               |'
         print *,'|---------------------------------------------------------------|'
         print *
@@ -332,8 +352,10 @@
 !----------------------------------------------------------------------
 !  Get domain dimensions, allocate some arrays, then call PARAM
 
-      open(unit=20,file='namelist.input',form='formatted',status='old',    &
+!begin LOFS
+      open(unit=20,file=trim(namelist_cmdline),form='formatted',status='old',    &
            access='sequential',err=8778)
+!end LOFS
       read(20,nml=param0)
       read(20,nml=param2)
       read(20,nml=param8)
@@ -352,6 +374,9 @@
         dowr = .false.
       ENDIF
 
+!ORF TODO set this appropriately
+!Make it the 1st node that is saving data
+!Just coopt dowr for all LOFS output
       IF( myid.eq.0 ) dowr = .true.
 
       nodex  = max(1,nodex)
@@ -786,6 +811,19 @@
       allocate( kn2(imp,kmt,4) )
       kn2 = 0.0
 
+!begin LOFS
+      call allocate_orf_vars1()
+      call h5open_f(ierr); check_err(ierr)
+! You can actually use LOFS without ZFP compression, but it kind of defeats the purpose.
+! This is also set in the makefile (-DUSE_ZFP_COMPRESSION)
+#ifdef USE_ZFP_COMPRESSION
+      ierr = H5Z_zfp_initialize(); check_err(ierr)
+#endif
+!end LOFS
+
+
+
+
       call       param(dt,dtlast,stattim,taptim,rsttim,radtim,prcltim,  &
                        cloudvar,rhovar,qname,qunit,budname,             &
                        xh,rxh,arh1,arh2,uh,ruh,xf,rxf,arf1,arf2,uf,ruf, &
@@ -800,6 +838,11 @@
                        uw31,uw32,ue31,ue32,us31,us32,un31,un32,         &
                        vw31,vw32,ve31,ve32,vs31,vs32,vn31,vn32,         &
                        ww31,ww32,we31,we32,ws31,ws32,wn31,wn32)
+
+!begin LOFS
+!This sets the k levels for various heights AGL that I save in 2D/swath files
+call setvindices(zh,zf)
+!end LOFS
 
       dbldt = dble(dt)
 
@@ -1600,9 +1643,24 @@
 !----------------------------------------------------------------------
 !  Prepare for I/O:
 
-      call       setup_output(tdef,qname,qunit,budname,   &
-                              name_output,desc_output,unit_output,grid_output,cmpr_output,  &
-                              xh,xf,yh,yf,xfref,yfref,sigma,sigmaf,dosfcflx)
+!begin LOFS
+! setup_output is in writeout.F which I have removed. However some stuff is set here that has
+! bled into other parts of the code (stuff like totlen, strlen, sstring etc.)
+!     call       setup_output(tdef,qname,qunit,budname,   &
+!                             name_output,desc_output,unit_output,grid_output,cmpr_output,  &
+!                             xh,xf,yh,yf,xfref,yfref,sigma,sigmaf,dosfcflx)
+!Here are the relevant bits:
+
+output_path=    'BOGUSIGNORE                                                         '
+output_basename='BOGUSIGNORE                                                         '
+strlen=10
+baselen=10
+totlen=strlen+baselen
+string(:)=' '
+statfile(:)=' '
+sstring(:)=' '
+!end LOFS
+
 
       cmpr_output = .true.
 
@@ -1619,6 +1677,10 @@
       if( iprcl.eq.1 )  &
       call       setup_parcel_vars(name_prcl,desc_prcl,unit_prcl,qname,tdef)
 
+!begin LOFS
+firstvisit=.true.
+newcycle=.false.
+!end LOFS
 
 
 !----------------------------------------------------------------------
@@ -1639,38 +1701,41 @@
                         emiss,thc,albd,znt,mavail,dsxy,prs0s,prs0,   &
                         tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml)
 
-      IF(irst.eq.1)THEN
+read_restart:      IF(irst.eq.1)THEN
 
         startup = .false.
         restarted = .true.
-        call     read_restart(nstep,srec,sirec,urec,vrec,wrec,nrec,prec,           &
-                              trecs,trecw,arecs,arecw,                             &
-                              nwrite,nwritet,nwritea,nwriteh,nrst,                 &
-                              num_soil_layers,nrad2d,                              &
-                              dt,dtlast,mtime,ndt,adt,acfl,dbldt,mass1,            &
-                              stattim,taptim,rsttim,radtim,prcltim,                &
-                              qbudget,asq,bsq,qname,                               &
-                              xfref,yfref,zh,zf,sigma,sigmaf,zs,                   &
-                              th0,prs0,pi0,rho0,qv0,u0,v0,                         &
-                              rain,sws,svs,sps,srs,sgs,sus,shs,                    &
-                              tsk,znt,ust,cd,ch,cq,u1,v1,s1,thflux,qvflux,         &
-                              radbcw,radbce,radbcs,radbcn,                         &
-                              rho,prs,ua,va,wa,ppi,tha,qa,tkea,                    &
-                              swten,lwten,radsw,rnflx,radswnet,radlwin,rad2d,      &
-                              effc,effi,effs,effr,effg,effis,                      &
-                              lu_index,kpbl2d,psfc,u10,v10,s10,hfx,qfx,xland,      &
-                              hpbl,wspd,psim,psih,gz1oz0,br,                       &
-                              CHS,CHS2,CQS2,CPMM,ZOL,MAVAIL,                       &
-                              MOL,RMOL,REGIME,LH,FLHC,FLQC,QGH,                    &
-                              CK,CKA,CDA,USTM,QSFC,T2,Q2,TH2,EMISS,THC,ALBD,       &
-                              gsw,glw,chklowq,capg,snowc,fm,fh,tslb,               &
-                              tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml,               &
-                              qpten,qtten,qvten,qcten,pta,pdata,ploc,ppx,          &
-                              tdiag,qdiag,phi1,phi2,                               &
-                              icenter,jcenter,xcenter,ycenter,                     &
-                              dum1,dat1,dat2,dat3,reqt,restarted,restart_prcl)
+!begin LOFS
+        call read_restart_hdf5_r19(wr3dindex,nstep,nrec,prec,nwrite,nrst,  &
+                         dt,dtlast,mtime,ndt,adt,acfl,dbldt,           &
+                         stattim,taptim,rsttim,radtim,prcltim,         &
+                         qbudget,asq,bsq,                              &
+                         rain,sws,svs,sps,srs,sgs,sus,shs,             &
+                         tsk,znt,ust,cd,u1,v1,thflux,qvflux,           &
+                         radbcw,radbce,radbcs,radbcn,                  &
+                         rho,prs,ua,va,wa,ppi,tha,qa,tkea,             &
+                         psfc,u10,v10,xland,                           &
+                         qpten,qtten,qvten,qcten,pta,pdata, &
+                         arecs,arecw,icenter,jcenter,mass1,nwritea,nwritet,  &
+                         srec,trecs,trecw,urec,vrec,wrec,xcenter,ycenter,    &
+                         phi1,phi2,ch,cq,ppx,s1,s10)
+
+!ORF 2018-11 For reasons that are not clear to me, you can no longer
+!change the model time step with r19 from a restart; I suspect this is
+!a bug. I tried with pristine code and got the same results. So if you
+!are using a constant dt (not adaptive) and the model CFL's and you want
+!to reduce the time step, you are screwed! The reason is dbldt is stored
+!and retrieved from the history file, nuking dtl.... unless you set
+!dbldt here.
+
+!ORF TODO FROM THE FUTURE 2020... change dtl to be double anyway, save lots of hassle.
+dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all these damned dt's
+!nwrite=1
+!ORF: use nwrite from restart file for further decision making
+!end LOFS
+
         !  In case user wants to change values on a restart:
-        IF( restart_reset_frqtim )THEN 
+        IF( restart_reset_frqtim )THEN  !ORF this is only used here, so I can coopt!
           if( statfrq.gt.1.0e-6 ) stattim = mtime + statfrq
           if(  tapfrq.gt.1.0e-6 ) taptim  = mtime + tapfrq
           if(  rstfrq.gt.1.0e-6 ) rsttim  = mtime + rstfrq
@@ -1697,12 +1762,12 @@
         ! (see subroutine in misclibs.F for more details)
 !!!        call randpert(xfref,yfref,xh,yh,zh,zf,tha)
 
-      ELSE
+      ELSE read_restart
 
         restarted = .false.
         restart_prcl = .false.
 
-      ENDIF
+      ENDIF read_restart
 
 
       IF( doturbdiag )THEN
@@ -1774,6 +1839,8 @@
 !----------------------------------------------------------------------
 !  All done with initialization and setup.  A few more odds and ends ....
 
+! LOFS should work fine with adaptive time stepping
+
       if( adapt_dt.eq.1 )then
         dt = dbldt
         if( .not. restarted )then
@@ -1824,13 +1891,18 @@
 
       nstep0 = nstep
 
+!ORF OK I think I get what he's doing here. The first pass through the
+!time loop is handled differently... we have restarts to consider, but
+!also choices about whether to, for instance, save the initial state at t=0
+!LOFS would really appreciate it if you didn't save the initial state at t=0
+
 
       IF( startup )THEN
         ! starting from t=0:  skip solve and write initial conditions
         dosolve     = .false.
         dorad       = .true.
         dostat      = .true.
-        dowriteout  = .true.
+        dowriteout  = .false. !ORF TODO make sure this is what we want
         doprclout   = .true.
         dotdwrite   = .true.
         doazimwrite = .true.
@@ -2263,13 +2335,19 @@
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
 
+!begin LOFS
+!We follow George's booleans (dorestart, dowriteout).
+!The extra stuff for LOFS is when to flush files !to disk
+we_are_doing_new_cycle = (mod(nwrite,time_levels_per_histfile).eq.0.or.dorestart)
+!end LOFS
 
-      if( dowriteout )then
-      otype:  &
-      IF(output_format.eq.1.or.output_format.eq.2)THEN
+write_LOFS:      if( dowriteout )then
+!     otype:  &
+!     IF(output_format.eq.1.or.output_format.eq.2)THEN
         nn = 1
-        if(terrain_flag .and. output_interp.eq.1) nn = 2
-        if(output_format.eq.2) nn = 1
+! LOFS does not currently support terrain
+!       if(terrain_flag .and. output_interp.eq.1) nn = 2
+!       if(output_format.eq.2) nn = 1
         DO n=1,nn
           if(n.eq.1)then
             fnum = 51
@@ -2288,41 +2366,75 @@
             wdiag = 0.0
             kdiag = 0.0
           ENDIF
-          call writeout(frec,urec,vrec,wrec,rtime,dt,fnum,nwrite,qname,                        &
-                        name_output,desc_output,unit_output,grid_output,cmpr_output,           &
-                        xh,xf,uf,yh,yf,vf,xfref,yfref,                                         &
-                        rds,sigma,rdsf,sigmaf,zh,zf,mf,gx,gy,wprof,                            &
-                        pi0,prs0,rho0,rr0,rf0,rrf0,th0,qv0,u0,v0,thv0,rth0,qc0,qi0,            &
-                        zs,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,thflux,qvflux,psfc,      &
-                        rxh,arh1,arh2,uh,ruh,rxf,arf1,arf2,vh,rvh,mh,rmh,rmf,rr,rf,            &
-                        gz,rgz,gzu,gzv,gxu,gyv,dzdx,dzdy,c1,c2,                                &
-                        cd,ch,cq,tlh,f2d,prate,dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,        &
-                        t11,t12,t13,t22,t23,t33,rho,prs,divx,                                  &
-                        rru,u3d,uten,uten1,rrv,v3d,vten,vten1,rrw,w3d,wten,pp3d,th3d,phi2,     &
-                        sadv,thten,nm,defv,defh,dissten,                                       &
-                        thpten,qvpten,qcpten,qipten,upten,vpten,xkzh,xkzq,xkzm,                &
-                        lu_index,xland,mavail,tsk,tmn,tml,hml,huml,hvml,hfx,qfx,gsw,glw,tslb,  &
-                        q3d,kmh,kmv,khh,khv,tke3d,swten,lwten,cldfra,                          &
-                        radsw,rnflx,radswnet,radlwin,dsr,olr,pta,                              &
-                        effc,effi,effs,effr,effg,effis,                                        &
-                        lwupt,lwdnt,lwupb,lwdnb,                                               &
-                        swupt,swdnt,swupb,swdnb,lwcf,swcf,                                     &
-                        num_soil_layers,u10,v10,s10,t2,q2,znt,ust,tst,qst,z0t,z0q,u1,v1,s1,    &
-                        hpbl,zol,mol,rmol,br,brcr,psim,psih,psiq,wspd,qsfc,                    &
-                        dat1,dat2,dat3,reqt,thten1(ib,jb,1),                                   &
-                        tdiag,qdiag,udiag,vdiag,wdiag,pdiag,out2d,out3d,                       &
-                        nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
-                        ! end_writeout
+
+!begin LOFS--------------------------------- here is our writeout hook code-------(turn it over)---------
+
+if (we_are_doing_new_cycle) then
+      newcycle = .true.
+else
+      newcycle = .false.
+endif
+
+if(newcycle.or.firstvisit) then
+    if(myid.eq.0)call h5_file_op(op_mkhistdirs,mtime) !mtime is double precision
+    call MPI_Barrier(MPI_COMM_CM1,ierr);check_err(ierr)
+endif
+
+!I think neither below is necessary because we start with both being
+!set as such, and only change firstvisit below if .not. nobuffer
+!But what the hell, just for clarity I guess!
+if(nobuffer) then
+      firstvisit=.true. !This means we'll always enter the 1st block in lofs-hdfprelim where we set up our new files, groups, etc.
+      newcycle=.false.  !this is unnecessary, done just for "that true first visit feeling"
+endif
+
+!ORF TODO change to iprintinfo or whatever in case we are not on rank 0
+if(myid.eq.0) then
+    write(outfile,"('Beginning history file output cycle...')")
+    call FFLUSH(outfile)
+endif
+
+!This is for r16 in 2020
+         call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                                     &
+              rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,             &
+              zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,      &
+              dum1,dum2,dum3,dum4,sten,qa,                           &
+              t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                      &
+              znt,ust,u1,v1,rr)
+
+!This is for r19.5 in 2019
+         call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
+             rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
+             zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
+             dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
+             t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
+             znt,ust,u1,v1,s1,rr,qdiag)
+
+
+         call MPI_BARRIER(MPI_COMM_CM1,ierr)
+
+!ORF TODO change to iprintinfo or whatever in case we are not on rank 0
+if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFLUSH(outfile)
+
+         if(.not.nobuffer) firstvisit = .false.
+         if(dorestart) firstvisit =.true.
+
+!end LOFS------------------------------- there was our writeout hook code-------(play it again)-------
+
+
           if(n.eq.1)then
             srec = frec
           else
             sirec = frec
           endif
-        ENDDO
-      ELSE  otype
-        print *,'  09832 '
-        call stopcm1
-      ENDIF  otype
+        ENDDO !stupid because we only go through here once (nn=1), so best to ignore
+!LOFS: we ignore all checks for output format etc. because there is only one LOFS format
+!begin LOFS
+!     ELSE  otype
+!       print *,'  09832 '
+!       call stopcm1
+!end LOFS
+!     ENDIF  otype
         nwrite=nwrite+1
         if(tapfrq.gt.0.0)then
           doit = .true.
@@ -2334,7 +2446,7 @@
           enddo
         endif
         if(timestats.ge.1) time_write=time_write+mytime()
-      endif
+      endif write_LOFS
 
 
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
@@ -2542,33 +2654,35 @@
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
 
 
-      if( dorestart )then
-        call     write_restart(nstep,srec,sirec,urec,vrec,wrec,nrec,prec,           &
-                               trecs,trecw,arecs,arecw,                             &
-                               nwrite,nwritet,nwritea,nwriteh,nrst,                 &
-                               num_soil_layers,nrad2d,                              &
-                               dt,dtlast,mtime,ndt,adt,acfl,dbldt,mass1,            &
-                               stattim,taptim,rsttim,radtim,prcltim,                &
-                               qbudget,asq,bsq,qname,                               &
-                               xfref,yfref,zh,zf,sigma,sigmaf,zs,                   &
-                               th0,prs0,pi0,rho0,qv0,u0,v0,                         &
-                               rain,sws,svs,sps,srs,sgs,sus,shs,                    &
-                               tsk,znt,ust,cd,ch,cq,u1,v1,s1,thflux,qvflux,         &
-                               radbcw,radbce,radbcs,radbcn,                         &
-                               rho,prs,ua,va,wa,ppi,tha,qa,tkea,                    &
-                               swten,lwten,radsw,rnflx,radswnet,radlwin,rad2d,      &
-                               effc,effi,effs,effr,effg,effis,                      &
-                               lu_index,kpbl2d,psfc,u10,v10,s10,hfx,qfx,xland,      &
-                               hpbl,wspd,psim,psih,gz1oz0,br,                       &
-                               CHS,CHS2,CQS2,CPMM,ZOL,MAVAIL,                       &
-                               MOL,RMOL,REGIME,LH,FLHC,FLQC,QGH,                    &
-                               CK,CKA,CDA,USTM,QSFC,T2,Q2,TH2,EMISS,THC,ALBD,       &
-                               gsw,glw,chklowq,capg,snowc,fm,fh,tslb,               &
-                               tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml,               &
-                               qpten,qtten,qvten,qcten,pta,pdata,ploc,ppx,          &
-                               tdiag,qdiag,phi1,phi2,                               &
-                               icenter,jcenter,xcenter,ycenter,                     &
-                               dum1,dat1,dat2,dat3,reqt)
+write_restart:   if( dorestart )then
+!ORF TODO change to iprintinfo or whatever in case we are not on rank 0
+          if (myid.eq.0) call h5_file_op_int(op_mkrestartdirs,int(mtime+1.0e-3))
+          call mpi_barrier(MPI_COMM_CM1,ierr);check_err(ierr)
+
+!begin LOFS: LOFS restart files are (a) written in hdf5 format (b) NOT
+!saved the same way as default r19. Restart files here are saved much
+!like they were in r16. However as you can see with the call arguments
+!below as compared to above I am not saving as many variables as are
+!saved by default. I have only saved what I use in my research. An
+!obvious thing to do in the future is update the restart code to make it
+!more compaitble with all the default options of r19.
+!end LOFS
+
+          call  write_restart_hdf5_r19(wr3dindex,nstep,nrec,prec,nwrite,nrst, &
+                         dt,dtlast,mtime,ndt,adt,acfl,dbldt,                  &
+                         stattim,taptim,rsttim,radtim,prcltim,                &
+                         qbudget,asq,bsq,                                     &
+                         rain,sws,svs,sps,srs,sgs,sus,shs,                    &
+                         tsk,znt,ust,cd,u1,v1,thflux,qvflux,                  &
+                         radbcw,radbce,radbcs,radbcn,                         &
+                         rho,prs,ua,va,wa,ppi,tha,qa,tkea,                    &
+                         psfc,u10,v10,xland,                                  &
+                         qpten,qtten,qvten,qcten,pta,pdata,                   &
+                         arecs,arecw,icenter,jcenter,mass1,nwritea,nwritet,   &
+                         srec,trecs,trecw,urec,vrec,wrec,xcenter,ycenter,     &
+                         phi1,phi2,ch,cq,ppx,s1,s10)
+
+
         IF( nrst.eq.0 )THEN
           ! 150820:  Write restart file if rstfrq=0 and stop
           !          (useful for ensemble DA)
@@ -2688,19 +2802,21 @@
 
 
     ENDDO  timeloop
-    !c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c!
+    !c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-combo breaker!
 
 
 !----------------------------------------------------------------------
 !  write new stats descriptor file, if necessary:
 
-      IF( stat_out.gt.0 .and. output_format.eq.1 .and. myid.eq.0 )THEN
-        IF( adapt_dt.eq.1 .and. statfrq.lt.0.0 )THEN
-          print *,'  re-writing GrADS stats descriptor file .... '
-          call   write_statsctl(name_stat,desc_stat,unit_stat,  &
+!begin LOFS: turn this off, I think with my changes it screws things up
+!     IF( stat_out.gt.0 .and. output_format.eq.1 .and. myid.eq.0 )THEN
+!       IF( adapt_dt.eq.1 .and. statfrq.lt.0.0 )THEN
+!         print *,'  re-writing GrADS stats descriptor file .... '
+!         call   write_statsctl(name_stat,desc_stat,unit_stat,  &
                                 tdef,nstep+1)
-        ENDIF
-      ENDIF
+!       ENDIF
+!     ENDIF
+!end LOFS
 
 !----------------------------------------------------------------------
 

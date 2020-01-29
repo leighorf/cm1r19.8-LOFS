@@ -495,7 +495,7 @@
       subroutine change_uvmove(u0,ua,u3d,v0,va,v3d,oldumove,oldvmove)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -538,7 +538,7 @@
       use goddard_module, only : consat2
       use lfoice_module, only : lfoice_init
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -741,7 +741,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2145,7 +2145,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -2225,7 +2225,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -2385,7 +2385,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2527,7 +2527,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2610,7 +2610,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2687,7 +2687,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2912,7 +2912,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2977,7 +2977,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3050,7 +3050,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3122,7 +3122,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3240,7 +3240,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -3344,7 +3344,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

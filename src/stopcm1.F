@@ -1,7 +1,7 @@
 
       subroutine stopcm1()
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

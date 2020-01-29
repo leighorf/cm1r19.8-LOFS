@@ -34,7 +34,7 @@
 #ifdef MPI
       subroutine getcorner(s,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: s
@@ -208,7 +208,7 @@
 
       subroutine getcornert(t,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: t
@@ -382,7 +382,7 @@
 
       subroutine getcorneru(u,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -572,7 +572,7 @@
 
       subroutine getcornerv(v,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -762,7 +762,7 @@
 
       subroutine getcornerw(w,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: w
@@ -951,7 +951,7 @@
 
       subroutine getcorner3(s,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: s
@@ -1153,7 +1153,7 @@
 
       subroutine comm_2we_start(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1242,7 +1242,7 @@
 
       subroutine comm_2we_end(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1324,7 +1324,7 @@
 
       subroutine comm_2sn_start(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1413,7 +1413,7 @@
 
       subroutine comm_2sn_end(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1496,7 +1496,7 @@
       subroutine comm_3s_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -1653,7 +1653,7 @@
       subroutine comm_3s_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -1872,7 +1872,7 @@
       subroutine comm_3t_start(t,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -2026,7 +2026,7 @@
       subroutine comm_3t_end(t,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -2243,7 +2243,7 @@
       subroutine comm_3u_start(u,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real u(ib:ie+1,jb:je,kb:ke)
@@ -2397,7 +2397,7 @@
       subroutine comm_3u_end(u,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real u(ib:ie+1,jb:je,kb:ke)
@@ -2615,7 +2615,7 @@
       subroutine comm_3v_start(v,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real v(ib:ie,jb:je+1,kb:ke)
@@ -2767,7 +2767,7 @@
       subroutine comm_3v_end(v,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real v(ib:ie,jb:je+1,kb:ke)
@@ -2985,7 +2985,7 @@
       subroutine comm_3w_start(w,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -3138,7 +3138,7 @@
       subroutine comm_3w_end(w,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -3356,7 +3356,7 @@
       subroutine comm_1s2d_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je)
@@ -3493,7 +3493,7 @@
       subroutine comm_1s2d_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je)
@@ -3663,7 +3663,7 @@
       subroutine comm_1s_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -3809,7 +3809,7 @@
       subroutine comm_1s_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -4019,7 +4019,7 @@
       subroutine comm_1p_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -4134,7 +4134,7 @@
       subroutine comm_1t_start(t,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -4279,7 +4279,7 @@
       subroutine comm_1t_end(t,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -4489,7 +4489,7 @@
       subroutine comm_1u_start(u,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(in   ), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -4634,7 +4634,7 @@
       subroutine comm_1u_end(u,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -4845,7 +4845,7 @@
       subroutine comm_1v_start(v,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(in   ), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -4990,7 +4990,7 @@
       subroutine comm_1v_end(v,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -5200,7 +5200,7 @@
       subroutine comm_1w_start(w,ww1,ww2,we1,we2,   &
                                  ws1,ws2,wn1,wn2,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -5339,7 +5339,7 @@
       subroutine comm_1w_end(w,ww1,ww2,we1,we2,   &
                                ws1,ws2,wn1,wn2,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -5576,7 +5576,7 @@
       subroutine comm_2d_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5719,7 +5719,7 @@
 
       subroutine comm_2dew_end(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5778,7 +5778,7 @@
 
       subroutine comm_2dns_end(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5869,7 +5869,7 @@
 
       subroutine comm_2d_corner(s)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5985,7 +5985,7 @@
 
       subroutine getcorner3_2d(s)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je) :: s
@@ -6164,7 +6164,7 @@
       subroutine comm_3r_start(th,pp,west,newwest,east,neweast,   &
                                      south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real th(ib:ie,jb:je,kb:ke)
@@ -6340,7 +6340,7 @@
       subroutine comm_3r_end(th,pp,west,newwest,east,neweast,   &
                                    south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real th(ib:ie,jb:je,kb:ke)
@@ -6591,7 +6591,7 @@
       subroutine comm_3q_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke,numq)
@@ -6753,7 +6753,7 @@
       subroutine comm_3q_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke,numq)
@@ -7157,7 +7157,7 @@
 
       subroutine getcorneru3(u,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -7345,7 +7345,7 @@
 
       subroutine getcornerv3(v,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -7533,7 +7533,7 @@
 
       subroutine getcornerw3(w,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: w

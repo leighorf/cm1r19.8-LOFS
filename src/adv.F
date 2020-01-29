@@ -18,7 +18,7 @@
       use pdef_module
       use adv_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -886,7 +886,7 @@
       use constants
       use adv_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -1716,7 +1716,7 @@
       use constants
       use adv_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

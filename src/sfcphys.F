@@ -13,7 +13,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

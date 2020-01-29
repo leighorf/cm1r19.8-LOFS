@@ -1848,7 +1848,7 @@
       subroutine restrict_openbc_we(rvh,rmh,rho0,u3d)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -1954,7 +1954,7 @@
       subroutine restrict_openbc_sn(ruh,rmh,rho0,v3d)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 

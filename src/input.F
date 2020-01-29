@@ -109,6 +109,20 @@
               output_pwat,output_lwp,                                         &
               output_thbudget,output_qvbudget,                                &
               output_ubudget,output_vbudget,output_wbudget,output_pdcomp,     &
+!begin LOFS
+              output_thrhopert,output_q_numconc,output_prespert_min_2000,     &
+              output_prespert_min_1000,output_prespert_min_0000,              &
+              output_snapshot_dbz_0500,output_snapshot_prespert_0500,         &
+              output_snapshot_qc_1000,output_snapshot_qc_2000,                &
+              output_snapshot_thrhopert_0000,output_snapshot_u_0000,          &
+              output_snapshot_v_0000,output_snapshot_w_0500,                  &
+              output_snapshot_w_5000,output_w_max_0500,output_w_max_1000,     &
+              output_w_max_5000,output_w_min_0500,output_w_min_1000,          &
+              output_snapshot_prespert_0000,output_vortmag,                   &
+              output_zeta_max_0500,output_zeta_max_1000,output_zeta_max_2000, &
+              output_zeta_max_0000,output_zeta_min_0000,output_zeta_min_0500, &
+              output_zeta_min_1000,output_zeta_min_2000,                      &
+!end LOFS
               prcl_th,prcl_t,prcl_prs,prcl_ptra,prcl_q,prcl_nc,               &
               prcl_km,prcl_kh,prcl_tke,prcl_dbz,prcl_b,prcl_vpg,prcl_vort,    &
               prcl_rho,prcl_qsat,prcl_sfc,                                    &
@@ -237,6 +251,20 @@
               output_pwat,output_lwp,                                         &
               output_thbudget,output_qvbudget,                                &
               output_ubudget,output_vbudget,output_wbudget,output_pdcomp
+!begin LOFS
+              output_thrhopert,output_q_numconc,output_prespert_min_2000,     &
+              output_prespert_min_1000,output_prespert_min_0000,              &
+              output_snapshot_dbz_0500,output_snapshot_prespert_0500,         &
+              output_snapshot_qc_1000,output_snapshot_qc_2000,                &
+              output_snapshot_thrhopert_0000,output_snapshot_u_0000,          &
+              output_snapshot_v_0000,output_snapshot_w_0500,                  &
+              output_snapshot_w_5000,output_w_max_0500,output_w_max_1000,     &
+              output_w_max_5000,output_w_min_0500,output_w_min_1000,          &
+              output_snapshot_prespert_0000,output_vortmag,                   &
+              output_zeta_max_0500,output_zeta_max_1000,output_zeta_max_2000, &
+              output_zeta_max_0000,output_zeta_min_0000,output_zeta_min_0500, &
+              output_zeta_min_1000,output_zeta_min_2000
+!end LOFS
       namelist /param16/                                                      &
               restart_format,restart_filetype,restart_reset_frqtim,           &
               restart_file_theta,restart_file_dbz,restart_file_th0,           &

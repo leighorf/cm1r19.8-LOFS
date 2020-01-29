@@ -16,7 +16,7 @@
       use module_ra_rrtmg_lw , only : rrtmg_lwinit
       use module_ra_rrtmg_sw , only : rrtmg_swinit
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
