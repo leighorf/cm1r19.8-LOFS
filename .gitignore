@@ -1,0 +1,8 @@
+*.o
+*.s
+*.f90
+*.mod
+*~
+.*.swp
+run/cm1.exe
+run/onefile.F
