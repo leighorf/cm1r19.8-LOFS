@@ -267,7 +267,7 @@
       print *
     endif
 #ifdef MPI
-    call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+    call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
     call stopcm1
 
@@ -435,7 +435,7 @@
 #ifdef MPI
       cfoo = 0.0
       call MPI_REDUCE(qbudget(1),cfoo(1),nbudget,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       if( myid.eq.0 )then
         do n=1,nbudget
           qbudget(n)=cfoo(n)
@@ -446,7 +446,7 @@
       if( imoist.eq.1 )then
         afoo = 0.0
         call MPI_REDUCE(asq(1),afoo(1),numq,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                        MPI_COMM_WORLD,ierr)
+                        MPI_COMM_CM1,ierr)
         if( myid.eq.0 )then
           do n=1,numq
             asq(n)=afoo(n)
@@ -456,7 +456,7 @@
         endif
         bfoo = 0.0
         call MPI_REDUCE(bsq(1),bfoo(1),numq,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                        MPI_COMM_WORLD,ierr)
+                        MPI_COMM_CM1,ierr)
         if( myid.eq.0 )then
           do n=1,numq
             bsq(n)=bfoo(n)
@@ -1484,7 +1484,7 @@
 #ifdef MPI
       if(timestats.ge.1)then
         ! this is needed for proper accounting of timing:
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
       endif
 #endif
 
@@ -1772,7 +1772,7 @@
       print *
     endif
 #ifdef MPI
-    call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+    call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
     call stopcm1
 
@@ -1938,41 +1938,41 @@
 
 #ifdef MPI
       ! communicate to all other processors:
-      call MPI_BCAST(nstep  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(srec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sirec  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(urec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(vrec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(wrec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nrec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prec   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(trecs  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(trecw  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(arecs  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(arecw  ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nwrite ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nwritet,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nwritea,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nrst   ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ndt    ,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(icenter,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jcenter,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(old_format,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dt     ,1,MPI_REAL            ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dtlast ,1,MPI_REAL            ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(xcenter,1,MPI_REAL            ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ycenter,1,MPI_REAL            ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cflmax ,1,MPI_REAL            ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(mtime  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stattim,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(taptim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rsttim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(radtim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcltim,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(adt    ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(acfl   ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dbldt  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(mass1  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(nstep  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(srec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sirec  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(urec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(vrec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(wrec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nrec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prec   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(trecs  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(trecw  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(arecs  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(arecw  ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nwrite ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nwritet,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nwritea,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nrst   ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ndt    ,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(icenter,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jcenter,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(old_format,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dt     ,1,MPI_REAL            ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dtlast ,1,MPI_REAL            ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(xcenter,1,MPI_REAL            ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ycenter,1,MPI_REAL            ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cflmax ,1,MPI_REAL            ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(mtime  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stattim,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(taptim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rsttim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(radtim ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcltim,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(adt    ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(acfl   ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dbldt  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(mass1  ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
 #endif
 
 !---------------------------------------------------------------
@@ -2595,7 +2595,7 @@
       endif
 
 #ifdef MPI
-      call MPI_BCAST(nvar,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(nvar,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 #endif
 
       if( iptra.eq.1 .or. nvar.gt.0 )then
@@ -2663,7 +2663,7 @@
       endif
 
 #ifdef MPI
-      call MPI_BCAST(nvar,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(nvar,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 #endif
 
       if( iprcl.eq.1 .or. nvar.gt.0 )then
@@ -2722,7 +2722,7 @@
           endif
           IF( iprcl.eq.1 )THEN
 #ifdef MPI
-            call MPI_BCAST(ploc,3*nparcels,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+            call MPI_BCAST(ploc,3*nparcels,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
             if( .not. terrain_flag )then
               DO np=1,nparcels
@@ -2936,7 +2936,7 @@
         read(50) nwriteh
       endif
 #ifdef MPI
-      call MPI_BCAST(nwriteh,1,MPI_INTEGER         ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(nwriteh,1,MPI_INTEGER         ,0,MPI_COMM_CM1,ierr)
 #endif
 
     IF( restart_format.eq.1 )THEN
@@ -3015,7 +3015,7 @@
 #ifdef MPI
       if(timestats.ge.1)then
         ! this is needed for proper accounting of timing:
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
       endif
 #endif
 
@@ -3057,7 +3057,7 @@
 #else
       IF(myid.ne.0)THEN
         if( ibndy.eq.1 )then
-          call MPI_ISEND(radbc(1,k),nj,MPI_REAL,0,31,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(radbc(1,k),nj,MPI_REAL,0,31,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         endif
       ELSE
@@ -3079,7 +3079,7 @@
           endif
           fooj = proc / nodex + 1
           fooi = proc - (fooj-1)*nodex  + 1
-          call MPI_IRECV(dumy((fooj-1)*nj+1),nj,MPI_REAL,proc,31,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(dumy((fooj-1)*nj+1),nj,MPI_REAL,proc,31,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         enddo
       ENDIF
@@ -3117,7 +3117,7 @@
 #else
       IF(myid.ne.0)THEN
         if( ibndy.eq.1 )then
-          call MPI_ISEND(radbc(1,k),ni,MPI_REAL,0,32,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(radbc(1,k),ni,MPI_REAL,0,32,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         endif
       ELSE
@@ -3139,7 +3139,7 @@
           endif
           fooj = proc / nodex + 1
           fooi = proc - (fooj-1)*nodex  + 1
-          call MPI_IRECV(dumx((fooi-1)*ni+1),ni,MPI_REAL,proc,32,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(dumx((fooi-1)*ni+1),ni,MPI_REAL,proc,32,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         enddo
       ENDIF
@@ -3177,7 +3177,7 @@
 #else
       IF(myid.ne.0)THEN
         if( ibndy.eq.1 )then
-          call MPI_IRECV(radbc(1,k),nj,MPI_REAL,0,33,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(radbc(1,k),nj,MPI_REAL,0,33,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         endif
       ELSE
@@ -3199,7 +3199,7 @@
           endif
           fooj = proc / nodex + 1
           fooi = proc - (fooj-1)*nodex  + 1
-          call MPI_ISEND(dumy((fooj-1)*nj+1),nj,MPI_REAL,proc,33,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(dumy((fooj-1)*nj+1),nj,MPI_REAL,proc,33,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         enddo
       ENDIF
@@ -3237,7 +3237,7 @@
 #else
       IF(myid.ne.0)THEN
         if( ibndy.eq.1 )then
-          call MPI_IRECV(radbc(1,k),ni,MPI_REAL,0,34,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(radbc(1,k),ni,MPI_REAL,0,34,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         endif
       ELSE
@@ -3259,7 +3259,7 @@
           endif
           fooj = proc / nodex + 1
           fooi = proc - (fooj-1)*nodex  + 1
-          call MPI_ISEND(dumx((fooi-1)*ni+1),ni,MPI_REAL,proc,34,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(dumx((fooi-1)*ni+1),ni,MPI_REAL,proc,34,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,mpi_status_ignore,ierr)
         enddo
       ENDIF
@@ -3356,7 +3356,7 @@
           dat1(i,j)=var(i,j,k)
         enddo
         enddo
-        call MPI_ISEND(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_ISEND(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
         ! DONE, ordinary processors
       ELSE
@@ -3364,7 +3364,7 @@
         if( recv1 )then
           ! start receives from all other processors on a node:
           do proc=myid+1,myid+(ppnode-1)
-            call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+            call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_CM1,reqt(proc-myid),ierr)
           enddo
         endif
         iammsk:  IF(myid.ne.msk)THEN
@@ -3379,7 +3379,7 @@
           ! wait for receives to finish:
           call mpi_waitall(ppnode-1,reqt(1:ppnode-1),MPI_STATUS_IGNORE,ierr)
           ! send data to processor msk:
-          call MPI_ISEND(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_CM1,reqs,ierr)
           ! wait for send to finish:
           call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
           recv1 = .true.
@@ -3394,7 +3394,7 @@
               else
                 proc = n*ppnode
               endif
-              call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_WORLD,reqt(ppnode-1+n),ierr)
+              call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_CM1,reqt(ppnode-1+n),ierr)
             enddo
           endif
 #ifdef NETCDF
@@ -3476,14 +3476,14 @@
           IF( k.lt.numk2 )THEN
             ! start receives for next level:
             do proc=myid+1,myid+(ppnode-1)
-              call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag+2,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+              call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag+2,MPI_COMM_CM1,reqt(proc-myid),ierr)
             enddo
             recv1 = .false.
 !!!#ifdef NETCDF
 !!!            IF( restart_format.eq.2 )THEN
               do n = 1,(nodes-1)
                 proc = n*ppnode
-                call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+3,MPI_COMM_WORLD,reqt(ppnode-1+n),ierr)
+                call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+3,MPI_COMM_CM1,reqt(ppnode-1+n),ierr)
               enddo
               recv2 = .false.
 !!!            ENDIF
@@ -3550,7 +3550,7 @@
 
 !!!#ifdef MPI
 !!!    ! helps with memory:
-!!!    call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!    call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!    !----------------- end MPI section -----------------!
 !!!#endif
 
@@ -3630,7 +3630,7 @@
 #ifdef MPI
       IF(myid.ne.nodemaster)THEN
         ! ordinary processor ... recv data from nodemaster:
-        call MPI_IRECV(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_IRECV(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
 !$omp parallel do default(shared)   &
 !$omp private(i,j)
@@ -3645,12 +3645,12 @@
         IF(myid.ne.msk)THEN
           ! nodemaster, not proc msk:
           ! get data from msk:
-          call MPI_IRECV(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_CM1,reqs,ierr)
           ! wait for data to arrive:
           call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
           ! start sends to other processors on a node:
           do proc=myid+1,myid+(ppnode-1)
-            call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+            call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_CM1,reqt(proc-myid),ierr)
           enddo
           ! my data:
 !$omp parallel do default(shared)  &
@@ -3719,7 +3719,7 @@
                 enddo
               enddo
               proc = index2*ppnode
-              call MPI_ISEND(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_WORLD,reqt(ppnode-1+nn),ierr)
+              call MPI_ISEND(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_CM1,reqt(ppnode-1+nn),ierr)
           enddo
           do nn=1,( ppnode-1 )
               ! send data to ordinary procs on this node:
@@ -3735,7 +3735,7 @@
                 dat3(i,j,proc) = dat2(fooi+i,fooj+j)
               enddo
               enddo
-              call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_WORLD,reqt(nn),ierr)
+              call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_CM1,reqt(nn),ierr)
           enddo
           ! my data:
           if( myid.eq.0 )then
@@ -3799,7 +3799,7 @@
 
 !!!#ifdef MPI
 !!!    ! helps with memory:
-!!!    call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!    call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!    !----------------- end MPI section -----------------!
 !!!#endif
 
@@ -3852,11 +3852,11 @@
           dat1(i,j) = var(i,j,k)
         enddo
         enddo
-        call MPI_ISEND(dat1,numi*numj,MPI_REAL,nodemaster,k,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_ISEND(dat1,numi*numj,MPI_REAL,nodemaster,k,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,mpi_status_ignore,ierr)
       ELSE
         do proc=myid+1,myid+(ppnode-1)
-          call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,k,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+          call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,k,MPI_COMM_CM1,reqt(proc-myid),ierr)
         enddo
 !$omp parallel do default(shared)   &
 !$omp private(i,j)
@@ -3923,7 +3923,7 @@
 
     DO k=numk1,numk2
       IF(myid.ne.nodemaster)THEN
-        call MPI_IRECV(dat1,numi*numj,MPI_REAL,nodemaster,k,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_IRECV(dat1,numi*numj,MPI_REAL,nodemaster,k,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,mpi_status_ignore,ierr)
 !$omp parallel do default(shared)   &
 !$omp private(i,j)
@@ -3943,7 +3943,7 @@
             dat3(i,j,proc)=dat2(fooi+i,j)
           enddo
           enddo
-          call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,k,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+          call MPI_ISEND(dat3(1,1,proc),numi*numj,MPI_REAL,proc,k,MPI_COMM_CM1,reqt(proc-myid),ierr)
         enddo
 !$omp parallel do default(shared)   &
 !$omp private(i,j)

@@ -199,7 +199,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*3       ,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*3       ,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/( dble(maxx-minx)*dble(maxy-miny) )
@@ -271,7 +271,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*(3+numq),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*(3+numq),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/( dble(maxx-minx)*dble(maxy-miny) )

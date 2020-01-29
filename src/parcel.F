@@ -641,10 +641,10 @@
 
 #ifdef MPI
       if( .not. terrain_flag )then
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       else
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),2*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,prsig),nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),2*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,prsig),nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       endif
 #endif
 
@@ -1640,9 +1640,9 @@
 #ifdef MPI
   do np=4,npvals
     if( myid.eq.0 )then
-      call MPI_REDUCE(MPI_IN_PLACE,pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE(MPI_IN_PLACE,pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_CM1,ierr)
     else
-      call MPI_REDUCE( pdata(1,np),pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE( pdata(1,np),pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_CM1,ierr)
     endif
   enddo
 #endif
@@ -1906,7 +1906,7 @@
     ENDDO  zsnploop
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,przs) ,nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,przs) ,nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
       end subroutine getparcelzs

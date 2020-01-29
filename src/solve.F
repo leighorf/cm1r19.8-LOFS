@@ -2958,8 +2958,8 @@
         ENDIF
 
 #ifdef MPI
-        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-        call MPI_ALLREDUCE(mpi_in_place,dumk2(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+        call MPI_ALLREDUCE(mpi_in_place,dumk2(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
         mass2 = 0.0
@@ -4398,7 +4398,7 @@
 
 
 !!!#ifdef MPI
-!!!      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!      if(timestats.ge.1) time_mpb=time_mpb+mytime()
 !!!#endif
 

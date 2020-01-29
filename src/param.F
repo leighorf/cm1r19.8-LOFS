@@ -202,330 +202,330 @@
 #ifdef MPI
       endif  myid0
 
-      call MPI_BCAST(dx    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dy    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dz    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dtl   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(timax ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(run_time,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tapfrq,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rstfrq,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(statfrq,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prclfrq,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(dx    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dy    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dz    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dtl   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(timax ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(run_time,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tapfrq,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rstfrq,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(statfrq,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prclfrq,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(cm1setup ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(testcase,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(adapt_dt ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(irst     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rstnum   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iconly   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(hadvordrs,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(vadvordrs,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(hadvordrv,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(vadvordrv,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(advwenos ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(advwenov ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(weno_order,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(apmasscon,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(idiff    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(mdiff    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(difforder,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(imoist   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ipbl     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sgsmodel ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tconfig  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(bcturbs  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(horizturb,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(doimpl   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(irdamp   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(hrdamp   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(psolver  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ptype    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ihail    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iautoc   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(icor     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(lspgrad  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(eqtset   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(idiss    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(efall    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rterm    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(wbc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ebc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sbc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nbc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(bbc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tbc      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(irbc     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(roflux   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nudgeobc ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(isnd     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iwnd     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(itern    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iinit    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(irandp   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ibalance ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iorigin  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(axisymm  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(imove    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iptra    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(npt      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(pdtra    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iprcl    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nparcels ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(cm1setup ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(testcase,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(adapt_dt ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(irst     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rstnum   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iconly   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(hadvordrs,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(vadvordrs,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(hadvordrv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(vadvordrv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(advwenos ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(advwenov ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(weno_order,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(apmasscon,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(idiff    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(mdiff    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(difforder,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(imoist   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ipbl     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sgsmodel ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tconfig  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(bcturbs  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(horizturb,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(doimpl   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(irdamp   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(hrdamp   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(psolver  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ptype    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ihail    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iautoc   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(icor     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(lspgrad  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(eqtset   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(idiss    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(efall    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rterm    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(wbc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ebc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sbc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nbc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(bbc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tbc      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(irbc     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(roflux   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nudgeobc ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(isnd     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iwnd     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(itern    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iinit    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(irandp   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ibalance ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iorigin  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(axisymm  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(imove    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iptra    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(npt      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(pdtra    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iprcl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nparcels ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(kdiff2 ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kdiff6 ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(fcor   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kdiv   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(alph   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rdalpha,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(zd     ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(xhd    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(alphobc,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(umove  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(vmove  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(v_t    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(l_h    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(lhref1 ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(lhref2 ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(l_inf  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ndcnst ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(kdiff2 ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kdiff6 ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(fcor   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kdiv   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(alph   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rdalpha,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(zd     ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(xhd    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(alphobc,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(umove  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(vmove  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(v_t    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(l_h    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(lhref1 ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(lhref2 ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(l_inf  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ndcnst ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(stretch_x,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dx_inner ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dx_outer ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nos_x_len,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tot_x_len,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(stretch_x,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dx_inner ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dx_outer ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nos_x_len,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tot_x_len,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(stretch_y,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dy_inner ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dy_outer ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(nos_y_len,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tot_y_len,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(stretch_y,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dy_inner ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dy_outer ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(nos_y_len,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tot_y_len,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(stretch_z,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ztop     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(str_bot  ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(str_top  ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dz_bot   ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dz_top   ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(stretch_z,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ztop     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(str_bot  ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(str_top  ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dz_bot   ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dz_top   ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(bc_temp  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ptc_top  ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ptc_bot  ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(viscosity,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(pr_num   ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(bc_temp  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ptc_top  ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ptc_bot  ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(viscosity,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(pr_num   ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(var1     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var2     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var3     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var4     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var5     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var6     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var7     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var8     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var9     ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(var10    ,1,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(var1     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var2     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var3     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var4     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var5     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var6     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var7     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var8     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var9     ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(var10    ,1,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(output_path    ,70,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_basename,70,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_format  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_filetype,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_interp ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_rain   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sws    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_svs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sps    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_srs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sgs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sus    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_shs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_coldpool,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sfcflx ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sfcparams,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_sfcdiags,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_psfc   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_zs     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_zh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_basestate,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_th     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_thpert ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_prs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_prspert,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pi     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pipert ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_rho    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_rhopert,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_tke    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_km     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_kh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_qv     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_qvpert ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_q      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_dbz    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_buoyancy,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_u      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_upert  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_uinterp,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_v      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_vpert  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_vinterp,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_w      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_winterp,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_vort   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pv     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_uh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pblten ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_dissten,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_fallvel ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_nm     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_def    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_radten ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_cape   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_cin    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_lcl    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_lfc    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pwat   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_lwp    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_thbudget,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_qvbudget,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_ubudget,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_vbudget,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_wbudget,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(output_pdcomp ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(output_path    ,70,MPI_CHARACTER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_basename,70,MPI_CHARACTER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_format  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_filetype,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_interp ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_rain   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sws    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_svs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sps    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_srs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sgs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sus    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_shs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_coldpool,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sfcflx ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sfcparams,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_sfcdiags,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_psfc   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_zs     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_zh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_basestate,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_th     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_thpert ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_prs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_prspert,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pi     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pipert ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_rho    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_rhopert,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_tke    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_km     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_kh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_qv     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_qvpert ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_q      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_dbz    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_buoyancy,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_u      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_upert  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_uinterp,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_v      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_vpert  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_vinterp,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_w      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_winterp,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_vort   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pv     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_uh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pblten ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_dissten,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_fallvel ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_nm     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_def    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_radten ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_cape   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_cin    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_lcl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_lfc    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pwat   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_lwp    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_thbudget,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_qvbudget,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_ubudget,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_vbudget,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_wbudget,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(output_pdcomp ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(restart_format      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_filetype    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_theta  ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_dbz    ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_th0    ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_prs0   ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_pi0    ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_rho0   ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_qv0    ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_u0     ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_v0     ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_zs     ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_zh     ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_zf     ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_file_diags  ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_use_theta   ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(restart_reset_frqtim,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(restart_format      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_filetype    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_theta  ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_dbz    ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_th0    ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_prs0   ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_pi0    ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_rho0   ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_qv0    ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_u0     ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_v0     ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_zs     ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_zh     ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_zf     ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_file_diags  ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_use_theta   ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(restart_reset_frqtim,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(stat_w      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_wlevs  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_u      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_v      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_rmw    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_pipert ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_prspert,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_thpert ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_q      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_tke    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_km     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_kh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_div    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_rh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_rhi    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_the    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_cloud  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_sfcprs ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_wsp    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_cfl    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_vort   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_tmass  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_tmois  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_qmass  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_tenerg ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_mo     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_tmf    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_pcn    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(stat_qsrc   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(stat_w      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_wlevs  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_u      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_v      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_rmw    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_pipert ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_prspert,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_thpert ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_q      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_tke    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_km     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_kh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_div    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_rh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_rhi    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_the    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_cloud  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_sfcprs ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_wsp    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_cfl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_vort   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_tmass  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_tmois  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_qmass  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_tenerg ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_mo     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_tmf    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_pcn    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(stat_qsrc   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(prcl_th     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_t      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_prs    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_ptra   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_q      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_nc     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_km     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_kh     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_tke    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_dbz    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_b      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_vpg    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_vort   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_rho    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_qsat   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(prcl_sfc    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(prcl_th     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_t      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_prs    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_ptra   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_q      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_nc     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_km     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_kh     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_tke    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_dbz    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_b      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_vpg    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_vort   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_rho    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_qsat   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_sfc    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(radopt   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dtrad  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ctrlat ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ctrlon ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(year   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(month  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(day    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(hour   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(minute ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(second ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(radopt   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dtrad  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ctrlat ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ctrlon ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(year   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(month  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(day    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(hour   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(minute ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(second ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(isfcflx   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sfcmodel  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(oceanmodel,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(initsfc   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tsk0      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(tmn0      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(xland0    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(lu0       ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(season    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cecd      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(pertflx   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnstce    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnstcd    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(isftcflx  ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iz0tlnd   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(oml_hml0  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(oml_gamma ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(set_flx   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(set_znt   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(set_ust   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnst_shflx,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnst_lhflx,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnst_znt  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnst_ust  ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(isfcflx   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sfcmodel  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(oceanmodel,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(initsfc   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tsk0      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(tmn0      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(xland0    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(lu0       ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(season    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cecd      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(pertflx   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnstce    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnstcd    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(isftcflx  ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iz0tlnd   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(oml_hml0  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(oml_gamma ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(set_flx   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(set_znt   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(set_ust   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnst_shflx,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnst_lhflx,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnst_znt  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnst_ust  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(doturbdiag,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(turbfrq   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(doturbdiag,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(turbfrq   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 
-      call MPI_BCAST(doazimavg ,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(azimavgfrq,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ddr       ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rlen      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(doazimavg ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(azimavgfrq,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ddr       ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rlen      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 
       IF ( ptype .ge. 26 ) THEN
-      call MPI_BCAST(ccn       ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rho_qr    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnor      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rho_qs    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnos      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(rho_qh    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(cnoh      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(alphah    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(alphahl   ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dfrz      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(hldnmn    ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(infall    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(icdx      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(icdxhl    ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(imurain   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iferwisventr,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iehw      ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(iehlw     ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ehw0      ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ehlw0     ,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(dmrauto   ,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(ioldlimiter,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(ccn       ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rho_qr    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnor      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rho_qs    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnos      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(rho_qh    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(cnoh      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(alphah    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(alphahl   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dfrz      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(hldnmn    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(infall    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(icdx      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(icdxhl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(imurain   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iferwisventr,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iehw      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(iehlw     ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ehw0      ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ehlw0     ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(dmrauto   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(ioldlimiter,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       ENDIF
 #endif
 
@@ -579,7 +579,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -593,7 +593,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -607,7 +607,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -621,7 +621,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -879,7 +879,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -895,7 +895,7 @@
         print *,'  -------------------------------- '
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -911,7 +911,7 @@
         print *,'  -------------------------------- '
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -927,7 +927,7 @@
         print *,'  -------------------------------- '
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -943,7 +943,7 @@
         print *,'  -------------------------------- '
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -962,7 +962,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -979,7 +979,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -996,7 +996,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1015,7 +1015,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1034,7 +1034,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1052,7 +1052,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1071,7 +1071,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1090,7 +1090,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1109,7 +1109,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1128,7 +1128,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1145,7 +1145,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1163,7 +1163,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1179,7 +1179,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1195,7 +1195,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1212,7 +1212,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1228,7 +1228,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1247,7 +1247,7 @@
           print *,'   stopping model .... '
           print *
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         ELSE
@@ -1267,7 +1267,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1285,7 +1285,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1303,7 +1303,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1321,7 +1321,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1339,7 +1339,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1356,7 +1356,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1374,7 +1374,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1395,7 +1395,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1418,7 +1418,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1433,7 +1433,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1449,7 +1449,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1465,7 +1465,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1481,7 +1481,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1497,7 +1497,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1519,7 +1519,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
@@ -1542,7 +1542,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
@@ -1560,7 +1560,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1576,7 +1576,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1594,7 +1594,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1611,7 +1611,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1627,7 +1627,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1643,7 +1643,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1659,7 +1659,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1681,7 +1681,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1698,7 +1698,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1717,7 +1717,7 @@
 !        print *
 !        endif
 !#ifdef MPI
-!        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !#endif
 !        call stopcm1
 !      ENDIF
@@ -1734,7 +1734,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1751,7 +1751,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1768,7 +1768,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1786,7 +1786,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1804,7 +1804,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1820,7 +1820,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1837,7 +1837,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1854,7 +1854,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1871,7 +1871,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1888,7 +1888,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1905,7 +1905,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1922,7 +1922,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1939,7 +1939,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1956,7 +1956,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1972,7 +1972,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -1989,7 +1989,7 @@
         print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -2007,7 +2007,7 @@
         print *,'   stopping model .... '
         print *
         endif
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
         call stopcm1
       ENDIF
       !-----
@@ -2021,7 +2021,7 @@
         print *,'   stopping model .... '
         print *
         endif
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
         call stopcm1
       ENDIF
       !-----
@@ -2035,7 +2035,7 @@
         print *,'   stopping model .... '
         print *
         endif
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
         call stopcm1
       ENDIF
       !-----
@@ -2049,7 +2049,7 @@
         print *,'   stopping model .... '
         print *
         endif
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
         call stopcm1
       ENDIF
       !-----
@@ -2069,7 +2069,7 @@
           print *,'  numprocs=',numprocs
           print *
           endif
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         endif
 
@@ -2080,7 +2080,7 @@
           print *,'  nx,nodex,mod(nx,nodex)=',nx,nodex,mod(nx,nodex)
           print *
           endif
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         endif
 
@@ -2091,7 +2091,7 @@
           print *,'  ny,nodey,mod(ny,nodey)=',ny,nodey,mod(ny,nodey)
           print *
           endif
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         endif
 
@@ -2103,7 +2103,7 @@
           print *,'  both ni and nj must be >= 3 '
           print *
           endif
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         ENDIF
 
@@ -2116,7 +2116,7 @@
           print *,'  nodex*nodey,ppnode=',nodex*nodey,ppnode
           print *
           endif
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         endif
 
@@ -2136,28 +2136,28 @@
       if(ebc.eq.1 .and. wbc.ne.1)then
         print *,"Can not have periodic b.c.'s on one side only!"
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
       if(wbc.eq.1 .and. ebc.ne.1)then
         print *,"Can not have periodic b.c.'s on one side only!"
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
       if(nbc.eq.1 .and. sbc.ne.1)then
         print *,"Can not have periodic b.c.'s on one side only!"
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
       if(sbc.eq.1 .and. nbc.ne.1)then
         print *,"Can not have periodic b.c.'s on one side only!"
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
@@ -2191,7 +2191,7 @@
         print *,'   stopping model .... '
         print *
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -2207,7 +2207,7 @@
         print *,'   stopping model .... '
         print *
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -2756,7 +2756,7 @@
 
           print *,'  unrecognized value for inum '
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
 
@@ -3538,7 +3538,7 @@
           ENDIF
 
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
 
@@ -3560,7 +3560,7 @@
         print *,'   stopping model .... '
         print *
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -3589,7 +3589,7 @@
         if(dowr) write(outfile,*) '  Stopping model ....'
         if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
@@ -5432,7 +5432,7 @@
 
       print *,'  invalid option for iorigin'
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
       call stopcm1
 
@@ -5832,7 +5832,7 @@
         if(dowr) write(outfile,*) ' stretch_x must be 1,2,3'
         if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -5869,7 +5869,7 @@
           if(dowr) write(outfile,*) '  ... stopping ...  '
           if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -5895,7 +5895,7 @@
           if(dowr) write(outfile,*) '  ... stopping ...  '
           if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -5971,7 +5971,7 @@
         endif
 
 #ifdef MPI
-        call MPI_BCAST(xfdp(1),(nx+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(xfdp(1),(nx+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
 #endif
 
       ENDIF
@@ -6191,7 +6191,7 @@
         if(dowr) write(outfile,*) ' stretch_y must be 1,2,3'
         if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       ENDIF
@@ -6228,7 +6228,7 @@
           if(dowr) write(outfile,*) '  ... stopping ...  '
           if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6254,7 +6254,7 @@
           if(dowr) write(outfile,*) '  ... stopping ...  '
           if(dowr) write(outfile,*)
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6294,7 +6294,7 @@
         endif
 
 #ifdef MPI
-        call MPI_BCAST(yfdp(1),(ny+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(yfdp(1),(ny+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
 #endif
 
       ENDIF
@@ -6514,7 +6514,7 @@
           if(dowr) write(outfile,*) '  diff       = ',nk1*dz_bot-str_bot
           if(dowr) write(outfile,*) '  stopping cm1 ... '
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6529,7 +6529,7 @@
           if(dowr) write(outfile,*) '  diff            = ',nk2*nominal_dz-(str_top-str_bot)
           if(dowr) write(outfile,*) '  stopping cm1 ... '
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6541,7 +6541,7 @@
           if(dowr) write(outfile,*) '  diff         = ',nk3*dz_top-(ztop-str_top)
           if(dowr) write(outfile,*) '  stopping cm1 ... '
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6552,7 +6552,7 @@
           if(dowr) write(outfile,*) '   nk           = ',nk
           if(dowr) write(outfile,*)
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6584,7 +6584,7 @@
           if(dowr) write(outfile,*) '  ... stopping ...  '
           if(dowr) write(outfile,*)
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -6661,7 +6661,7 @@
         if(terrain_flag)then
           write(0,*) 'terrain not yet compatible with stretch_z == 2'
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         ENDIF
@@ -6706,8 +6706,8 @@
         endif
 
 #ifdef MPI
-        call MPI_BCAST(sigma(1) ,nk  ,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(sigmaf(1),nk+1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(sigma(1) ,nk  ,MPI_REAL,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(sigmaf(1),nk+1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
 
         ztop = sigmaf(nk+1)
@@ -6774,8 +6774,8 @@
         endif
 
 #ifdef MPI
-        call MPI_BCAST(sigma(1) ,nk  ,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(sigmaf(1),nk+1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(sigma(1) ,nk  ,MPI_REAL,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(sigmaf(1),nk+1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
 
         ztop = sigmaf(nk+1)
@@ -7087,22 +7087,22 @@
 
 #ifdef MPI
       var=0.0
-      call MPI_ALLREDUCE(min_dx,var,1,MPI_REAL,MPI_MIN,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(min_dx,var,1,MPI_REAL,MPI_MIN,MPI_COMM_CM1,ierr)
       min_dx=var
       var=0.0
-      call MPI_ALLREDUCE(min_dy,var,1,MPI_REAL,MPI_MIN,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(min_dy,var,1,MPI_REAL,MPI_MIN,MPI_COMM_CM1,ierr)
       min_dy=var
       var=0.0
-      call MPI_ALLREDUCE(min_dz,var,1,MPI_REAL,MPI_MIN,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(min_dz,var,1,MPI_REAL,MPI_MIN,MPI_COMM_CM1,ierr)
       min_dz=var
       var=0.0
-      call MPI_ALLREDUCE(max_dx,var,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(max_dx,var,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       max_dx=var
       var=0.0
-      call MPI_ALLREDUCE(max_dy,var,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(max_dy,var,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       max_dy=var
       var=0.0
-      call MPI_ALLREDUCE(max_dz,var,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(max_dz,var,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       max_dz=var
 #endif
 
@@ -7161,7 +7161,7 @@
           print *
           endif
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         ENDIF
@@ -7216,7 +7216,7 @@
           print *
           endif
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         ENDIF
@@ -7234,7 +7234,7 @@
           print *
           endif
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         ENDIF

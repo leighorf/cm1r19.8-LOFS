@@ -60,7 +60,7 @@ code:
 			mv onefile.F ../run
 
 clean:
-			rm -f *.f90 *.o *.a *.mod
+			rm -f *.f90 *.o *.a *.s *.mod
 
 adv.o: constants.o input.o pdef.o adv_routines.o
 adv_routines.o: input.o constants.o pdef.o comm.o

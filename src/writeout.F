@@ -90,7 +90,7 @@
       print *
       ENDIF
 #ifdef MPI
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
       call stopcm1
     ENDIF
@@ -2226,11 +2226,11 @@
       real :: zlcl, zlfc, zel , psource , tsource , qvsource
 
 !!!#ifdef MPI
-!!!      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!#endif
       if( myid.eq.0 ) print *,'  Entering writeout ... '
 !!!#ifdef MPI
-!!!      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!#endif
 
 !--------------------------------------------------------------
@@ -2401,7 +2401,7 @@
       IF( numprocs.gt.nlim )THEN
         doit = .false.
         IF( myid.ge.nlim )THEN
-          call MPI_IRECV(doit,1,mpi_logical,myid-nlim,999999,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_IRECV(doit,1,mpi_logical,myid-nlim,999999,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,status,ierr)
         ENDIF
       ENDIF
@@ -5907,7 +5907,7 @@
       IF( numprocs.gt.nlim )THEN
         doit = .true.
         IF( myid+nlim .le. (numprocs-1) )THEN
-          call MPI_ISEND(doit,1,mpi_logical,myid+nlim,999999,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(doit,1,mpi_logical,myid+nlim,999999,MPI_COMM_CM1,reqs,ierr)
           call MPI_WAIT(reqs,status,ierr)
         ENDIF
       ENDIF
@@ -5932,13 +5932,13 @@
 
 
 !!!#ifdef MPI
-!!!      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!#endif
       if( myid.eq.0 ) print *,'  ... leaving writeout '
 #ifdef MPI
       if(timestats.ge.1)then
         ! this is needed for proper accounting of timing:
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
       endif
 #endif
 
@@ -6045,7 +6045,7 @@
           dat1(i,j)=var(i,j,k)
         enddo
         enddo
-        call MPI_ISEND(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_ISEND(dat1(1,1),numi*numj,MPI_REAL,nodemaster,tag,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
         ! DONE, ordinary processors
       ELSE
@@ -6053,7 +6053,7 @@
         if( recv1 )then
           ! start receives from all other processors on a node:
           do proc=myid+1,myid+(ppnode-1)
-            call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+            call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag,MPI_COMM_CM1,reqt(proc-myid),ierr)
           enddo
         endif
         IF(myid.ne.msk)THEN
@@ -6068,7 +6068,7 @@
           ! wait for receives to finish:
           call mpi_waitall(ppnode-1,reqt(1:ppnode-1),MPI_STATUS_IGNORE,ierr)
           ! send data to processor msk:
-          call MPI_ISEND(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(dat3(1,1,myid),numi*numj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_CM1,reqs,ierr)
           ! wait for send to finish:
           call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
           recv1 = .true.
@@ -6083,7 +6083,7 @@
               else
                 proc = nn*ppnode
               endif
-              call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_WORLD,reqt(ppnode-1+nn),ierr)
+              call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_CM1,reqt(ppnode-1+nn),ierr)
             enddo
           endif
 #ifdef NETCDF
@@ -6166,14 +6166,14 @@
           IF( k.lt.numk2 )THEN
             ! start receives for next level:
             do proc=myid+1,myid+(ppnode-1)
-              call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag+2,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+              call MPI_IRECV(dat3(1,1,proc),numi*numj,MPI_REAL,proc,tag+2,MPI_COMM_CM1,reqt(proc-myid),ierr)
             enddo
             recv1 = .false.
 !!!#ifdef NETCDF
 !!!            IF( output_format.eq.2 )THEN
               do nn = 1,(nodes-1)
                 proc = nn*ppnode
-                call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+3,MPI_COMM_WORLD,reqt(ppnode-1+nn),ierr)
+                call MPI_IRECV(dat3(1,1,proc),numi*numj*ppnode,MPI_REAL,proc,tag+3,MPI_COMM_CM1,reqt(ppnode-1+nn),ierr)
               enddo
               recv2 = .false.
 !!!            ENDIF
@@ -6236,7 +6236,7 @@
 
 !!!#ifdef MPI
 !!!    ! helps with memory:
-!!!    call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!    call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!#endif
 
   ENDIF  ! endif for output_filetype=1,2

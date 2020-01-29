@@ -27,4 +27,7 @@ consuming to add. Also we need to add zfp compression parameters for all of them
 thinking to multiply all of the forcing terms by a thousand or a million. I hate tiny
 floating point numbers.
 
+------
+
+I have moved all of the r16 lofs*.F files to r19.8.
 

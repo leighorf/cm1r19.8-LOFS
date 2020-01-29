@@ -77,24 +77,24 @@
       mmax(1)=fmax
       mmax(2)=myid
       call MPI_ALLREDUCE(mmax,nmax,1,MPI_2REAL,MPI_MAXLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmax(2))
       imax=imax+(myi-1)*ni
       jmax=jmax+(myj-1)*nj
-      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kmax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kmax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
 
       mmin(1)=fmin
       mmin(2)=myid
       call MPI_ALLREDUCE(mmin,nmin,1,MPI_2REAL,MPI_MINLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmin(2))
       imin=imin+(myi-1)*ni
       jmin=jmin+(myj-1)*nj
-      call MPI_BCAST(imin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kmin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kmin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
 
       fmax=nmax(1)
       fmin=nmin(1)
@@ -186,22 +186,22 @@
       mmax(1)=fmax
       mmax(2)=myid
       call MPI_ALLREDUCE(mmax,nmax,1,MPI_2REAL,MPI_MAXLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmax(2))
       imax=imax+(myi-1)*ni
       jmax=jmax+(myj-1)*nj
-      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
 
       mmin(1)=fmin
       mmin(2)=myid
       call MPI_ALLREDUCE(mmin,nmin,1,MPI_2REAL,MPI_MINLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmin(2))
       imin=imin+(myi-1)*ni
       jmin=jmin+(myj-1)*nj
-      call MPI_BCAST(imin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
 
       fmax=nmax(1)
       fmin=nmin(1)

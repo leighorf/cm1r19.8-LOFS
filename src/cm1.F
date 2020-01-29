@@ -19,6 +19,11 @@
 !        http://www2.mmm.ucar.edu/people/bryan/cm1/cm1_equations.pdf
 !
 !-----------------------------------------------------------------------------
+!begin LOFS
+#define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
+      use mpi_newcomm
+      use module_lofs
+!end LOFS
 
       use input
       use constants
@@ -298,8 +303,8 @@
 
 #ifdef MPI
       call MPI_INIT( ierr )
-      call MPI_COMM_RANK( MPI_COMM_WORLD, myid, ierr )
-      call MPI_COMM_SIZE( MPI_COMM_WORLD, numprocs, ierr )
+      call MPI_COMM_RANK( MPI_COMM_CM1, myid, ierr )
+      call MPI_COMM_SIZE( MPI_COMM_CM1, numprocs, ierr )
 #endif
 
 !----------------------------------------------------------------------
@@ -1799,7 +1804,7 @@
 !----------------------------------------------------------------------
 
 #ifdef MPI
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 
       if(myid.eq.0)then
         tstart=mpi_wtime()
@@ -2574,7 +2579,7 @@
           if(dowr) write(outfile,*) '  ... stopping ... '
           if(dowr) write(outfile,*)
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           stop 55556
         ENDIF
@@ -2626,7 +2631,7 @@
             if(dowr) write(outfile,*) '  ... stopping ... '
             if(dowr) write(outfile,*)
 #ifdef MPI
-            call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+            call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
             stop 55555
           endif
@@ -2669,7 +2674,7 @@
           print *
         endif
 #ifdef MPI
-        call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+        call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
         call stopcm1
       endif
@@ -2700,7 +2705,7 @@
 !----------------------------------------------------------------------
 
 #ifdef MPI
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
       if(timestats.ge.1) time_mpb=time_mpb+mytime()
 
       if(myid.eq.0.and.procfiles)then
@@ -2719,157 +2724,157 @@
       ! for MPI runs without procfiles, average the timestat terms:
       IF(.not.procfiles)THEN
         sum = 0.0
-        call MPI_REDUCE(time_sound   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_sound   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_sound = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_poiss   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_poiss   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_poiss = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_advs    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_advs    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_advs = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_advu    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_advu    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_advu = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_advv    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_advv    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_advv = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_advw    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_advw    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_advw = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_divx    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_divx    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_divx = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_buoyan  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_buoyan  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_buoyan = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_turb    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_turb    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_turb = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_sfcphys ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_sfcphys ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_sfcphys = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_ttend   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_ttend   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_ttend = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_cor     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_cor     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_cor = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_diffu   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_diffu   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_diffu = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_rdamp   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_rdamp   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_rdamp = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_microphy,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_microphy,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_microphy = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_satadj  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_satadj  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_satadj = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_dbz,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_dbz,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_dbz = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_fall    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_fall    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_fall = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_rad     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_rad     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_rad = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_pbl     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_pbl     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_pbl = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_stat    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_stat    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_stat = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_cflq    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_cflq    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_cflq = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_bc      ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_bc      ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_bc = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_integ   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_integ   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_integ = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_write   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_write   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_write = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_restart ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_restart ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_restart = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_misc    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_misc    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_misc = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_swath   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_swath   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_swath = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_pdef    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_pdef    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_pdef = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_prsrho  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_prsrho  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_prsrho = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_turbdiag,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_turbdiag,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_turbdiag = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_azimavg ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_azimavg ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_azimavg = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_hifrq ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_hifrq ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_hifrq = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_parcels ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_parcels ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_parcels = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpu1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpu1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpu1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpv1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpv1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpv1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpw1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpw1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpw1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpp1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpp1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpp1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpu2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpu2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpu2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpv2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpv2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpv2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpw2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpw2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpw2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpp2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpp2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpp2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mps1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mps1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mps1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mps3    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mps3    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mps3 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpq1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpq1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpq1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mps2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mps2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mps2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mps4    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mps4    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mps4 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpq2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpq2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpq2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mptk1   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mptk1   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mptk1 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mptk2   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mptk2   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mptk2 = sum/float(numprocs)
         sum = 0.0
-        call MPI_REDUCE(time_mpb     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_WORLD,ierr)
+        call MPI_REDUCE(time_mpb     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
         time_mpb = sum/float(numprocs)
       ENDIF
 #endif

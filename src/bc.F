@@ -1903,11 +1903,11 @@
 #ifdef MPI
       tem=0.0d0
       call MPI_ALLREDUCE(fluxout,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxout=tem
       tem=0.0d0
       call MPI_ALLREDUCE(fluxin,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxin=tem
 #endif
 
@@ -2009,11 +2009,11 @@
 #ifdef MPI
       tem=0.0d0
       call MPI_ALLREDUCE(fluxout,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxout=tem
       tem=0.0d0
       call MPI_ALLREDUCE(fluxin,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxin=tem
 #endif
 

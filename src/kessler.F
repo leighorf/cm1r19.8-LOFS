@@ -335,7 +335,7 @@
 
 !!!#ifdef MPI
 !!!      omax=0
-!!!      call MPI_REDUCE(nmax,omax,1,MPI_INTEGER,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+!!!      call MPI_REDUCE(nmax,omax,1,MPI_INTEGER,MPI_MAX,0,MPI_COMM_CM1,ierr)
 !!!      nmax=omax
 !!!#endif
 !!!      if(myid.eq.0) print *,'  nmax = ',nmax

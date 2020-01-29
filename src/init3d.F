@@ -370,7 +370,7 @@
 
 #ifdef MPI
         ! this ensures that every processor has all parcel locations:
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
         IF(axisymm.eq.1.or.ny.eq.1)THEN
@@ -2060,7 +2060,7 @@
         enddo
       ENDIF
 
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 
 #endif
       if(terrain_flag)then
@@ -2281,7 +2281,7 @@
         ENDIF
 
 #ifdef MPI
-        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
         mass1 = 0.0
