@@ -121,7 +121,14 @@
               output_snapshot_prespert_0000,output_vortmag,                   &
               output_zeta_max_0500,output_zeta_max_1000,output_zeta_max_2000, &
               output_zeta_max_0000,output_zeta_min_0000,output_zeta_min_0500, &
-              output_zeta_min_1000,output_zeta_min_2000,                      &
+              output_zeta_min_1000,output_zeta_min_2000, output_prespert,     &
+              output_qc,output_qi,output_qr,output_qs,output_qg,              &
+              output_nci,output_ncr,output_ncs,output_ncg,                    &
+              output_rain_accum,output_hwin_max_sfc,output_zeta_max_sfc,      &
+              output_zeta_min_sfc,output_prespert_min_sfc,                    &
+              output_snapshot_thrho_sfc,output_snapshot_prespert_sfc,         &
+              output_snapshot_u_sfc,output_snapshot_v_sfc,                    &
+              output_helicity_max_2_5km,output_xvort,output_yvort,output_zvort,&
 !end LOFS
               prcl_th,prcl_t,prcl_prs,prcl_ptra,prcl_q,prcl_nc,               &
               prcl_km,prcl_kh,prcl_tke,prcl_dbz,prcl_b,prcl_vpg,prcl_vort,    &
@@ -250,7 +257,7 @@
               output_radten,output_cape,output_cin,output_lcl,output_lfc,     &
               output_pwat,output_lwp,                                         &
               output_thbudget,output_qvbudget,                                &
-              output_ubudget,output_vbudget,output_wbudget,output_pdcomp
+              output_ubudget,output_vbudget,output_wbudget,output_pdcomp,     &
 !begin LOFS
               output_thrhopert,output_q_numconc,output_prespert_min_2000,     &
               output_prespert_min_1000,output_prespert_min_0000,              &
@@ -263,7 +270,14 @@
               output_snapshot_prespert_0000,output_vortmag,                   &
               output_zeta_max_0500,output_zeta_max_1000,output_zeta_max_2000, &
               output_zeta_max_0000,output_zeta_min_0000,output_zeta_min_0500, &
-              output_zeta_min_1000,output_zeta_min_2000
+              output_zeta_min_1000,output_zeta_min_2000, output_prespert,     &
+              output_qc,output_qi,output_qr,output_qs,output_qg,              &
+              output_nci,output_ncr,output_ncs,output_ncg,                    &
+              output_rain_accum,output_hwin_max_sfc,output_zeta_max_sfc,      &
+              output_zeta_min_sfc,output_prespert_min_sfc,                    &
+              output_snapshot_thrho_sfc,output_snapshot_prespert_sfc,         &
+              output_snapshot_u_sfc,output_snapshot_v_sfc,                    &
+              output_helicity_max_2_5km,output_xvort,output_yvort,output_zvort
 !end LOFS
       namelist /param16/                                                      &
               restart_format,restart_filetype,restart_reset_frqtim,           &

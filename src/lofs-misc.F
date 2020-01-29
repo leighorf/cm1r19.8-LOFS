@@ -5,7 +5,6 @@
 !subroutine write_wforce
 !subroutine get_command_line_arguments
 !subroutine bcast_lofs
-!subroutine bcast_wforce
 !subroutine allocate_orf_vars1
 !subroutine setvindices
 !subroutine create_hardware_rank_mapping
@@ -193,20 +192,6 @@ subroutine bcast_lofs()
 
       return
 end subroutine bcast_lofs
-
-subroutine bcast_wforce()
-    implicit none
-      call MPI_BCAST(wforceon      ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforceendtime ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforceendval  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforcealpha   ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforcexrad    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforceyrad    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforcezrad    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforcexctr    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforceyctr    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(wforcezctr    ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
-end subroutine bcast_wforce
 
 subroutine allocate_orf_vars1()
     implicit none

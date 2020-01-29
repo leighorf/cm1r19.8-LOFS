@@ -3,7 +3,8 @@
 ZFP=/work/06618/orf/frontera/build/git/zfp
 HDF5ZFP=/home1/06618/orf/H5Z-ZFP-install
 FC=h5pfc
-OPTS = -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -qopenmp
+OPTS =  -I$(HDF5ZFP)/include
+OPTS += -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -qopenmp
 CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
 OUTPUTOPT =  -DCOREX=2 -DCOREY=7

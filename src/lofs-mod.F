@@ -2,9 +2,13 @@ module module_lofs
 use hdf5
 use h5zzfp_props_f
 use mpi_newcomm
+use input
+use constants
+use adv_routines, only: movesfc
+use misclibs, only: calcvort !ORF TODO don't need this? Calc post-hoc from u,v,w.
 implicit none
-include 'input.incl'
-include 'constants.incl'
+!include 'input.incl'
+!include 'constants.incl'
 
 #define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
 

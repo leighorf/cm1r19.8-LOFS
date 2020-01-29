@@ -49,7 +49,6 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
     character(LEN=7),  parameter :: param10_group_name = 'param10'
     character(LEN=7),  parameter :: param11_group_name = 'param11'
     character(LEN=7),  parameter :: param12_group_name = 'param12'
-    character(LEN=12),  parameter :: param_wforce_group_name = 'param_wforce'
     character(LEN=12),  parameter :: zfp_accuracy_group_name = 'zfp_accuracy'
     character(LEN=6),  parameter :: orf_io_group_name = 'orf_io'
 
@@ -127,7 +126,6 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gcreate_f(namelist_group_id,param10_group_name,param10_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param11_group_name,param11_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param12_group_name,param12_group_id,ierr); check_err(ierr)
-            call h5gcreate_f(namelist_group_id,param_wforce_group_name,param_wforce_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,zfp_accuracy_group_name,zfp_accuracy_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,orf_io_group_name,orf_io_group_id,ierr); check_err(ierr)
         
@@ -156,7 +154,6 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gclose_f(param10_group_id,ierr); check_err(ierr)
             call h5gclose_f(param11_group_id,ierr); check_err(ierr)
             call h5gclose_f(param12_group_id,ierr); check_err(ierr)
-            call h5gclose_f(param_wforce_group_id,ierr); check_err(ierr)
             call h5gclose_f(zfp_accuracy_group_id,ierr); check_err(ierr)
             call h5gclose_f(orf_io_group_id,ierr); check_err(ierr)
             call h5gclose_f(namelist_group_id,ierr); check_err(ierr)
@@ -215,7 +212,6 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gcreate_f(namelist_group_id,param10_group_name,param10_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param11_group_name,param11_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param12_group_name,param12_group_id,ierr); check_err(ierr)
-            call h5gcreate_f(namelist_group_id,param_wforce_group_name,param_wforce_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,zfp_accuracy_group_name,zfp_accuracy_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,orf_io_group_name,orf_io_group_id,ierr); check_err(ierr)
 !           if(fileindexname.ne.totalindexname) then
@@ -1227,7 +1223,6 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param12_group_id,floatval=xland0)
 
-
         varname='lu0'
         description='Default initial value for land-use index'
         units='index'
@@ -1237,9 +1232,6 @@ write_3d_once:    if (wr3d_once) then
         description='Which set of land-use conditions to use from LANDUSE.TBL file'
         units='index'
         call h5_write_val_iamio(param12_group_id,intval=season)
-
-
-
 
         varname='cecd'
         description='sfc exchange method'
@@ -1442,57 +1434,6 @@ write_3d_once:    if (wr3d_once) then
         description='User supplied variable'
         units='whatevah'
         call h5_write_val_iamio(param8_group_id,floatval=var10)
-
-        varname='wforceon'
-        description='Are we doing wforce?'
-        units='boolean'
-        if(wforceon) then; tmpint=1; else; tmpint=0; endif
-        call h5_write_val_iamio(param_wforce_group_id,intval=tmpint)
-
-        varname='wforceendtime'
-        description='End time of w forcing'
-        units='s'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforceendtime)
-
-        varname='wforceendval'
-        description='End value of updraft forcing following ramp up'
-        units='m/s'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforceendval)
-
-        varname='wforcealpha'
-        description='Time to ramp up to end val'
-        units='s'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforcealpha)
-
-        varname='wforcexrad'
-        description='X radius of w forcing'
-        units='m'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforcexrad)
-
-        varname='wforceyrad'
-        description='Y radius of w forcing'
-        units='m'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforceyrad)
-
-        varname='wforcezrad'
-        description='Z radius of w forcing'
-        units='m'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforcezrad)
-
-        varname='wforcexctr'
-        description='X center of w forcing'
-        units='#'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforcexctr)
-
-        varname='wforceyctr'
-        description='Y center of w forcing'
-        units='#'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforceyctr)
-
-        varname='wforcezctr'
-        description='Z center of w forcing'
-        units='#'
-        call h5_write_val_iamio(param_wforce_group_id,floatval=wforcezctr)
 
     endif write_3d_once
 
