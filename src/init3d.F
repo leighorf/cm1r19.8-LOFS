@@ -1975,6 +1975,7 @@
  
       integer :: i,j,k,n
       double precision :: p0
+      double precision, dimension(nk) :: dumk1
 
 !------------------------------------------------------------------
 !  Make sure boundary values are set properly
@@ -2066,116 +2067,6 @@
         call bcwsfc(gz,dzdx,dzdy,ua,va,wa)
         call bc2d(wa(ib,jb,1))
       endif
-!------------------------------------------------------------------
-!  Get stuff
-
-  IF( .not. restarted )THEN
-
-    IF(psolver.eq.4.or.psolver.eq.5.or.psolver.eq.6)THEN
-
-!$omp parallel do default(shared)  &
-!$omp private(i,j,k)
-      do k=1,nk
-      do j=1,nj
-      do i=1,ni
-        rho(i,j,k)=rho0(i,j,k)
-        prs(i,j,k)=prs0(i,j,k)
-      enddo
-      enddo
-      enddo
-
-    ELSE
-
-      call calcprs(pi0,prs,ppi)
- 
-      call calcrho(pi0,th0,rho,prs,ppi,tha,qa)
-
-    ENDIF
-
-  ENDIF
-
-
-        call bcs(rho)
-#ifdef MPI
-        call comm_1s_start(rho,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call comm_1s_end(rho,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call bcs2(rho)
-        call getcorner(rho,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-#endif
-
-      !$omp parallel do default(shared)  &
-      !$omp private(i,j,k)
-        do k=1,nk
-        do j=1,nj
-        do i=1,ni
-          rr(i,j,k) = 1.0/rho(i,j,k)
-          rf(i,j,k) = (c1(i,j,k)*rho(i,j,k-1)+c2(i,j,k)*rho(i,j,k))
-        enddo
-        enddo
-        enddo
-
-        ! meh 1 !
-      !$omp parallel do default(shared)  &
-      !$omp private(i,j,k)
-        do j=1,nj
-        do i=1,ni
-          ! cm1r17, 2nd-order extrapolation:
-          rf(i,j,1) = cgs1*rho(i,j,1)+cgs2*rho(i,j,2)+cgs3*rho(i,j,3)
-          rf(i,j,nk+1) = cgt1*rho(i,j,nk)+cgt2*rho(i,j,nk-1)+cgt3*rho(i,j,nk-2)
-        enddo
-        enddo
-
-        call bcs(rr)
-#ifdef MPI
-        call comm_1s_start(rr,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call comm_1s_end(rr,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call bcs2(rr)
-        call getcorner(rr,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-#endif
-        call bcs(rf)
-#ifdef MPI
-        call comm_1s_start(rf,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call comm_1s_end(rf,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
-        call bcs2(rf)
-        call getcorner(rf,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-#endif
-
-!------------------------------------------------------------------
-!  cm1r18:  get total mass of dry air at t=0
-
-      IF( .not. restarted )THEN
-
-        mass1 = 0.0
-
-        IF( axisymm.eq.0 )THEN
-          do k=1,nk
-          do j=1,nj
-          do i=1,ni
-            mass1 = mass1 + rho(i,j,k)*ruh(i)*rvh(j)*rmh(i,j,k)
-          enddo
-          enddo
-          enddo
-        ELSEIF( axisymm.eq.1 )THEN
-          do k=1,nk
-          do j=1,nj
-          do i=1,ni
-            mass1 = mass1 + rho(i,j,k)*ruh(i)*rvh(j)*rmh(i,j,k)*pi*(xf(i+1)**2-xf(i)**2)
-          enddo
-          enddo
-          enddo
-        ELSE
-          stop 2223
-        ENDIF
-
-#ifdef MPI
-        call MPI_ALLREDUCE(mpi_in_place,mass1,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-#endif
-
-        mass1 = mass1*dble(dx*dy*dz)
-
-        if( myid.eq.0 ) print *,'  mass1 = ',mass1
-
-      ENDIF
 
 !------------------------------------------------------------------
 
@@ -2260,6 +2151,150 @@
         enddo
         enddo
       endif
+
+!------------------------------------------------------------------
+!  Get stuff
+
+  IF( .not. restarted )THEN
+
+    IF(psolver.eq.4.or.psolver.eq.5.or.psolver.eq.6)THEN
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+      do k=1,nk
+      do j=1,nj
+      do i=1,ni
+        rho(i,j,k)=rho0(i,j,k)
+        prs(i,j,k)=prs0(i,j,k)
+      enddo
+      enddo
+      enddo
+
+    ELSE
+
+      IF(imoist.eq.1)THEN
+
+        !$omp parallel do default(shared)  &
+        !$omp private(i,j,k)
+        do k=1,nk
+        do j=1,nj
+        do i=1,ni
+          prs(i,j,k)=p00*((pi0(i,j,k)+pp3d(i,j,k))**cpdrd)
+          rho(i,j,k)=prs(i,j,k)                         &
+             /( (th0(i,j,k)+th3d(i,j,k))*(pi0(i,j,k)+pp3d(i,j,k))     &
+               *(rd+max(0.0,q3d(i,j,k,nqv))*rv) )
+        enddo
+        enddo
+        enddo
+
+      ELSE
+
+        !$omp parallel do default(shared)  &
+        !$omp private(i,j,k)
+        do k=1,nk
+        do j=1,nj
+        do i=1,ni
+          prs(i,j,k)=p00*((pi0(i,j,k)+pp3d(i,j,k))**cpdrd)
+          rho(i,j,k)=prs(i,j,k)   &
+             /(rd*(th0(i,j,k)+th3d(i,j,k))*(pi0(i,j,k)+pp3d(i,j,k)))
+        enddo
+        enddo
+        enddo
+
+      ENDIF
+
+    ENDIF
+
+  ENDIF
+
+
+        call bcs(rho)
+#ifdef MPI
+        call comm_1s_start(rho,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call comm_1s_end(rho,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call bcs2(rho)
+        call getcorner(rho,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+#endif
+
+      !$omp parallel do default(shared)  &
+      !$omp private(i,j,k)
+        do k=1,nk
+        do j=1,nj
+        do i=1,ni
+          rr(i,j,k) = 1.0/rho(i,j,k)
+          rf(i,j,k) = (c1(i,j,k)*rho(i,j,k-1)+c2(i,j,k)*rho(i,j,k))
+        enddo
+        enddo
+        enddo
+
+        ! meh 1 !
+      !$omp parallel do default(shared)  &
+      !$omp private(i,j,k)
+        do j=1,nj
+        do i=1,ni
+          ! cm1r17, 2nd-order extrapolation:
+          rf(i,j,1) = cgs1*rho(i,j,1)+cgs2*rho(i,j,2)+cgs3*rho(i,j,3)
+          rf(i,j,nk+1) = cgt1*rho(i,j,nk)+cgt2*rho(i,j,nk-1)+cgt3*rho(i,j,nk-2)
+        enddo
+        enddo
+
+        call bcs(rr)
+#ifdef MPI
+        call comm_1s_start(rr,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call comm_1s_end(rr,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call bcs2(rr)
+        call getcorner(rr,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+#endif
+        call bcs(rf)
+#ifdef MPI
+        call comm_1s_start(rf,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call comm_1s_end(rf,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
+        call bcs2(rf)
+        call getcorner(rf,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+#endif
+
+!------------------------------------------------------------------
+!  cm1r18:  get total mass of dry air at t=0
+
+      IF( .not. restarted )THEN
+
+        dumk1 = 0.0
+
+        IF( axisymm.eq.0 )THEN
+          do k=1,nk
+          do j=1,nj
+          do i=1,ni
+            dumk1(k) = dumk1(k) + rho(i,j,k)*ruh(i)*rvh(j)*rmh(i,j,k)
+          enddo
+          enddo
+          enddo
+        ELSEIF( axisymm.eq.1 )THEN
+          do k=1,nk
+          do j=1,nj
+          do i=1,ni
+            dumk1(k) = dumk1(k) + rho(i,j,k)*ruh(i)*rvh(j)*rmh(i,j,k)*pi*(xf(i+1)**2-xf(i)**2)
+          enddo
+          enddo
+          enddo
+        ELSE
+          stop 2223
+        ENDIF
+
+#ifdef MPI
+        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+#endif
+
+        mass1 = 0.0
+
+        do k=1,nk
+          mass1 = mass1 + dumk1(k)
+        enddo
+
+        mass1 = mass1*dble(dx*dy*dz)
+
+        if( myid.eq.0 ) print *,'  mass1 = ',mass1
+
+      ENDIF
 
 !------------------------------------------------------------------
 !  cm1r19.5:
