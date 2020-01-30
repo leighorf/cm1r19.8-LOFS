@@ -7402,6 +7402,10 @@
       deallocate( xfdp )
       deallocate( yfdp )
 
+!begin LOFS
+      call set_MCM_params(xh,yh,xf,yf)
+!end LOFS
+
 !cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !ccc   Get 2nd-order extrapolation coefficients (Fornberg 1988)   ccc
 !cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

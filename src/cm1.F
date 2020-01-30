@@ -364,6 +364,11 @@
       ! note:  read remainder of namelist sections in param.F !
 
 !----------------------------------------------------------------------
+#ifdef MPI
+!begin LOFS
+      call create_hardware_rank_mapping(MPI_COMM_WORLD,corex,corey,nodex,nodey,MPI_COMM_CM1)
+!end LOFS
+#endif
 
       IF( procfiles )THEN
 #ifdef MPI
@@ -1958,6 +1963,13 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
         ! check if writeout will be called at end of timestep:
         !   (needed for some diagnostic calculations in solve)
         dowriteout = .false.
+!       if(myid.eq.0) then
+!             print *,"mtime = ",mtime
+!             print *,"dbldt = ",dbldt
+!             print *,"taptim = ",taptim !ORF taptim is zero out of the gate
+!             print *,"dt = ",dt
+!             print *,"tapfrq = ",tapfrq
+!       endif
         if( (mtime+dbldt).ge.(taptim-0.1*dt) .or. tapfrq.lt.0.0 ) dowriteout = .true.
         IF( myid.eq.0 .and. dowriteout ) print *,'  dowriteout = ',dowriteout
 
@@ -2173,6 +2185,9 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
 
 
       rtime=sngl(mtime)
+!begin LOFS
+      iotime=mtime
+!end LOFS
 
       getsfc = .true.
       if( restarted ) getsfc = .false.
