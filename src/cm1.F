@@ -2417,7 +2417,7 @@ endif
              zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
              dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
              t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
-             znt,ust,u1,v1,s1,rr,tdiat,qdiag,udiag,vdiag,wdiag,pdiag)
+             znt,ust,u1,v1,s1,rr,tdiag,qdiag,udiag,vdiag,wdiag,pdiag)
 
          call MPI_BARRIER(MPI_COMM_CM1,ierr)
 

@@ -713,6 +713,955 @@
 
 
 
+! ORF We deviate from George's approach here and do not save the extra stagger point (not using dumu array)
+! stagger points are duplicated on adjacent ranks anyway
+
+! But, we should interpolate to the scalar mesh when we read these into hdf2nc or whatever
+
+wbudget: if (output_wbudget.eq.1) then
+
+!       elseif( trim(name_output(n)).eq.'wb_hadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_hadv)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_hadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="w budget: horizontal advection (non-diff component)"
+          else
+                description="w budget: horizontal advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_hadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_vadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_vadv)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_vadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="w budget: vertical advection (non-diff component)"
+          else
+                description="w budget: vertical advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_vadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_hturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_hturb)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_hturb"
+          description="w budget: horizontal parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_hturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_vturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_vturb)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_vturb"
+          description="w budget: vertical parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_vturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_hidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_hidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_hidiff"
+          description="w budget: horizontal implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_hidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_vidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_vidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_vidiff"
+          description="w budget: vertical implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_vidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_hediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_hediff)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_hediff"
+          description="w budget: horizontal explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_hediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_vediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_vediff)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_vediff"
+          description="w budget: vertical explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_vediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_pgrad' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_pgrad)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_pgrad"
+          description="w budget: pressure gradient"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_pgrad_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_rdamp' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_rdamp)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_rdamp"
+          description="w budget: Rayleigh damper"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_rdamp_acc)
+
+!       elseif( trim(name_output(n)).eq.'wb_buoy' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = wdiag(i,j,k,wd_buoy)
+          enddo
+          enddo
+          enddo
+
+          varname="wb_buoy"
+          description="w budget: buoyancy"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_buoy_acc)
+endif wbudget
+
+vbudget: if (output_vbudget.eq.1) then
+!       elseif( trim(name_output(n)).eq.'ub_hadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_hadv)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_hadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="v budget: horizontal advection (non-diff component)"
+          else
+                description="v budget: horizontal advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_hadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_vadv)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_vadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="v budget: vertical advection (non-diff component)"
+          else
+                description="v budget: vertical advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_vadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_hturb)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_hturb"
+          description="v budget: horizontal parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_hturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_vturb)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_hturb"
+          description="v budget: vertical parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_vturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_hidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_hidiff"
+          description="v budget: horiz implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_hidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_vidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_vidiff"
+          description="v budget: vert implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_vidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_hediff)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_hediff"
+          description="v budget: horiz explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_hediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_vediff)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_vediff"
+          description="v budget: vert explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_vediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_pgrad' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_pgrad)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_pgrad"
+          description="v budget: pressure gradient"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_pgrad_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_rdamp' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_rdamp)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_rdamp"
+          description="v budget: Rayleigh damper"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_rdamp_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_cor' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_cor)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_cor"
+          description="v budget: Coriolis acceleration"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_cor_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_pbl' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_pbl)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_pbl"
+          description="v budget: PBL scheme"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_pbl_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_subs' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = vdiag(i,j,k,vd_subs)
+          enddo
+          enddo
+          enddo
+
+          varname="vb_subs"
+          description="v budget: large-scale subsidence "
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_subs_acc)
+
+endif vbudget
+
+ubudget: if (output_ubudget.eq.1) then
+!       elseif( trim(name_output(n)).eq.'ub_hadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_hadv)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_hadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="u budget: horizontal advection (non-diff component)"
+          else
+                description="u budget: horizontal advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_hadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vadv' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_vadv)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_vadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="u budget: vertical advection (non-diff component)"
+          else
+                description="u budget: vertical advection"
+          endif
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_vadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_hturb)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_hturb"
+          description="u budget: horizontal parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_hturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vturb' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_vturb)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_hturb"
+          description="u budget: vertical parameterized turbulence"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_vturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_hidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_hidiff"
+          description="u budget: horiz implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_hidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vidiff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_vidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_vidiff"
+          description="u budget: vert implicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_vidiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_hediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_hediff)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_hediff"
+          description="u budget: horiz explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_hediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_vediff' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_vediff)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_vediff"
+          description="u budget: vert explicit diffusion"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_vediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_pgrad' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_pgrad)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_pgrad"
+          description="u budget: pressure gradient"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_pgrad_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_rdamp' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_rdamp)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_rdamp"
+          description="u budget: Rayleigh damper"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_rdamp_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_cor' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_cor)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_cor"
+          description="u budget: Coriolis acceleration"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_cor_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_pbl' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_pbl)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_pbl"
+          description="u budget: PBL scheme"
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_pbl_acc)
+
+!       elseif( trim(name_output(n)).eq.'ub_subs' )then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = udiag(i,j,k,ud_subs)
+          enddo
+          enddo
+          enddo
+
+          varname="ub_subs"
+          description="u budget: large-scale subsidence "
+          units="m/s/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_subs_acc)
+
+endif ubudget
+
+qvbudget: if (output_qvbudget.eq.1) then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_hadv)
+          enddo
+          enddo
+          enddo
+          varname="qvb_hadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="qv budget: horizontal advection (non-diff component)"
+          else
+                description="qv budget: horizontal advection"
+          endif
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_hadv_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_vadv)
+          enddo
+          enddo
+          enddo
+          varname="qvb_vadv"
+          if (hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 ) then
+                description="qv budget: vertical advection (non-diff component)"
+          else
+                description="qv budget: vertical advection"
+          endif
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_vadv_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_hturb' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_hturb)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_hturb"
+          description="qv budget: horizontal parameterized turbulence"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_hturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_vturb' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_vturb)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_vturb"
+          description="qv budget: vertical parameterized turbulence"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_vturb_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_hidiff' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_hidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_hidiff"
+          description="qv budget: horiz implicit diffusion"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_hdiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_vidiff' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_vidiff)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_vidiff"
+          description="qv budget: vert implicit diffusion"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_vdiff_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_hediff' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_hediff)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_hediff"
+          description="qv budget: horiz explicit diffusion"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_hediff_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_vediff' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_vediff)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_vediff"
+          description="qv budget: vert explicit diffusion"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_vediff_acc)
+
+
+!       elseif( trim(name_output(n)).eq.'qvb_mp' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_mp)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_mp"
+          description="qv budget: microphysics scheme"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_mp_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_pbl' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_pbl)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_pbl"
+          description="qv budget: PBL scheme"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_pbl_acc)
+
+!       elseif( trim(name_output(n)).eq.'qvb_subs' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_subs)
+          enddo
+          enddo
+          enddo
+
+          varname="qvb_subs"
+          description="qv budget: large-scale subsidence"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qvb_subs_acc)
+
+ptype5a: if (ptype.eq.5) then
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_cond)
+          enddo
+          enddo
+          enddo
+
+          varname="qt_cond"
+          description="qv tendency: condensation"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qt_cond_acc)
+
+!       elseif( trim(name_output(n)).eq.'qt_evac' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_evac)
+          enddo
+          enddo
+          enddo
+
+          varname="qt_evac"
+          description="qv tendency: cloudwater evaporation"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qt_evac_acc)
+
+!       elseif( trim(name_output(n)).eq.'qt_evar' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_evar)
+          enddo
+          enddo
+          enddo
+
+          varname="qt_evar"
+          description="qv tendency: rainwater evaporation"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qt_evar_acc)
+
+!       elseif( trim(name_output(n)).eq.'qt_dep' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_dep)
+          enddo
+          enddo
+          enddo
+
+          varname="qt_dep"
+          description="qv tendency: deposition"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qt_dep_acc)
+
+!       elseif( trim(name_output(n)).eq.'qt_subl' )then
+
+          !$omp parallel do default(shared)  &
+          !$omp private(i,j,k)
+          do k=1,maxk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k) = qdiag(i,j,k,qd_subl)
+          enddo
+          enddo
+          enddo
+
+          varname="qt_subl"
+          description="qv tendency: sublimation"
+          units="kg/kg/s"
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qt_subl_acc)
+
+      endif ptype5a
+
+endif qvbudget
+
+
 
 thbudget: if (output_thbudget.eq.1) then
      
@@ -964,6 +1913,8 @@ thbudget: if (output_thbudget.eq.1) then
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,td_efall_acc)
 
+ptype5b: if (ptype.eq.5) then
+
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
        do k=1,maxk
@@ -1068,6 +2019,7 @@ thbudget: if (output_thbudget.eq.1) then
        description="theta. tendency: freezing"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_frz_acc)
+ endif ptype5b
 
 endif thbudget
 
