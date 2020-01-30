@@ -34,7 +34,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
     character(LEN=6),  parameter :: twod_static_group_name = 'static'         !for 3D files
     character(LEN=6),  parameter :: twodfull_group_name = '2Dfull' !for 2D files
     character(LEN=2),  parameter :: threed_group_name = '3D'       !for 3D files
-! ORF Fuck it, just save all the namelist stuff using the same namelist nomenclature
+! save all the namelist stuff using the same namelist nomenclature
     character(LEN=8),  parameter :: namelist_group_name = 'namelist'
     character(LEN=6),  parameter :: param0_group_name = 'param0'
     character(LEN=6),  parameter :: param1_group_name = 'param1'
@@ -49,8 +49,12 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
     character(LEN=7),  parameter :: param10_group_name = 'param10'
     character(LEN=7),  parameter :: param11_group_name = 'param11'
     character(LEN=7),  parameter :: param12_group_name = 'param12'
+    character(LEN=7),  parameter :: param13_group_name = 'param13'
+    character(LEN=7),  parameter :: param14_group_name = 'param14'
+    character(LEN=7),  parameter :: param15_group_name = 'param15'
+    character(LEN=15),  parameter :: nssl2mom_params_group_name = 'nssl2mom_params'
     character(LEN=12),  parameter :: zfp_accuracy_group_name = 'zfp_accuracy'
-    character(LEN=6),  parameter :: orf_io_group_name = 'orf_io'
+    character(LEN=4),  parameter :: lofs_group_name = 'lofs'
 
 ! ORF 6/2/12 for now ignore extra stagger point
     real, dimension(1:myMCMni) :: xhMCM
@@ -77,9 +81,9 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
 1729 format("New (empty) LOFS files created on disk at t = ",f9.3)
 1730 format("Done flushing LOFS data to disk at t = ",f9.3)
 
-!print *,myid,"PRELIM: iamio = ",iamio,"wr3d = ",wr3d,"iwrite3d = ",iwrite3d, "firstvisit = ",firstvisit, "newcycle = ",newcycle
+!print *,myid,"PRELIM: iamio = ",iamio,"iwrite3d = ",iwrite3d, "firstvisit = ",firstvisit, "newcycle = ",newcycle
 
-    iamwriting3d: if (iamio.and.wr3d.and.iwrite3d) then
+    iamwriting3d: if (iamio.and.iwrite3d) then
         firstvis: if (firstvisit) then
             i3d_time_index = 0
 !           wr3dindex = 0
@@ -126,9 +130,12 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gcreate_f(namelist_group_id,param10_group_name,param10_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param11_group_name,param11_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param12_group_name,param12_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param13_group_name,param13_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param14_group_name,param14_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param15_group_name,param15_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,nssl2mom_params_group_name,nssl2mom_params_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,zfp_accuracy_group_name,zfp_accuracy_group_id,ierr); check_err(ierr)
-            call h5gcreate_f(namelist_group_id,orf_io_group_name,orf_io_group_id,ierr); check_err(ierr)
-        
+            call h5gcreate_f(namelist_group_id,lofs_group_name,lofs_group_id,ierr); check_err(ierr)
             call h5gcreate_f(file_3d_id,fileindexname,fileindex_group_id,ierr) !Our 2d and 3d fields are inside the index group now
             call h5gcreate_f(fileindex_group_id,twod_group_name,twod_group_id,ierr); check_err(ierr)
             call h5gcreate_f(twod_group_id,twod_swath_group_name,twod_swath_group_id,ierr); check_err(ierr) !added swaths
@@ -154,8 +161,12 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gclose_f(param10_group_id,ierr); check_err(ierr)
             call h5gclose_f(param11_group_id,ierr); check_err(ierr)
             call h5gclose_f(param12_group_id,ierr); check_err(ierr)
+            call h5gclose_f(param13_group_id,ierr); check_err(ierr)
+            call h5gclose_f(param14_group_id,ierr); check_err(ierr)
+            call h5gclose_f(param15_group_id,ierr); check_err(ierr)
+            call h5gclose_f(nssl2mom_params_group_id,ierr); check_err(ierr)
             call h5gclose_f(zfp_accuracy_group_id,ierr); check_err(ierr)
-            call h5gclose_f(orf_io_group_id,ierr); check_err(ierr)
+            call h5gclose_f(lofs_group_id,ierr); check_err(ierr)
             call h5gclose_f(namelist_group_id,ierr); check_err(ierr)
             call h5gclose_f(twod_static_group_id,ierr); check_err(ierr)
             call h5gclose_f(twod_swath_group_id,ierr); check_err(ierr)
@@ -212,8 +223,12 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gcreate_f(namelist_group_id,param10_group_name,param10_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param11_group_name,param11_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,param12_group_name,param12_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param13_group_name,param13_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param14_group_name,param14_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,param15_group_name,param15_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,nssl2mom_params_group_name,nssl2mom_params_group_id,ierr); check_err(ierr)
             call h5gcreate_f(namelist_group_id,zfp_accuracy_group_name,zfp_accuracy_group_id,ierr); check_err(ierr)
-            call h5gcreate_f(namelist_group_id,orf_io_group_name,orf_io_group_id,ierr); check_err(ierr)
+            call h5gcreate_f(namelist_group_id,lofs_group_name,lofs_group_id,ierr); check_err(ierr)
 !           if(fileindexname.ne.totalindexname) then
 !               call h5lcreate_soft_f(fileindexname,file_3d_id,totalindexname,ierr);check_err(ierr)
 !           endif
@@ -259,9 +274,9 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
     endif
 
 ! ORF IWRITE3D 
-! declare new boolean: wr3d_once = (iamio.and.wr3d.and.iwrite3d.and.(firstvisit.or.newcycle))
+! declare new boolean: wr3d_once = (iamio.and.iwrite3d.and.(firstvisit.or.newcycle))
 
-    wr3d_once=(iamio.and.wr3d.and.iwrite3d.and.(firstvisit.or.newcycle))
+    wr3d_once=(iamio.and.iwrite3d.and.(firstvisit.or.newcycle))
 
 write_3d_once:    if (wr3d_once) then
         varname='dx'
@@ -489,6 +504,8 @@ write_3d_once:    if (wr3d_once) then
 
 ! ORF save all values even where I save stuff elsewhere (grid and mesh groups).
 
+!param0
+
         varname='nx'
         description='number of scalar grid points in x'
         units='#'
@@ -514,6 +531,13 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param0_group_id,intval=nodey)
 
+        varname='ppnode'
+        description='number of cores per node'
+        units='#'
+        call h5_write_val_iamio(param0_group_id,intval=ppnode)
+
+!param1
+
         varname='dx'
         description='constant grid spacing in EW direction if stretch_x=0'
         units='m'
@@ -530,14 +554,19 @@ write_3d_once:    if (wr3d_once) then
         call h5_write_val_iamio(param1_group_id,floatval=dz)
 
         varname='dtl'
-        description='THIS VALUE IS IGNORED... see orf_io/dtl_dbl_orf for actual time step'
+        description='model time step'
         units='s'
-        call h5_write_val_iamio(param1_group_id,floatval=dtl)
+        call h5_write_val_iamio(param1_group_id,floatval=dtl) !ORF TODO double precision
 
         varname='timax'
         description='Time to stop model'
         units='s'
         call h5_write_val_iamio(param1_group_id,floatval=timax)
+
+        varname='run_time'
+        description='Run time'
+        units='s'
+        call h5_write_val_iamio(param1_group_id,floatval=run_time)
 
         varname='tapfrq'
         description='Time interval between LOFS history data saves'
@@ -559,67 +588,76 @@ write_3d_once:    if (wr3d_once) then
         units='s'
         call h5_write_val_iamio(param1_group_id,floatval=prclfrq)
 
-        varname='dtl_dbl_orf'
+!!!!!!!ORF!!!!!!!
+
+!lofs
+
+        varname='dtl_dbl_orf' !ORF TODO shouldn't need this anymore
         description='model time step'
         units='s'
-        call h5_write_val_iamio(orf_io_group_id,doubleval=dtl_dbl_orf)
+        call h5_write_val_iamio(lofs_group_id,doubleval=dtl_dbl_orf)
 
-        varname='numconcfreq'
+        varname='numconcfreq' !ORF TODO just forget this
         description='number concentration save interval'
         units='s'
-        call h5_write_val_iamio(orf_io_group_id,floatval=numconcfreq)
+        call h5_write_val_iamio(lofs_group_id,floatval=numconcfreq)
 
         varname='time_levels_per_histfile'
         description='Time levels per LOFS file'
         units='s'
-        call h5_write_val_iamio(orf_io_group_id,intval=time_levels_per_histfile)
+        call h5_write_val_iamio(lofs_group_id,intval=time_levels_per_histfile)
 
 !ORF there is no H5T_NATIVE_LOGICAL type, so we convert fortran logical to an integer, 0=false 1=true
         varname='save_full_domain'
         description='Are we saving full horizontal extent of domain?'
         units='boolean'
         if(save_full_domain) then; tmpint=1; else; tmpint=0; endif
-        call h5_write_val_iamio(orf_io_group_id,intval=tmpint)
+        call h5_write_val_iamio(lofs_group_id,intval=tmpint)
 
         varname='save_full_vertical_extent'
         description='Are we saving full vertical extent of domain?'
         units='boolean'
         if(save_full_vertical_extent) then; tmpint=1; else; tmpint=0; endif
-        call h5_write_val_iamio(orf_io_group_id,intval=tmpint)
+        call h5_write_val_iamio(lofs_group_id,intval=tmpint)
 
         varname='save_x0'
         description='Requested save_x0'
         units='index'
-        call h5_write_val_iamio(orf_io_group_id,intval=save_x0)
+        call h5_write_val_iamio(lofs_group_id,intval=save_x0)
 
         varname='save_x1'
         description='Requested save_x1'
         units='index'
-        call h5_write_val_iamio(orf_io_group_id,intval=save_x1)
+        call h5_write_val_iamio(lofs_group_id,intval=save_x1)
 
         varname='save_y0'
         description='Requested save_y0'
         units='index'
-        call h5_write_val_iamio(orf_io_group_id,intval=save_y0)
+        call h5_write_val_iamio(lofs_group_id,intval=save_y0)
 
         varname='save_y1'
         description='Requested save_y1'
         units='index'
-        call h5_write_val_iamio(orf_io_group_id,intval=save_y1)
+        call h5_write_val_iamio(lofs_group_id,intval=save_y1)
+
+! ORF TODO we really need save_z0 and save_z1
+! ORF save_all_times and save_start_time are ignored!!
 
         varname='nkwrite_val'
         description='Actual top (vertical) index saved (we often do not save up to nz)'
         units='index'
         if(save_full_vertical_extent) then
-           call h5_write_val_iamio  (orf_io_group_id,intval=nk)
+           call h5_write_val_iamio  (lofs_group_id,intval=nk)
         else
-           call h5_write_val_iamio  (orf_io_group_id,intval=nkwrite_val)
+           call h5_write_val_iamio  (lofs_group_id,intval=nkwrite_val)
         endif
 
         varname='prespert_swath_start_time'
         description='Model time when we start collecting pressure swath data (to avoid initial pulse)'
         units='s'
-        call h5_write_val_iamio(orf_io_group_id,floatval=prespert_swath_start_time)
+        call h5_write_val_iamio(lofs_group_id,floatval=prespert_swath_start_time)
+
+!zfp_accuracy
 
         varname='u_acc'
         description='u zfp accuracy parameter'
@@ -801,6 +839,18 @@ write_3d_once:    if (wr3d_once) then
         units='s^-1'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=vortmag_acc)
 
+!param2
+
+        varname='cm1setup'
+        description='cm1setup'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=cm1setup)
+
+        varname='testcase'
+        description='testcase'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=testcase)
+
         varname='adapt_dt'
         description='adaptive time stepping?'
         units='boolean'
@@ -816,35 +866,55 @@ write_3d_once:    if (wr3d_once) then
         units='s'
         call h5_write_val_iamio(param2_group_id,intval=rstnum)
 
-        varname='hadvorder'
-        description='horizontal advection order of accuracy'
+        varname='iconly'
+        description='iconly'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=iconly)
+
+        varname='hadvordrs'
+        description='horizontal advection order of accuracy for scalars'
         units='integer'
-        call h5_write_val_iamio(param2_group_id,intval=hadvorder)
+        call h5_write_val_iamio(param2_group_id,intval=hadvordrs)
 
-        varname='vadvorder'
-        description='vertical advection order of accuracy'
+        varname='vadvordrs'
+        description='vertical advection order of accuracy for scalars'
         units='integer'
-        call h5_write_val_iamio(param2_group_id,intval=vadvorder)
+        call h5_write_val_iamio(param2_group_id,intval=vadvordrs)
 
-        varname='pdscheme'
-        description='ensure positive definiteness of moisture?'
-        units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=pdscheme)
+        varname='hadvordrv'
+        description='horizontal advection order of accuracy for wind'
+        units='integer'
+        call h5_write_val_iamio(param2_group_id,intval=hadvordrv)
 
-        varname='advweno'
-        description='Advect scalars (except for pressure) with WENO scheme?'
+        varname='vadvordrv'
+        description='vertical advection order of accuracy for wind'
+        units='integer'
+        call h5_write_val_iamio(param2_group_id,intval=vadvordrv)
+
+        varname='advwenos'
+        description='Advect scalars with WENO scheme?'
         units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=advweno)
+        call h5_write_val_iamio(param2_group_id,intval=advwenos)
+
+        varname='advwenov'
+        description='Advect velocity with WENO scheme?'
+        units='boolean'
+        call h5_write_val_iamio(param2_group_id,intval=advwenov)
+
+        varname='weno_order'
+        description='WENO scheme order'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=weno_order)
+
+        varname='apmasscon'
+        description='Adjust mass to keep pressure from drifting?'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=apmasscon)
 
         varname='idiff'
         description='Include additional artificial diffusion?'
         units='index'
         call h5_write_val_iamio(param2_group_id,intval=idiff)
-
-        varname='vdiff'
-        description='When idiff=1, apply artificial diffusion to vertical direction?'
-        units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=vdiff)
 
         varname='mdiff'
         description='When idiff=1 and diforder=6, apply monotonic version of artificial diffusion?'
@@ -863,38 +933,41 @@ write_3d_once:    if (wr3d_once) then
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=imoist)
 
-        varname='iturb'
+        varname='ipbl'
+        description='Use planetary bondary layer parameterization?'
+        units='boolean'
+        call h5_write_val_iamio(param2_group_id,intval=ipbl)
+
+        varname='sgsmodel'
         description='1=TKE 2=Smagorinsky'
         units='index'
-        call h5_write_val_iamio(param2_group_id,intval=iturb)
+        call h5_write_val_iamio(param2_group_id,intval=sgsmodel)
 
         varname='tconfig'
         description='Turb coefficient calculation: 1=isotropic-ish mesh, 2=dz<<dx,dy'
         units='index'
         call h5_write_val_iamio(param2_group_id,intval=tconfig)
 
-        varname='bcturbu'
-        description='Lower/upper boundary condition for vertical diffusion of winds (u and v)'
-        units='index'
-        call h5_write_val_iamio(param2_group_id,intval=bcturbu)
-
         varname='bcturbs'
         description='Lower/upper boundary condition for vertical diffusion of all scalars'
-        units='boolean'
+        units='index'
         call h5_write_val_iamio(param2_group_id,intval=bcturbs)
 
-        varname='dns'
-        description='Dirct Numerical Simulation?'
+        varname='horizturb'
+        description='Horizontal turb. param. (i.e., horiz Smag; see Bryan and Rotunno (2009,MWR,p1773))'
         units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=dns)
+        call h5_write_val_iamio(param2_group_id,intval=horizturb)
 
-!ORF should turn this on to see if pressure fluctuations go away
+        varname='doimpl'
+        description='Vertically implicit calculation for vertical turbulence tendencies?'
+        units='boolean'
+        call h5_write_val_iamio(param2_group_id,intval=doimpl)
+
         varname='irdamp'
         description='Use upper-level Rayleigh damping zone (acts on u,v,w, and theta; user must set rdalpha and xhd) (0=no 1=yes)?'
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=irdamp)
 
-!ORF and this
         varname='hrdamp'
         description='Use Rayleigh damping near lateral boundaries (acts on u,v,w, only; use rmust set rdalpha and xhd) (0=no 1=yes)?'
         units='boolean'
@@ -905,10 +978,11 @@ write_3d_once:    if (wr3d_once) then
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=psolver)
 
-        varname='nsound'
-        description='Number of small (acoustic) time steps per large time step'
-        units='index'
-        call h5_write_val_iamio(param2_group_id,intval=nsound)
+! ORF So this is set automatically now
+!       varname='nsound'
+!       description='Number of small (acoustic) time steps per large time step'
+!       units='index'
+!       call h5_write_val_iamio(param2_group_id,intval=nsound)
 
         varname='ptype'
         description='Microphysics. 1=Kessler 2=NASA-Goddard LFO 3=Thompson 4=Gilmore/Straka/Rasmussen LFO 5=Morrison 6=Rotunno-Emanuel(1987)?'
@@ -930,15 +1004,15 @@ write_3d_once:    if (wr3d_once) then
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=icor)
 
-        varname='pertcor'
-        description='Apply Coriolis to perturbation winds only?'
+        varname='lspgrad'
+        description='Apply large-scale pressure gradient acceleration to u and v components of velocity?'
         units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=pertcor)
+        call h5_write_val_iamio(param2_group_id,intval=lspgrad)
 
-        varname='neweqts'
-        description='Use Bryan and Fritsch(2002) equations? 2 recommended.'
-        units='boolean'
-        call h5_write_val_iamio(param2_group_id,intval=neweqts)
+        varname='eqtset'
+        description='Equation set for moist microphysics; 2 is more accurate CM1 method.'
+        units='#'
+        call h5_write_val_iamio(param2_group_id,intval=eqtset)
 
         varname='idiss'
         description='Include dissipative heating?'
@@ -976,6 +1050,16 @@ write_3d_once:    if (wr3d_once) then
         units='index'
         call h5_write_val_iamio(param2_group_id,intval=nbc)
 
+        varname='bbc'
+        description='Bottom boundary conditions for winds'
+        units='index'
+        call h5_write_val_iamio(param2_group_id,intval=bbc)
+
+        varname='tbc'
+        description='Top boundary conditions for winds'
+        units='index'
+        call h5_write_val_iamio(param2_group_id,intval=tbc)
+
         varname='irbc'
         description='Type of radiative scheme. 1=KW on large stapes, 2=KW on small steps 4=Durran-Klemp(1983)?'
         units='index'
@@ -986,6 +1070,11 @@ write_3d_once:    if (wr3d_once) then
         description='Restrict outward flux?'
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=roflux)
+
+        varname='nudgeobc'
+        description='Nudge winds at inflow boundaries when using open boundary conditions?'
+        units='boolean'
+        call h5_write_val_iamio(param2_group_id,intval=nudgeobc)
 
         varname='isnd'
         description='Sounding option. 7=read from external file'
@@ -1003,7 +1092,7 @@ write_3d_once:    if (wr3d_once) then
         call h5_write_val_iamio(param2_group_id,intval=itern)
 
         varname='iinit'
-        description='3D initialization option (ignored for LOFS which uses wforcing [see param_wforce])'
+        description='3D initialization option'
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=iinit)
 
@@ -1042,6 +1131,11 @@ write_3d_once:    if (wr3d_once) then
         units='index'
         call h5_write_val_iamio(param2_group_id,intval=npt)
 
+        varname='pdtra'
+        description='Ensure positive-definiteness for tracers?'
+        units='boolean'
+        call h5_write_val_iamio(param2_group_id,intval=pdtra)
+
         varname='iprcl'
         description='Integrate passive parcels?'
         units='boolean'
@@ -1051,6 +1145,8 @@ write_3d_once:    if (wr3d_once) then
         description='Total number of parcels?'
         units='boolean'
         call h5_write_val_iamio(param2_group_id,intval=nparcels)
+
+! param3
 
         varname='kdiff2'
         description='diffusion coefficient for difforder=2'
@@ -1113,8 +1209,18 @@ write_3d_once:    if (wr3d_once) then
         units='m'
         call h5_write_val_iamio(param3_group_id,floatval=l_h)
 
+        varname='lhref1'
+        description='A reference value of l_h (m): value for surface pressure of 1015 mb'
+        units='m'
+        call h5_write_val_iamio(param3_group_id,floatval=lhref1)
+
+        varname='lhref2'
+        description='A reference value of l_h (m): value for surface pressure of 900 mb'
+        units='m'
+        call h5_write_val_iamio(param3_group_id,floatval=lhref2)
+
         varname='l_inf'
-        description='Asymptotic vertical turbulence lengh scale used for iturb=3'
+        description='Asymptotic vertical turbulence length scale (m)'
         units='m'
         call h5_write_val_iamio(param3_group_id,floatval=l_inf)
 
@@ -1122,6 +1228,8 @@ write_3d_once:    if (wr3d_once) then
         description='Specified cloud droplet concentration for default version of Morrison microphysics scheme.'
         units='cm^-3'
         call h5_write_val_iamio(param3_group_id,floatval=ndcnst)
+
+!param11
 
         varname='radopt'
         description='Use atmospheric radiation code?'
@@ -1142,11 +1250,6 @@ write_3d_once:    if (wr3d_once) then
         description='Longitude'
         units='degrees'
         call h5_write_val_iamio(param11_group_id,floatval=ctrlon)
-
-
-
-
-
 
         varname='year'
         description='Year at start of simulation'
@@ -1178,10 +1281,7 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param11_group_id,intval=second)
 
-        varname='idrag'
-        description='Include surface drag?'
-        units='boolean'
-        call h5_write_val_iamio(param12_group_id,intval=idrag)
+!param12
 
         varname='isfcflx'
         description='Include surface fluxes of heat and moisture?'
@@ -1194,14 +1294,9 @@ write_3d_once:    if (wr3d_once) then
         call h5_write_val_iamio(param12_group_id,intval=sfcmodel)
 
         varname='oceanmodel'
-        description='Model for ocean conditions'
+        description='Model for ocean/water conditions'
         units='index'
         call h5_write_val_iamio(param12_group_id,intval=oceanmodel)
-
-        varname='ipbl'
-        description='Use YSU PBL parameterization?'
-        units='boolean'
-        call h5_write_val_iamio(param12_group_id,intval=ipbl)
 
         varname='initsfc'
         description='Initial surface contitions'
@@ -1245,13 +1340,13 @@ write_3d_once:    if (wr3d_once) then
 
 ! ORF Surface fluxes must be on for this to be active
         varname='cnstce'
-        description='Constant value of Ce for cecd=1 and isfcflx=1'
+        description='Constant value of Ce for isfcflx=1 and cecd=1'
         units='#'
         call h5_write_val_iamio(param12_group_id,floatval=cnstce)
 
 ! ORF We've used this drag coefficient in all of our friction runs
         varname='cnstcd'
-        description='Constant value of Cd if cecd=1 and idrag=1'
+        description='Constant value of Cd if bbc=1 and cecd=1'
         units='#'
         call h5_write_val_iamio(param12_group_id,floatval=cnstcd)
 
@@ -1274,6 +1369,39 @@ write_3d_once:    if (wr3d_once) then
         description='For oceanmodel=2, default deep water lapse rate'
         units='K/m'
         call h5_write_val_iamio(param12_group_id,floatval=oml_gamma)
+
+        varname='set_flx'
+        description='impose constant surface heat fluxes'
+        units='boolean'
+        call h5_write_val_iamio(param12_group_id,intval=set_flx)
+
+        varname='cnst_shflx'
+        description='set_flx=1: surface sensible heat flux'
+        units='K m/s'
+        call h5_write_val_iamio(param12_group_id,floatval=cnst_shflx)
+
+        varname='set_znt'
+        description='set_znt=1: impose constant surface roughness length'
+        units='boolean'
+        call h5_write_val_iamio(param12_group_id,intval=set_znt)
+
+        varname='cnst_znt'
+        description='set_znt=1: Value of surface roughness length'
+        units='m'
+        call h5_write_val_iamio(param12_group_id,floatval=cnst_znt)
+
+        varname='set_ust'
+        description='Impose constant surface friction velocity?'
+        units='boolean'
+        call h5_write_val_iamio(param12_group_id,intval=set_ust)
+
+        varname='cnst_ust'
+        description='set_ust=1: Value of surface friction veloctiy'
+        units='m/s'
+        call h5_write_val_iamio(param12_group_id,floatval=cnst_ust)
+
+
+!param4
 
         varname='stretch_x'
         description='Use horizontally stretched grid in x?'
@@ -1300,6 +1428,8 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param4_group_id,floatval=tot_x_len)
 
+!param5
+
         varname='stretch_y'
         description='Use horizontally stretched grid in y?'
         units='index'
@@ -1325,8 +1455,10 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param5_group_id,floatval=tot_y_len)
 
+!param6
+
         varname='stretch_z'
-        description='Use horizontally stretched grid in z?'
+        description='Use horizontally stretched grid in z? THERE ARE 4 VERT STRETCH OPTIONS NOW'
         units='index'
         call h5_write_val_iamio(param6_group_id,intval=stretch_z)
 
@@ -1355,35 +1487,34 @@ write_3d_once:    if (wr3d_once) then
         units='m'
         call h5_write_val_iamio(param6_group_id,floatval=dz_top)
 
-        varname='bc_wind'
-        description='dns=1 top/bottom boundary conditions for horizontal winds'
-        units='index'
-        call h5_write_val_iamio(param7_group_id,intval=bc_wind)
+!param7
 
         varname='bc_temp'
-        description='dns=1 top/bottom boundary condition for theta'
+        description='turbconf=3 top/bottom boundary condition for theta'
         units='index'
         call h5_write_val_iamio(param7_group_id,intval=bc_temp)
 
         varname='ptc_top'
-        description='dns=1 potential temperature closure for top of model'
+        description='turbconf=3 potential temperature closure for top of model'
         units='K or K/s'
         call h5_write_val_iamio(param7_group_id,floatval=ptc_top)
 
         varname='ptc_bot'
-        description='dns=1 potential temperature closure for bottom of model'
+        description='turbconf=3 potential temperature closure for bottom of model'
         units='K or K/s'
         call h5_write_val_iamio(param7_group_id,floatval=ptc_bot)
 
         varname='viscosity'
-        description='dns=1 Value for kinematic viscosity'
+        description='turbconf=3 Value for kinematic viscosity'
         units='m^2/s'
         call h5_write_val_iamio(param7_group_id,floatval=viscosity)
 
         varname='pr_num'
-        description='dns=1 Prandtl number'
+        description='turbconf=3 Prandtl number'
         units='#'
         call h5_write_val_iamio(param7_group_id,floatval=pr_num)
+
+!param8
 
         varname='var1'
         description='User supplied variable'
@@ -1442,7 +1573,7 @@ write_3d_once:    if (wr3d_once) then
     varname='yh'
     description='N/S location of scalar points (model uses Arakawa C grid)'
     units='meters'
-    if (wr3d.and.(newcycle.or.firstvisit)) then
+    if (newcycle.or.firstvisit) then
         if (myMCMlyrank.ne.MPI_UNDEFINED) then;call MPI_Gather (yh(1:nj),nj,MPI_REAL,yhMCM,nj,MPI_REAL,0,myMCMlycomm,ierr);check_err(ierr);endif
         dims(1)=myMCMnj; count(1)=myMCMnj; offset(1)=0
         if(iamio.and.iwrite3d)call h5_write_1d_float_iamio(mesh_group_id,   yhMCM,myMCMnj,dims,count,offset)
@@ -1453,7 +1584,7 @@ write_3d_once:    if (wr3d_once) then
     varname='yf'
     description='N/S location of V points (model uses Arakawa C grid)'
     units='meters'
-    if (wr3d.and.(newcycle.or.firstvisit)) then
+    if (newcycle.or.firstvisit) then
         if (myMCMlyrank.ne.MPI_UNDEFINED) then;call MPI_Gather (yf(1:nj),nj,MPI_REAL,yfMCM,nj,MPI_REAL,0,myMCMlycomm,ierr);check_err(ierr);endif
         dims(1)=myMCMnj; count(1)=myMCMnj; offset(1)=0
         if(iamio.and.iwrite3d)call h5_write_1d_float_iamio(mesh_group_id,   yfMCM,myMCMnj,dims,count,offset)
@@ -1463,7 +1594,7 @@ write_3d_once:    if (wr3d_once) then
     varname='xh'
     description='E/W location of scalar points (model uses Arakawa C grid)'
     units='meters'
-    if (wr3d.and.(newcycle.or.firstvisit)) then
+    if (newcycle.or.firstvisit) then
         if (myMCMbxrank.ne.MPI_UNDEFINED) then;call MPI_Gather (xh(1:ni),ni,MPI_REAL,xhMCM,ni,MPI_REAL,0,myMCMbxcomm,ierr);check_err(ierr);endif
         dims(1)=myMCMni; count(1)=myMCMni; offset(1)=0
         if(iamio.and.iwrite3d)call h5_write_1d_float_iamio(mesh_group_id,   xhMCM,myMCMni,dims,count,offset)
@@ -1472,7 +1603,7 @@ write_3d_once:    if (wr3d_once) then
     varname='xf'
     description='E/W location of U points (model uses Arakawa C grid)'
     units='meters'
-    if (wr3d.and.(newcycle.or.firstvisit)) then
+    if (newcycle.or.firstvisit) then
         if (myMCMbxrank.ne.MPI_UNDEFINED) then;call MPI_Gather (xf(1:ni),ni,MPI_REAL,xfMCM,ni,MPI_REAL,0,myMCMbxcomm,ierr);check_err(ierr);endif
         dims(1)=myMCMni; count(1)=myMCMni; offset(1)=0
         if(iamio.and.iwrite3d)call h5_write_1d_float_iamio(mesh_group_id,   xfMCM,myMCMni,dims,count,offset)

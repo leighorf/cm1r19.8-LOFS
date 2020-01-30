@@ -6,6 +6,7 @@ use input
 use constants
 use adv_routines, only: movesfc
 use misclibs, only: calcvort !ORF TODO don't need this? Calc post-hoc from u,v,w.
+!ORF TODO see the "only:" where I have to use module_lofs but "only" need one or two vars
 implicit none
 !include 'input.incl'
 !include 'constants.incl'
@@ -22,18 +23,18 @@ integer, parameter :: corex = COREX, corey = COREY ! Set in Makefile, # of cores
 integer, parameter :: nfilesperwrite = NFILES_PER_WRITE !Set in makefile
 integer, parameter :: nhistperdir = 1000
 logical :: iamio,iwrite3d,iprintinfo,restart_file_exists
-logical :: wr3d
 logical :: dbg=.false.
 integer :: myid_orig
+integer :: nkwrite
 !ORF wr3dindex no longer serves any purpose but to keep track of the number of
 !history writes undertaken, which is not really useful for anything
 integer :: wr3dindex
 double precision :: iotime
 real :: tapfrq_save,numconctime
 
-namelist /orf_io/ dtl_dbl_orf,numconcfreq,use_dtinv,dtinv,save_full_domain,save_full_vertical_extent, &
+namelist /lofs/ save_full_domain,save_full_vertical_extent, &
 save_all_times,save_x0,save_y0,save_y1,save_x1, nkwrite_val,wr2dfreq, &
-time_levels_per_histfile,save_start_time,prespert_swath_start_time,uadjust,vadjust,adjust_box_speed_from_restart
+time_levels_per_histfile,save_start_time,prespert_swath_start_time,u_adjust,v_adjust,adjust_box_speed_from_restart
 
 double precision :: dtl_dbl_orf
 logical :: use_dtinv,save_full_domain,save_full_vertical_extent,save_all_times
@@ -53,13 +54,13 @@ rho_acc,rhopert_acc,tke_acc,km_acc,kh_acc,qv_acc,qvpert_acc,dbz_acc, &
 qc_acc,qr_acc,qi_acc,qs_acc,qg_acc,nci_acc,ncr_acc,ncs_acc,ncg_acc, &
 xvort_acc,yvort_acc,zvort_acc,vortmag_acc,zvort_tilt_acc,zvort_stretch_acc
 
-logical :: we_are_dumping_hist_data,we_are_doing_new_cycle,we_are_saving_2d_data,we_are_dumping_numconc_data
+logical :: we_are_dumping_hist_data,we_are_doing_new_cycle,we_are_saving_2d_data
 logical :: we_are_dumping_restarts
 
 real, dimension(:), allocatable :: MCMrootranks,x1dranks,y1dranks,myMCMxranks,myMCMyranks
 real, dimension (:,:), allocatable :: var2d
-real, dimension (:,:,:), allocatable :: var3d
-real, dimension (:,:,:), allocatable :: tmp1,dum5,dum6,dum7,dum8,dum9,dum10
+real, dimension (:,:,:), allocatable :: var3d,lofstmp1
+!real, dimension (:,:,:), allocatable :: tmp1,dum5,dum6,dum7,dum8,dum9,dum10
 real, dimension (:,:,:), allocatable :: q1mb,q2mb
 
 integer, dimension(1) :: rootonlyranks
@@ -70,8 +71,8 @@ real, dimension (:), allocatable :: MCM3dbuf          ! buffer for gatherng 3D f
 real, dimension (:), allocatable :: MCM2dbuf          ! buffer for gatherng 2D floats on a node
 real, dimension (:,:,:), allocatable,target :: MCM3d  ! local 3D floats on a MPI rank
 real, dimension (:,:), allocatable,target :: MCM2d    ! local 3D floats on a MPI rank
-real, dimension (:,:,:,:), allocatable ::orfswaths    ! more swaths beyond the normal ones
-integer, parameter :: norfswaths = 13                 ! number of orfswaths to malloc
+real, dimension (:,:,:,:), allocatable ::lofs_swaths  ! more swaths beyond the normal ones
+integer, parameter :: nlofsswaths = 13                ! number of lofs_swaths to malloc
 integer, parameter :: strsize = 256                   ! 256 characters ought to be enough for anybody
 integer, parameter :: padtimeint = 5                  ! zero-padded integer part of time
 integer, parameter :: padtimefrac = 7                 ! Fractional time, if we are not saving every integer seconds
@@ -104,7 +105,8 @@ integer(HID_T) :: twodfull_id,twodfull_mesh_id,twodfull_grid_id,twodfull_base_id
 integer(HID_T) :: namelist_group_id,param0_group_id,param1_group_id,param2_group_id,param3_group_id
 integer(HID_T) :: param4_group_id,param5_group_id,param6_group_id,param7_group_id
 integer(HID_T) :: param8_group_id,param9_group_id,param10_group_id,param11_group_id
-integer(HID_T) :: param12_group_id,zfp_accuracy_group_id,orf_io_group_id,param_wforce_group_id
+integer(HID_T) :: param12_group_id,zfp_accuracy_group_id,lofs_group_id
+integer(HID_T) :: param13_group_id,param14_group_id,param15_group_id,nssl2mom_params_group_id
 integer(SIZE_T), parameter :: blocksize = 536870912   ! 512 * 1024 * 1024 bytes (2**29)
 
 #ifdef MICROBURST
@@ -112,9 +114,9 @@ real q1forc,q2forc,ot
 real thrand,frand
 #endif
 
-double precision dbldt
+!double precision dbldt
 
-real uadjust,vadjust
+real u_adjust,v_adjust
 
 ! ORF 3/13/18
 ! There is probably a more elegant way to handle this, but hey, it's

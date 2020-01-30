@@ -3,9 +3,9 @@
       subroutine writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                                        &
                           rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,             &
                           zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,      &
-                          dum1,dum2,dum3,dum4,dbz,qa,                            &
+                          dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,dum9,qa,                       &
                           t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                     &
-                          znt,ust,u1,v1,rr)
+                          znt,ust,u1,v1,s1,rr,tdiag,qdiag,udiag,vdiag,wdiag,pdiag)
 
       character*3, dimension(maxq), intent(in) :: qname
       real, dimension(ib:ie), intent(in) :: xh,uh
@@ -13,12 +13,11 @@
       real, dimension(jb:je), intent(in) :: yh,vh
       real, dimension(jb:je+1), intent(in) :: yf,vf
       real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: zh
-      real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: dbz
       real, dimension(ib:ie,jb:je,kb:ke+1), intent(in) :: zf,mf
       real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: pi0,prs0,rho0,th0,qv0
       real, dimension(ib:ie,jb:je,nrain), intent(in) :: rain,sws,svs,sps,srs,sgs,sus,shs
-      real, dimension(ib:ie,jb:je,kb:ke), intent(inout) :: dum1,dum2,dum3,dum4,t11,t12
-      real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: ppi,prs,tha,rho
+      real, dimension(ib:ie,jb:je,kb:ke), intent(inout) :: dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,dum9
+      real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: ppi,prs,tha,rho,t11,t12
       real, dimension(ibt:iet,jbt:jet,kbt:ket), intent(in) :: tkea
       real, intent(in), dimension(ibc:iec,jbc:jec,kbc:kec) :: kmh,kmv,khh,khv
       real, dimension(ibm:iem,jbm:jem,kbm:kem,numq), intent(in) :: qa
@@ -28,44 +27,21 @@
       real, dimension(kb:ke), intent(in) :: rds,sigma
       real, dimension(kb:ke+1), intent(in) :: rdsf,sigmaf
       real, dimension(itb:ite,jtb:jte), intent(in) :: zs,rgzu,rgzv,gz,rgz,gzu,gzv
-      real, dimension(ib:ie,jb:je), intent(in) :: znt,ust,u1,v1
+      real, dimension(ib:ie,jb:je), intent(in) :: znt,ust,u1,v1,s1
       real, intent(in), dimension(ib:ie,jb:je,kb:ke) :: rr
       real, intent(in), dimension(itb:ite,jtb:jte,ktb:kte) :: gxu,gyv
       real, intent(in), dimension(ib:ie,jb:je,kb:ke) :: mh
+      real, intent(in) , dimension(ibdt:iedt,jbdt:jedt,kbdt:kedt,ntdiag) :: tdiag
+      real, intent(in) , dimension(ibdq:iedq,jbdq:jedq,kbdq:kedq,nqdiag) :: qdiag
+      real, intent(in) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
+      real, intent(in) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
+      real, intent(in) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
+      real, intent(in) , dimension(ibdp:iedp,jbdp:jedp,kbdp:kedp,npdiag) :: pdiag !shared memory only
 
       integer i,j,k,n
 
+    nkwrite=nk !ORF TODO fix
     call h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
-
-! ORF Definitely need to save swaths to 3D files.
-! With frequent saving, we could create neat animations of 2D swath fields
-! translated with the moving domain, but just centered on the action
-! 2D data should take no time whatsoever to write to 3D files
-
-! ORF If we ever get asynchronous I/O working we should definitely pass
-! varname, description, units as arguments (not make them global)
-
-! This new way of doing things has everything controlled by
-! output_XXX.eq.1... so we may need to add more of these to input.incl,
-! or "bunch" some stuff together
-
-! TODO: Keep swath of surface qc to follow tornado condensation funnel
-! at surface, can superimpose this with sws or sp to show relationship
-! between visible funnel and tornado strength winds
-
-!First, 2D
-
-!ALL RIGHT LISTEN UP BITCHES: WE HAVE TURNED OFF 2D COLECTIVE WRITES. We
-!will reconstruct the 2D swath files with a newly modified hdf2nc. The
-!2D writes were impossibly slow for large core counts and aren't part of
-!LOFS anyway...
-
-!So, if we are here, we are writing data out, based upon the 3D tapfrq.
-!Now that we are going to save 2d data in 3d files *every tapfrq* we
-!need to reorganize the logic. Rather than create new booleans, we
-!just write ALL of our 2d patches w/out asking.... note, there are
-!forty-something of them! But they are 2D so I doubt this will slow us
-!down much.
 
 1101 format('DEBUG: myid = ',I2.2,' A')
 1102 format('DEBUG: myid = ',I2.2,' B')
@@ -91,13 +67,13 @@
         varname = "w_min_0500"
         description='minmum downdraft at 500 meters'
         units='m/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,1)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,1)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1) then
             varname = "w_min_0500_move"
             description='minmum downdraft at 500 meters, translated with the moving domain'
             units='m/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,1)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,1)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -106,13 +82,13 @@
         varname = "w_min_1000"
         description='minmum downdraft at 1 km'
         units='m/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,2)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,2)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1) then
             varname = "w_min_1000_move"
             description='minmum downdraft at 1 km, translated with the moving domain'
             units='m/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,2)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,2)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -121,13 +97,13 @@
         varname = "w_max_1000"
         description='maximum updraft at 1 km'
         units='m/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,3)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,3)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "w_max_1000_move"
             description='maximum updraft at 1 km, translated with the moving domain'
             units='m/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,3)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,3)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -151,13 +127,13 @@
         varname = "w_max_0500"
         description='maximum updraft at 500 m'
         units='m/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,4)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,4)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "w_max_0500_move"
             description='maximum updraft at 500 m, translated with the moving domain'
             units='m/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,4)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,4)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -166,13 +142,13 @@
         varname = "zeta_max_0500"
         description='maximum vertical vorticity at 500 m'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,5)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,5)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_max_0500_move"
             description='maximum vertical vorticity at 500 m, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,5)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,5)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -181,13 +157,13 @@
         varname = "zeta_max_1000"
         description='maximum vertical vorticity at 1 km'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,6)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,6)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_max_1000_move"
             description='maximum vertical vorticity at 1km, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,6)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,6)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -196,13 +172,13 @@
         varname = "zeta_max_2000"
         description='maximum vertical vorticity at 2 km'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,7)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,7)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_max_2000_move"
             description='maximum vertical vorticity at 2km, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,7)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,7)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -241,13 +217,13 @@
         varname = "zeta_min_sfc"
         description='minimum vertical vorticity at lowest model grid level'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,8)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,8)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_min_sfc_move"
             description='minimum vertical vorticity at lowest model grid level, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,8)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,8)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -256,13 +232,13 @@
         varname = "zeta_min_0500"
         description='minimum vertical vorticity at 500 m'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,9)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,9)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_min_0500_move"
             description='minimum vertical vorticity at 500 m, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,9)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,9)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -271,13 +247,13 @@
         varname = "zeta_min_1000"
         description='minimum vertical vorticity at 1 km'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,10)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,10)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_min_1000_move"
             description='minimum vertical vorticity at 1 km, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,10)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,10)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -286,13 +262,13 @@
         varname = "zeta_min_2000"
         description='minimum vertical vorticity at 2 km'
         units='/s'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,11)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,11)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "zeta_min_2000_move"
             description='minimum vertical vorticity at 2 km, translated with the moving domain'
             units='/s'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,11)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,11)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -316,13 +292,13 @@
         varname = "prespert_min_1000"
         description='minimum perturbation pressure at 1 km'
         units='hPa'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,12)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,12)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "prespert_min_1000_move"
             description='minimum perturbation pressure at 1 km, translated with the moving domain'
             units='hPa'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,12)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,12)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -331,13 +307,13 @@
         varname = "prespert_min_2000"
         description='minimum perturbation pressure at 2 km'
         units='hPa'
-        var2d(:,:) = orfswaths(1:ni,1:nj,1,13)
+        var2d(:,:) = lofs_swaths(1:ni,1:nj,1,13)
         call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         if(imove.eq.1)then
             varname = "prespert_min_2000_move"
             description='minimum perturbation pressure at 2 km, translated with the moving domain'
             units='hPa'
-            var2d(:,:) = orfswaths(1:ni,1:nj,2,13)
+            var2d(:,:) = lofs_swaths(1:ni,1:nj,2,13)
             call h5_write_2d_float_scalar(twod_swath_group_id,var2d,ninjtype)
         endif
     endif
@@ -346,8 +322,8 @@
         varname = "snapshot_thrho_sfc"
         description='snapshot of density potential temperature perturbation at lowest model grid level'
         units='K'
-        call calc_thrho_pert(th0,tha,qa,qv0,dum1,tmp1)
-        var2d(:,:) = tmp1(1:ni,1:nj,1)
+        call calc_thrho_pert(th0,tha,qa,qv0,dum1,lofstmp1)
+        var2d(:,:) = lofstmp1(1:ni,1:nj,1)
         call h5_write_2d_float_scalar(twod_static_group_id,var2d,ninjtype)
     endif
 
@@ -355,7 +331,8 @@
         varname = "snapshot_dbz_0500"
         description='snapshot of calculated reflectivity at 500 m'
         units='dBZ'
-        var2d(:,:) = dbz(1:ni,1:nj,k500)
+!       var2d(:,:) = dbz(1:ni,1:nj,k500)
+        var2d(:,:) = qdiag(1:ni,1:nj,k500,qd_dbz)
         call h5_write_2d_float_scalar(twod_static_group_id,var2d,ninjtype)
     endif
 
@@ -450,7 +427,6 @@
 ! nkwrite_val. Also make sure chunk dims is small enough so HDF doesn't barf
 ! (   chunkdims(3) .le. dims(3)   )
 
-wr3dtrue: if(wr3d) then
     if(output_u.eq.1) then
         varname="u"
         description = "u, on native C grid"
@@ -532,8 +508,13 @@ wr3dtrue: if(wr3d) then
     endif
 
     if(output_xvort.eq.1.or.output_yvort.eq.1.or.output_zvort.eq.1.or.output_vortmag.eq.1) &
-         call calcvort(xh,xf,uf,vf,zh,mf,zf,zs,rgzu,rgzv,rds,sigma,rdsf,sigmaf,  &
-                      ua,va,wa,dum1,dum2,dum3,dum4,t11,t12)
+         call calcvort(xh,xf,uf,vf,zh,mh,zf,mf,                                           &
+                          zs,gz,gzu,gzv,rgz,rgzu,rgzv,gxu,gyv,rds,sigma,rdsf,sigmaf,       &
+                          ua,va,wa,dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,th0,tha,rr,  &
+                          ust,znt,u1,v1,s1)
+
+!        call calcvort(xh,xf,uf,vf,zh,mf,zf,zs,rgzu,rgzv,rds,sigma,rdsf,sigmaf,  &
+!                     ua,va,wa,dum1,dum2,dum3,dum4,t11,t12)
 
     if(output_xvort.eq.1) then
         varname="xvort"
@@ -575,52 +556,6 @@ wr3dtrue: if(wr3d) then
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vortmag_acc)
     endif
 
-! TODO: get rid of all these internal calculations - do them from saved data
-
-!  if(output_zeta_tilt.eq.1.or.output_zeta_stretch.eq.1) &
-!  call calc_str_tlt_zeta(xh,xf,uf,uh,vf,vh,zh,mf,zf,zs,rgzu,rgzv,rds,sigma,rdsf,sigmaf,  &
-!                        ua,va,wa,dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,dum9,dum10)
-
-!ORF temp
-
-!        varname="dwdx"
-!        description = "dwdx"
-!        units = "s^-1"
-!        var3d(:,:,:) = dum7(1:ni,1:nj,1:nk)
-!        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,accuracy)
-!        varname="dvdz"
-!        description = "dvdz"
-!        units = "s^-1"
-!        var3d(:,:,:) = dum8(1:ni,1:nj,1:nk)
-!        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,accuracy)
-!        varname="dwdy"
-!        description = "dwdy"
-!        units = "s^-1"
-!        var3d(:,:,:) = dum9(1:ni,1:nj,1:nk)
-!        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,accuracy)
-!        varname="dudz"
-!        description = "dudz"
-!        units = "s^-1"
-!        var3d(:,:,:) = dum10(1:ni,1:nj,1:nk)
-!        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,accuracy)
-
-
-!   if(output_zeta_tilt.eq.1) then
-!       varname="zvort_tlt"
-!       description = "tilting of z component of vorticity (zeta)"
-!       units = "s^-2"
-!       var3d(:,:,:) = dum1(1:ni,1:nj,1:nk)
-!       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,zvort_tilt_acc)
-!   endif
-
-!   if(output_zeta_stretch.eq.1) then
-!       varname="zvort_str"
-!       description = "stretching of z component of vorticity (zeta)"
-!       units = "s^-2"
-!       var3d(:,:,:) = dum2(1:ni,1:nj,1:nk)
-!       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,zvort_stretch_acc)
-!   endif
-
     if(output_tke.eq.1) then
         varname="tke_sg"
         description = "Subgrid turbulence kinetic energy"
@@ -636,17 +571,11 @@ wr3dtrue: if(wr3d) then
         var3d(:,:,:) = khh(1:ni,1:nj,1:nk)
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,kh_acc)
 
-!ORF for istotropic mesh we only need one of these, same for km below
-!       varname="khv"
-!       description = "Subgrid eddy scalar diffusivity, vertical"
-!       units = "m^2/s"
-!       var3d(:,:,:) = khv(1:ni,1:nj,1:nk)
-!       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,kh_acc)
-
-! ORF for Smagorinsky runs khh=khv (except khv=0 at sfc) and kmh=1/3 khh
-! So we only need to save 1 of these (scalar so we have 1st sfc gridpoint)
-! Any code that needs khv, kmh, kmv will have to read khh and adjust
-! accordingly (multiply by 1/3 and/or set sfc to zero if khv/kmv)
+       varname="khv"
+       description = "Subgrid eddy scalar diffusivity, vertical"
+       units = "m^2/s"
+       var3d(:,:,:) = khv(1:ni,1:nj,1:nk)
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,kh_acc)
     endif
 
     if(output_km.eq.1) then
@@ -655,11 +584,12 @@ wr3dtrue: if(wr3d) then
         units = "m^2/s"
         var3d(:,:,:) = kmh(1:ni,1:nj,1:nk)
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,km_acc)
-!       varname="kmv"
-!       description = "Subgrid eddy momentum viscosity, vertical"
-!       units = "m^2/s"
-!       var3d(:,:,:) = kmv(1:ni,1:nj,1:nk)
-!       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,km_acc)
+
+        varname="kmv"
+        description = "Subgrid eddy momentum viscosity, vertical"
+        units = "m^2/s"
+        var3d(:,:,:) = kmv(1:ni,1:nj,1:nk)
+        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,km_acc)
     endif
 
     if(output_thpert.eq.1) then
@@ -674,8 +604,8 @@ wr3dtrue: if(wr3d) then
         varname="thrhopert"
         description = "Perturbation density potential temperature"
         units = "K"
-        call calc_thrho_pert(th0,tha,qa,qv0,dum1,tmp1)
-        var3d(:,:,:) = tmp1(1:ni,1:nj,1:nk)
+        call calc_thrho_pert(th0,tha,qa,qv0,dum1,lofstmp1)
+        var3d(:,:,:) = lofstmp1(1:ni,1:nj,1:nk)
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,thrhopert_acc)
     endif
 
@@ -734,13 +664,11 @@ wr3dtrue: if(wr3d) then
     endif
 
 !Just the number concentrations
-! ORF 2019-06-14 only save numconc every 10 seconds for Bodine/Frank study
-! numconcfreq is set in orf_io block of namelist file
 ! we_are_dumping_numconcdata is set in solve next to we_are_dumping_hist_data
 !write(*,1103)myid,we_are_dumping_numconc_data
 
 !ORF now we specify these separately, not as a group
-    if(imoist.eq.1.and.we_are_dumping_numconc_data)then
+    if(imoist.eq.1)then
       do n=nnc1,nnc2
           do k=1,nk
           do j=1,nj
@@ -766,16 +694,391 @@ wr3dtrue: if(wr3d) then
         varname="dbz"
         description = "Simulated reflectivity"
         units = "dBZ"
-        var3d(:,:,:) = dbz(1:ni,1:nj,1:nk)
+!       var3d(:,:,:) = dbz(1:ni,1:nj,1:nk)
+        var3d(:,:,:) = qdiag(1:ni,1:nj,1:nk,qd_dbz)
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,dbz_acc)
     endif
+
+
+!!!!!! 2020-01-30 ORF new diagnostics !!!!!!
+
+! holy shit there are a lot of them
+
+! ORF TODO: Note that some of the diagnostics are saved on the scalar grid, some on the velocity / staggered grid
+! George saves metadata for this for each variable... perhaps we should as well.
+
+! ORF TODO: Must set all of the new _acc values and add them to namelist, declare them, etc.
+
+
+
+
+
+
+thbudget: if (output_thbudget.eq.1) then
+     
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_hadv)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_hadv"
+       if( hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 )then
+            description = "pt budget: horiz advection (non-diff component)"
+       else
+            description = "pt budget: horiz advection"
+       endif
+       units = "K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hadv_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_vadv)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_vadv"
+       if( vadvordrs.eq.3 .or. vadvordrs.eq.5 .or. vadvordrs.eq.7 .or. vadvordrs.eq.9 .or. advwenos.ge.1 )then
+            description = "pt budget: vert advection (non-diff component)"
+       else
+            description = "pt budget: vert advection"
+       endif
+       units = "K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vadv_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_hturb)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_hturb"
+       description="pot temp budget: horiz parameterized turbulence"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hturb_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_vturb)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_vturb"
+       description="pot temp budget: vert parameterized turbulence"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vturb_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_hidiff)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_hidiff"
+       description="pot temp budget: horiz implicit diffusion"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hidiff_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_vidiff)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_vidiff"
+       description="pot temp budget: vert implicit diffusion"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vidiff_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_hediff)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_hediff"
+       description="pot temp budget: horiz explicit diffusion"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hediff_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_vediff)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_vediff"
+       description="pot temp budget: vert explicit diffusion"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vediff_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_mp)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_mp"
+       description="pot temp budget: microphysics scheme"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_mp_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_rdamp)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_mp"
+       description="pot temp budget: Rayleigh damper"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_rdamp_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_rad)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_rad"
+       description="pot temp budget: radiation scheme"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_rad_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_div)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_div"
+       description="pot temp budget: moist divergence term"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_div_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_diss)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_diss"
+       description="pot temp budget: dissipating heating"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_diss_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_pbl)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_pbl"
+       description="pot temp budget: PBL scheme"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_pbl_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_subs)
+       enddo
+       enddo
+       enddo
+
+       varname="ptb_subs"
+       description="pot temp budget: large-scale subsidence"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_subs_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_efall)
+       enddo
+       enddo
+       enddo
+
+       varname="td_efall"
+       description="temp. tendency: energy fallout terms"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,td_efall_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_cond)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_cond"
+       description="theta. tendency: condensation"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_cond_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_evac)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_evac"
+       description="theta. tendency: cloudwater evaporation"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_evac_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_evar)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_evar"
+       description="theta. tendency: rainwater evaporation"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_evar_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_dep)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_dep"
+       description="theta. tendency: deposition"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_dep_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_subl)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_subl"
+       description="theta. tendency: sublimation"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_subl_acc)
+
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_melt)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_melt"
+       description="theta. tendency: melting"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_melt_acc)
+       
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
+       do k=1,maxk
+       do j=1,nj
+       do i=1,ni
+         var3d(i,j,k) = tdiag(i,j,k,td_frz)
+       enddo
+       enddo
+       enddo
+
+       varname="tt_frz"
+       description="theta. tendency: freezing"
+       units="K/s"
+       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tt_frz_acc)
+
+endif thbudget
+
+
 
 ! ORF this is freaking important... now with fixing restart/missing single
 ! time step problem. We also set firstvisit to .true. in solve.
 if (nobuffer.or.we_are_dumping_restarts) then
     if(iprintinfo) write(outfile,"('nobuffer=.true.; immediately flushing to disk...')")
     if(iprintinfo) call FFLUSH(6)
-    if (iamio.and.wr3d.and.iwrite3d) then
+    if (iamio.and.iwrite3d) then
           call h5gclose_f(grid_group_id,ierr); check_err(ierr)
           call h5gclose_f(mesh_group_id,ierr); check_err(ierr)
           call h5gclose_f(misc_group_id,ierr); check_err(ierr)
@@ -794,9 +1097,12 @@ if (nobuffer.or.we_are_dumping_restarts) then
           call h5gclose_f(param10_group_id,ierr); check_err(ierr)
           call h5gclose_f(param11_group_id,ierr); check_err(ierr)
           call h5gclose_f(param12_group_id,ierr); check_err(ierr)
-          call h5gclose_f(param_wforce_group_id,ierr); check_err(ierr)
+          call h5gclose_f(param13_group_id,ierr); check_err(ierr)
+          call h5gclose_f(param14_group_id,ierr); check_err(ierr)
+          call h5gclose_f(param15_group_id,ierr); check_err(ierr)
+          call h5gclose_f(nssl2mom_params_group_id,ierr); check_err(ierr)
           call h5gclose_f(zfp_accuracy_group_id,ierr); check_err(ierr)
-          call h5gclose_f(orf_io_group_id,ierr); check_err(ierr)
+          call h5gclose_f(lofs_group_id,ierr); check_err(ierr)
           call h5gclose_f(namelist_group_id,ierr); check_err(ierr)
           call h5gclose_f(twod_static_group_id,ierr); check_err(ierr)
           call h5gclose_f(twod_swath_group_id,ierr); check_err(ierr)
@@ -811,7 +1117,6 @@ if (nobuffer.or.we_are_dumping_restarts) then
 endif
 
 
-endif wr3dtrue
 
 
 end subroutine writeout_hdf5

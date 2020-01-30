@@ -2395,21 +2395,29 @@ if(myid.eq.0) then
 endif
 
 !This is for r16 in 2020
-         call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                                     &
-              rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,             &
-              zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,      &
-              dum1,dum2,dum3,dum4,sten,qa,                           &
-              t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                      &
-              znt,ust,u1,v1,rr)
+!        call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                                     &
+!             rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,             &
+!             zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,      &
+!             dum1,dum2,dum3,dum4,sten,qa,                           &
+!             t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                      &
+!             znt,ust,u1,v1,rr)
 
 !This is for r19.5 in 2019
+!        call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
+!            rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
+!            zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
+!            dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
+!            t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
+!            znt,ust,u1,v1,s1,rr,qdiag)
+
+!New call, with diagnostics and stuff.
+
          call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
              rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
              zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
              dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
              t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
-             znt,ust,u1,v1,s1,rr,qdiag)
-
+             znt,ust,u1,v1,s1,rr,tdiat,qdiag,udiag,vdiag,wdiag,pdiag)
 
          call MPI_BARRIER(MPI_COMM_CM1,ierr)
 
@@ -2708,7 +2716,7 @@ write_restart:   if( dorestart )then
           enddo
         endif
         if(timestats.ge.1) time_restart=time_restart+mytime()
-      endif
+      endif write_restart
 
 
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
@@ -2813,7 +2821,7 @@ write_restart:   if( dorestart )then
 !       IF( adapt_dt.eq.1 .and. statfrq.lt.0.0 )THEN
 !         print *,'  re-writing GrADS stats descriptor file .... '
 !         call   write_statsctl(name_stat,desc_stat,unit_stat,  &
-                                tdef,nstep+1)
+!                               tdef,nstep+1)
 !       ENDIF
 !     ENDIF
 !end LOFS

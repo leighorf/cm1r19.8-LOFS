@@ -1,7 +1,7 @@
 #define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
 
 !Contains the following:
-!subroutine initialize_orfswaths
+!subroutine initialize_lofs_swaths
 !subroutine write_wforce
 !subroutine get_command_line_arguments
 !subroutine bcast_lofs
@@ -14,37 +14,37 @@
 !subroutine set_MCM_params
 
 
-subroutine initialize_orfswaths
+subroutine initialize_lofs_swaths
 implicit none
 
 !   w_min_0500
-    orfswaths(:,:,:,1) =  1000.0
+    lofs_swaths(:,:,:,1) =  1000.0
 !   w_min_1000
-    orfswaths(:,:,:,2) =  1000.0
+    lofs_swaths(:,:,:,2) =  1000.0
 !   w_max_1000
-    orfswaths(:,:,:,3) = -1000.0
+    lofs_swaths(:,:,:,3) = -1000.0
 !   w_max_0500
-    orfswaths(:,:,:,4) = -1000.0
+    lofs_swaths(:,:,:,4) = -1000.0
 !   zeta_max_0500
-    orfswaths(:,:,:,5) = -200.0
+    lofs_swaths(:,:,:,5) = -200.0
 !   zeta_max_1000
-    orfswaths(:,:,:,6) = -200.0
+    lofs_swaths(:,:,:,6) = -200.0
 !   zeta_max_2000
-    orfswaths(:,:,:,7) = -200.0
+    lofs_swaths(:,:,:,7) = -200.0
 !   zeta_min_sfc
-    orfswaths(:,:,:,8) =  200.0
+    lofs_swaths(:,:,:,8) =  200.0
 !   zeta_min_0500
-    orfswaths(:,:,:,9) =  200.0
+    lofs_swaths(:,:,:,9) =  200.0
 !   zeta_min_1000
-    orfswaths(:,:,:,10) =  200.0
+    lofs_swaths(:,:,:,10) =  200.0
 !   zeta_min_2000
-    orfswaths(:,:,:,11) =  200.0
+    lofs_swaths(:,:,:,11) =  200.0
 !   prespert_min_1000
-    orfswaths(:,:,:,12) =  20000.0
+    lofs_swaths(:,:,:,12) =  20000.0
 !   prespert_min_2000
-    orfswaths(:,:,:,13) =  20000.0
+    lofs_swaths(:,:,:,13) =  20000.0
 
-end subroutine initialize_orfswaths
+end subroutine initialize_lofs_swaths
 
 
 
@@ -195,14 +195,14 @@ end subroutine bcast_lofs
 
 subroutine allocate_orf_vars1()
     implicit none
-    allocate(orfswaths(ib:ie,jb:je,2,norfswaths))
-    allocate(dum5(ib:ie,jb:je,kb:ke))
-    allocate(dum6(ib:ie,jb:je,kb:ke))
-    allocate(dum7(ib:ie,jb:je,kb:ke))
-    allocate(dum8(ib:ie,jb:je,kb:ke))
-    allocate(dum9(ib:ie,jb:je,kb:ke))
-    allocate(dum10(ib:ie,jb:je,kb:ke))
-    allocate(tmp1(ni,nj,nk))
+    allocate(lofs_swaths(ib:ie,jb:je,2,nlofsswaths))
+!   allocate(dum5(ib:ie,jb:je,kb:ke))
+!   allocate(dum6(ib:ie,jb:je,kb:ke))
+!   allocate(dum7(ib:ie,jb:je,kb:ke))
+!   allocate(dum8(ib:ie,jb:je,kb:ke))
+!   allocate(dum9(ib:ie,jb:je,kb:ke))
+!   allocate(dum10(ib:ie,jb:je,kb:ke))
+!   allocate(tmp1(ni,nj,nk))
     allocate(var2d(ni,nj))
     allocate(var3d(ni,nj,nk))
     allocate(xhfull(1:nx))

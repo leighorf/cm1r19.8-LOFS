@@ -184,7 +184,7 @@
 !          access='sequential',err=8000)
       read(20,nml=param1)
 !begin LOFS 
-      read(20,nml=lofs_io)
+      read(20,nml=lofs)
       read(20,zfp_accuracy)
 !end LOFS
       read(20,nml=param2)

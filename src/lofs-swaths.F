@@ -1,5 +1,5 @@
 
-subroutine do_orfswaths(rtime,dum1,uh,vh,reqs_s,sw31,sw32,se31,se32,ss31,ss32,sn31,sn32,dt, &
+subroutine do_lofs_swaths(rtime,dum1,uh,vh,reqs_s,sw31,sw32,se31,se32,ss31,ss32,sn31,sn32,dt, &
       uf,vf,w3d,ua,va,prs,prs0)  
         
 implicit none
@@ -37,14 +37,14 @@ si = 1
       do j=1,nj
       do i=1,ni
           tem = w3d(i,j,kw1km)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 10.0*epsilon
-        call movesfc(-20000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-20000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -58,15 +58,15 @@ si = 2
       do j=1,nj
       do i=1,ni
           tem = w3d(i,j,kw500)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         !-20000 m/s sanity minimum
         weps = 10.0*epsilon
-        call movesfc(-20000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-20000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -80,15 +80,15 @@ si = 3
       do j=1,nj
       do i=1,ni
           tem = w3d(i,j,kw1km)
-          orfswaths(i,j,1,si)=max(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=max(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=max(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=max(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 10.0*epsilon
         !-100 m/s sanity minimum maximum updraft
-        call movesfc(-10000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-10000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -102,15 +102,15 @@ si = 4
       do j=1,nj
       do i=1,ni
           tem = w3d(i,j,kw500)
-          orfswaths(i,j,1,si)=max(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=max(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=max(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=max(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 10.0*epsilon
         !-100 m/s sanity minimum maximum updraft
-        call movesfc(-10000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-10000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -125,14 +125,14 @@ si = 5
       do i=1,ni+1
         tem = (va(i,j,kw500)-va(i-1,j,kw500))*rdx*uf(i)   &
              -(ua(i,j,kw500)-ua(i,j-1,kw500))*rdy*vf(j)
-          orfswaths(i,j,1,si)=max(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=max(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=max(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=max(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -147,15 +147,15 @@ si = 6
       do i=1,ni+1
         tem = (va(i,j,k1km)-va(i-1,j,k1km))*rdx*uf(i)   &
              -(ua(i,j,k1km)-ua(i,j-1,k1km))*rdy*vf(j)
-          orfswaths(i,j,1,si)=max(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=max(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=max(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=max(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
         ! -10.0 /s sanity minimum maximum vertical vorticity
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -170,14 +170,14 @@ si = 7
       do i=1,ni+1
         tem = (va(i,j,k2km)-va(i-1,j,k2km))*rdx*uf(i)   &
              -(ua(i,j,k2km)-ua(i,j-1,k2km))*rdy*vf(j)
-          orfswaths(i,j,1,si)=max(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=max(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=max(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=max(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -193,14 +193,14 @@ si = 8
       do i=1,ni+1
         tem = (va(i,j,ksfc)-va(i-1,j,ksfc))*rdx*uf(i)   &
              -(ua(i,j,ksfc)-ua(i,j-1,ksfc))*rdy*vf(j)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -215,15 +215,15 @@ si = 9
       do i=1,ni+1
         tem = (va(i,j,k500)-va(i-1,j,k500))*rdx*uf(i)   &
              -(ua(i,j,k500)-ua(i,j-1,k500))*rdy*vf(j)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
         ! -10.0 /s sanity minimum maximum vertical vorticity
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -238,14 +238,14 @@ si = 10
       do i=1,ni+1
         tem = (va(i,j,k1km)-va(i-1,j,k1km))*rdx*uf(i)   &
              -(ua(i,j,k1km)-ua(i,j-1,k1km))*rdy*vf(j)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -260,14 +260,14 @@ si = 11
       do i=1,ni+1
         tem = (va(i,j,k2km)-va(i-1,j,k2km))*rdx*uf(i)   &
              -(ua(i,j,k2km)-ua(i,j-1,k2km))*rdy*vf(j)
-          orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-          orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+          lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+          lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
 
       if(imove.eq.1)then
         weps = 0.01*epsilon
-        call movesfc(-1000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-1000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -293,13 +293,13 @@ if(rtime.ge.prespert_swath_start_time)  then
       do j=1,nj
       do i=1,ni
         tem = 0.01*(prs(i,j,k1km)-prs0(i,j,k1km))
-           orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-           orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+           lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+           lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
       if(imove.eq.1)then
         weps = 10.0*epsilon
-        call movesfc(-2000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-2000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
@@ -315,19 +315,19 @@ if(rtime.ge.prespert_swath_start_time)  then
       do j=1,nj
       do i=1,ni
            tem = 0.01*(prs(i,j,k2km)-prs0(i,j,k2km))
-           orfswaths(i,j,1,si)=min(orfswaths(i,j,1,si),tem)
-           orfswaths(i,j,2,si)=min(orfswaths(i,j,2,si),tem)
+           lofs_swaths(i,j,1,si)=min(lofs_swaths(i,j,1,si),tem)
+           lofs_swaths(i,j,2,si)=min(lofs_swaths(i,j,2,si),tem)
       enddo
       enddo
       if(imove.eq.1)then
         weps = 10.0*epsilon
-        call movesfc(-2000.0,dt,weps,uh,vh,orfswaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
+        call movesfc(-2000.0,dt,weps,uh,vh,lofs_swaths(ib,jb,2,si),dum1(ib,jb,1),dum1(ib,jb,2),dum1(ib,jb,3), &
                      reqs_s,sw31(1,1,1),sw32(1,1,1),se31(1,1,1),se32(1,1,1),               &
                             ss31(1,1,1),ss32(1,1,1),sn31(1,1,1),sn32(1,1,1))
       endif
 endif
 
-! ------------------  End of orfswaths ------------------- !
+! ------------------  End of lofs_swaths ------------------- !
 
 return
-end subroutine do_orfswaths
+end subroutine do_lofs_swaths

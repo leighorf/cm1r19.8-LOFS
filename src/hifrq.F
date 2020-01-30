@@ -53,7 +53,7 @@
     use bc_module
 #ifdef MPI
     use comm_module
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1145,7 +1145,7 @@
     subroutine gather(var,dat1,dat2,dat3,reqt)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
