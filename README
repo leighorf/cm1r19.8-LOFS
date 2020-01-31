@@ -3,6 +3,15 @@
 CM1 Numerical Model, Release 19.8  (cm1r19.8)
 31 March 2019
 
+
+*****************************************************************************************
+* NOTE: This github distribution contains Leigh Orf's LOFS code (see http://lofs.io)    *
+* which allows for lossily compressed HDF5 output that performs very well for large     *
+* distributed-memory versions of CM1. This code ONLY works with MPI - no serial version *
+* with LOFS exists.                                                                     *
+*****************************************************************************************
+
+
 ------------------------------------------------------------------------
 
 RETURNING USERS:  please read the "CHANGES" file for a summary of 
