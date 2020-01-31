@@ -988,7 +988,7 @@ vbudget: if (output_vbudget.eq.1) then
           enddo
           enddo
 
-          varname="vb_hturb"
+          varname="vb_vturb"
           description="v budget: vertical parameterized turbulence"
           units="m/s/s"
           call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_vturb_acc)
@@ -1220,7 +1220,7 @@ ubudget: if (output_ubudget.eq.1) then
           enddo
           enddo
 
-          varname="ub_hturb"
+          varname="ub_vturb"
           description="u budget: vertical parameterized turbulence"
           units="m/s/s"
           call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ub_vturb_acc)
@@ -1818,7 +1818,7 @@ thbudget: if (output_thbudget.eq.1) then
        enddo
        enddo
 
-       varname="ptb_mp"
+       varname="ptb_rdamp"
        description="pot temp budget: Rayleigh damper"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_rdamp_acc)

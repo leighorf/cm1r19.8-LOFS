@@ -1706,6 +1706,14 @@ newcycle=.false.
                         emiss,thc,albd,znt,mavail,dsxy,prs0s,prs0,   &
                         tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml)
 
+!begin LOFS
+firstvisit=.true.
+nobuffer=.false.
+newcycle=.false.
+iotime=dble(0.0)
+if(time_levels_per_histfile.eq.1)nobuffer=.true.
+!end LOFS
+
 read_restart:      IF(irst.eq.1)THEN
 
         startup = .false.
