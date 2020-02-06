@@ -99,7 +99,7 @@ real, dimension (:,:,:), allocatable,target :: MCM3d  ! local 3D floats on a MPI
 real, dimension (:,:), allocatable,target :: MCM2d    ! local 3D floats on a MPI rank
 real, dimension (:,:,:,:), allocatable ::lofs_swaths  ! more swaths beyond the normal ones
 integer, parameter :: nlofsswaths = 13                ! number of lofs_swaths to malloc
-integer, parameter :: strsize = 256                   ! 256 characters ought to be enough for anybody
+integer, parameter :: strsize = 512                   ! 512 characters ought to be enough for anybody
 integer, parameter :: padtimeint = 5                  ! zero-padded integer part of time
 integer, parameter :: padtimefrac = 7                 ! Fractional time, if we are not saving every integer seconds
 integer, parameter :: padnode = 7                     ! zero-padded node width for naming hdf files
@@ -116,7 +116,7 @@ character(len=strsize) executable_cmdline,namelist_cmdline,output_path_cmdline,o
 character(len=strsize) restart_path_cmdline,restart_basename_cmdline
 
 integer :: n_cmd_args
-real :: droplet_breakup_diameter
+real :: cm1D_b ! we pass Morrison's D_b value from var4 in namelist
 
 logical :: firstvisit,newcycle,writingrestart,nobuffer,adjust_box_speed_from_restart
 

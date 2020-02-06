@@ -2665,7 +2665,8 @@
           if(dowr) write(outfile,*)
           if(dowr) write(outfile,*) 'Calling GRAUPEL_INIT'
 
-          call graupel_init(ihail,inum,ndcnst)
+          cm1D_b = var4 !ORF
+          call graupel_init(ihail,inum,ndcnst,cm1D_b)
 
           if(dowr) write(outfile,*) 'Returned from GRAUPEL_INIT'
           if(dowr) write(outfile,*)

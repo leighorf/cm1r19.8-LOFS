@@ -1351,16 +1351,16 @@
 
       ELSEIF(iinit.eq.12)THEN
 
-        xc_wnudge     =  centerx                   ! x_c (m), center point of nudging in x
+        xc_wnudge     =  var1                      ! x_c (m), center point of nudging in x
         xr_wnudge     =  10000.0                   ! x_r (m), radius of nudging in x
 
-        yc_wnudge     =  centery                   ! y_c (m), center point of nudging in y
+        yc_wnudge     =  var2                      ! y_c (m), center point of nudging in y
         yr_wnudge     =  10000.0                   ! y_r (m), radius of nudging in y
 
         zc_wnudge     =   1500.0                   ! z_c (m), center point of nudging in z
         zr_wnudge     =   1500.0                   ! z_r (m), radius of nudging in z
 
-        alpha_wnudge  =      0.5                   ! alpha (1/s), inverse e-folding time for nudging
+        alpha_wnudge  =  var3                      ! alpha (1/s), inverse e-folding time for nudging
         wmax_wnudge   =     10.0                   ! w_max (m/s), max value of w to nudge towards
 
         t1_wnudge     =    900.0                   ! time (s) to start ramping down nudging
