@@ -3,10 +3,6 @@
 CM1 Numerical Model, Release 19.8  (cm1r19.8)
 31 March 2019
 
-<<<<<<< HEAD
-
-=======
->>>>>>> r19-zs-LOFS
 *****************************************************************************************
 * NOTE: This github distribution contains Leigh Orf's LOFS code (see http://lofs.io)    *
 * which allows for lossily compressed HDF5 output that performs very well for large     *
@@ -14,10 +10,6 @@ CM1 Numerical Model, Release 19.8  (cm1r19.8)
 * serial version of CM1 with LOFS exists.                                               *
 *****************************************************************************************
 
-<<<<<<< HEAD
-
-=======
->>>>>>> r19-zs-LOFS
 ------------------------------------------------------------------------
 
 RETURNING USERS:  please read the "CHANGES" file for a summary of 
