@@ -301,7 +301,7 @@ MODULE module_mp_GRAUPEL
 CONTAINS
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst)
+SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst,cm1D_b)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! THIS SUBROUTINE INITIALIZES ALL PHYSICAL CONSTANTS AMND PARAMETERS 
 ! NEEDED BY THE MICROPHYSICS SCHEME.
@@ -312,7 +312,7 @@ SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst)
 
       integer, intent(in) :: cm1hail
       integer, intent(inout) :: cm1inum
-      real,    intent(in) :: cm1ndcnst
+      real,    intent(in) :: cm1ndcnst,cm1D_b
       integer n,i
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -490,7 +490,9 @@ SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst)
 ! V2.1
          LAMMINR = 1./2800.E-6
 
-         D_b = 300.e-6  ! cutoff diameter for breakup
+!        D_b = 300.e-6  ! cutoff diameter for breakup
+! ORF this is var4 in the namelist file
+         D_b = cm1D_b
 
          LAMMAXS = 1./10.E-6
          LAMMINS = 1./2000.E-6

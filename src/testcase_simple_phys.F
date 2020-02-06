@@ -159,7 +159,7 @@
       subroutine get_avg_uvt(uavg,vavg,thavg,cavg,th0,ua,va,tha,ruh,ruf,rvh,rvf)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -199,7 +199,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*3       ,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*3       ,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/( dble(maxx-minx)*dble(maxy-miny) )
@@ -221,7 +221,7 @@
       subroutine get_avg_uvtq(uavg,vavg,thavg,qavg,cavg,th0,ua,va,tha,qa,ruh,ruf,rvh,rvf)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -271,7 +271,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*(3+numq),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,cavg(kb,1),(ke-kb+1)*(3+numq),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/( dble(maxx-minx)*dble(maxy-miny) )

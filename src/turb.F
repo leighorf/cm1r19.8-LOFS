@@ -2148,6 +2148,17 @@
         t23(i,j,1)=t23(i,j,2)
       enddo
       enddo
+    ELSEIF(bbc.eq.11)THEN
+      ! zero-flux:
+
+!$omp parallel do default(shared)   &
+!$omp private(i,j)
+      do j=1,nj+1
+      do i=1,ni+1
+        t13(i,j,1)=0.0
+        t23(i,j,1)=0.0
+      enddo
+      enddo
 
     ELSEIF(bbc.eq.2)THEN
       ! no slip:
@@ -2281,6 +2292,17 @@
       do i=1,ni+1
         t13(i,j,nk+1)=t13(i,j,nk)
         t23(i,j,nk+1)=t23(i,j,nk)
+      enddo
+      enddo
+    ELSEIF(tbc.eq.11)THEN
+      ! zero-flux:
+
+!$omp parallel do default(shared)   &
+!$omp private(i,j)
+      do j=1,nj+1
+      do i=1,ni+1
+        t13(i,j,nk+1)=0.0
+        t23(i,j,nk+1)=0.0
       enddo
       enddo
 

@@ -16,7 +16,7 @@
       use module_ra_rrtmg_lw , only : rrtmg_lwinit
       use module_ra_rrtmg_sw , only : rrtmg_swinit
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -67,11 +67,11 @@
 !!!             acswalloc = .false.
 
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
              if(myid.eq.0) print *,'  rrtmg_lwinit '
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
              CALL rrtmg_lwinit(                             &
                            p_top,  .true.         ,         &
@@ -82,11 +82,11 @@
 !!!             aclwalloc = .true.
 
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
              if(myid.eq.0) print *,'  rrtmg_swinit '
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
              CALL rrtmg_swinit(                             &
                             .true.         ,                &
@@ -94,11 +94,11 @@
                   ims=ib ,ime=ie   , jms=jb ,jme=je   , kms=kb ,kme=ke ,            &
                   its=1  ,ite=ni   , jts=1  ,jte=nj   , kts=1  ,kte=nk )
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
              if(myid.eq.0) print *,'  done rrtmg init '
 #ifdef MPI
-             call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+             call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
 
 !!!             acswalloc = .true.

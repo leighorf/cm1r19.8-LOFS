@@ -53,7 +53,7 @@
     use bc_module
 #ifdef MPI
     use comm_module
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -785,7 +785,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,sum,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,sum,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       havg = ( sum/dble(nx*ny) )
@@ -1145,7 +1145,7 @@
     subroutine gather(var,dat1,dat2,dat3,reqt)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1194,14 +1194,14 @@
           dat1(i,j)=var(i,j)
         enddo
         enddo
-        call MPI_ISEND(dat1(1,1),ni*nj,MPI_REAL,nodemaster,tag,MPI_COMM_WORLD,reqs,ierr)
+        call MPI_ISEND(dat1(1,1),ni*nj,MPI_REAL,nodemaster,tag,MPI_COMM_CM1,reqs,ierr)
         call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
         ! DONE, ordinary processors
       ELSE
         ! begin nodemaster section:
           ! start receives from all other processors on a node:
           do proc=myid+1,myid+(ppnode-1)
-            call MPI_IRECV(dat3(1,1,proc),ni*nj,MPI_REAL,proc,tag,MPI_COMM_WORLD,reqt(proc-myid),ierr)
+            call MPI_IRECV(dat3(1,1,proc),ni*nj,MPI_REAL,proc,tag,MPI_COMM_CM1,reqt(proc-myid),ierr)
           enddo
         IF(myid.ne.msk)THEN
           ! nodemaster, not proc msk:
@@ -1215,7 +1215,7 @@
           ! wait for receives to finish:
           call mpi_waitall(ppnode-1,reqt(1:ppnode-1),MPI_STATUS_IGNORE,ierr)
           ! send data to processor msk:
-          call MPI_ISEND(dat3(1,1,myid),ni*nj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_WORLD,reqs,ierr)
+          call MPI_ISEND(dat3(1,1,myid),ni*nj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_CM1,reqs,ierr)
           ! wait for send to finish:
           call MPI_WAIT(reqs,MPI_STATUS_IGNORE,ierr)
           ! DONE, nodemaster (not proc msk)
@@ -1228,7 +1228,7 @@
               else
                 proc = nn*ppnode
               endif
-              call MPI_IRECV(dat3(1,1,proc),ni*nj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_WORLD,reqt(ppnode-1+nn),ierr)
+              call MPI_IRECV(dat3(1,1,proc),ni*nj*ppnode,MPI_REAL,proc,tag+1,MPI_COMM_CM1,reqt(ppnode-1+nn),ierr)
             enddo
           ! my data:
           if( myid.eq.0 )then
@@ -1299,7 +1299,7 @@
         !-------------------- end MPI section --------------------!
       ENDIF
       ! seems to help with memory:
-      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
 
 

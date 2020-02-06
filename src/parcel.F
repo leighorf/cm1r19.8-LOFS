@@ -14,7 +14,7 @@
       use bc_module
       use comm_module
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -93,6 +93,15 @@
       endif
     ELSEIF(bbc.eq.3)THEN
       ! u,v near sfc are determined below using log-layer equations
+    ELSEIF(bbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        ua(i,j,0) = ua(i, j, 1) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        va(i,j,0) = va(i, j, 1) 
+      enddo
     ENDIF
 
 !----------
@@ -116,6 +125,15 @@
       ENDIF
       do i=ib,ie
         va(i,j,nk+1) = 0.0
+      enddo
+    ELSEIF(tbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        ua(i,j,nk+1) = ua(i, j, nk) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        va(i,j,nk+1) = va(i, j, nk) 
       enddo
     ENDIF
 
@@ -623,10 +641,10 @@
 
 #ifdef MPI
       if( .not. terrain_flag )then
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),3*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       else
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),2*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
-        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,prsig),nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,1),2*nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,prsig),nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
       endif
 #endif
 
@@ -671,7 +689,7 @@
       use bc_module
       use comm_module
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -931,6 +949,15 @@
       endif
     ELSEIF(bbc.eq.3)THEN
       ! u,v near sfc are determined below using log-layer equations
+    ELSEIF(bbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        u3d(i,j,0) = u3d(i, j, 1) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        v3d(i,j,0) = v3d(i, j, 1) 
+      enddo
     ENDIF
 
 !----------
@@ -954,6 +981,15 @@
       ENDIF
       do i=ib,ie
         v3d(i,j,nk+1) = 0.0
+      enddo
+    ELSEIF(tbc.eq.11)THEN
+      IF(j.le.je)THEN
+      do i=ib,ie+1
+        u3d(i,j,nk+1) = u3d(i, j, nk) 
+      enddo
+      ENDIF
+      do i=ib,ie
+        v3d(i,j,nk+1) = v3d(i, j, nk) 
       enddo
     ENDIF
 
@@ -1604,9 +1640,9 @@
 #ifdef MPI
   do np=4,npvals
     if( myid.eq.0 )then
-      call MPI_REDUCE(MPI_IN_PLACE,pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE(MPI_IN_PLACE,pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_CM1,ierr)
     else
-      call MPI_REDUCE( pdata(1,np),pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE( pdata(1,np),pdata(1,np),nparcels,MPI_REAL,MPI_MAX,0,MPI_COMM_CM1,ierr)
     endif
   enddo
 #endif
@@ -1781,7 +1817,7 @@
       subroutine getparcelzs(xh,uh,ruh,xf,yh,vh,rvh,yf,zs,pdata)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -1870,7 +1906,7 @@
     ENDDO  zsnploop
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,przs) ,nparcels,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,pdata(1,przs) ,nparcels,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
       end subroutine getparcelzs

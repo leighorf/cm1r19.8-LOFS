@@ -21,7 +21,8 @@
       use adv_routines , only : zsgrad
       use comm_module
 #ifdef MPI
-      use mpi
+!NOTE: LOFS does not currently work with terrain
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -131,7 +132,7 @@
 
 #ifdef MPI
           ! communicate data to all processors:
-          call MPI_BCAST(zs_all,nx*ny,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+          call MPI_BCAST(zs_all,nx*ny,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
 
           ! 170313:

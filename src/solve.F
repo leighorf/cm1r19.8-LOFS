@@ -157,7 +157,7 @@
       use parcel_module, only : parcel_driver
       use pdcomp_module, only : pidcomp
 #ifdef MPI
-      use mpi
+      use module_lofs !LOFS
 #endif
       implicit none
 
@@ -2958,8 +2958,8 @@
         ENDIF
 
 #ifdef MPI
-        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-        call MPI_ALLREDUCE(mpi_in_place,dumk2(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(mpi_in_place,dumk1(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+        call MPI_ALLREDUCE(mpi_in_place,dumk2(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
         mass2 = 0.0
@@ -4398,7 +4398,7 @@
 
 
 !!!#ifdef MPI
-!!!      call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+!!!      call MPI_BARRIER (MPI_COMM_CM1,ierr)
 !!!      if(timestats.ge.1) time_mpb=time_mpb+mytime()
 !!!#endif
 
@@ -4533,6 +4533,7 @@
 !--------------------------------------------------------------------
 !  Minimum pressure perturbation at lowest model level:
 
+swath_start: if(rtime.ge.prespert_swath_start_time)  then
   IF( output_sps.eq.1 )THEN
 
 !$omp parallel do default(shared)  &
@@ -4540,6 +4541,7 @@
       do j=1,nj
       do i=1,ni
         tem = prs(i,j,1)-prs0(i,j,1)
+        tem = tem * 0.01 !ORF was having problems with stability
         do n=1,nrain
           sps(i,j,n)=min(sps(i,j,n),tem)
         enddo
@@ -4555,7 +4557,7 @@
       endif
 
   ENDIF
-
+endif swath_start
 !--------------------------------------------------------------------
 !  Maximum rainwater mixing ratio (qr) at lowest model level:
 
@@ -4702,6 +4704,11 @@
 
 !  Done with "swaths"
 !cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+!begin LOFS
+call do_lofs_swaths(rtime,dum1,uh,vh,reqs_s,sw31,sw32,se31,se32,ss31,ss32,sn31,sn32,dt, &
+     uf,vf,w3d,ua,va,prs,prs0)
+!end LOFS
 
 !cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !  Pressure decomposition:

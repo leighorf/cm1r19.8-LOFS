@@ -495,7 +495,7 @@
       subroutine change_uvmove(u0,ua,u3d,v0,va,v3d,oldumove,oldvmove)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -538,7 +538,7 @@
       use goddard_module, only : consat2
       use lfoice_module, only : lfoice_init
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -700,7 +700,7 @@
 
       ! all processors:
 #ifdef MPI
-      call MPI_BCAST(dbldt ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(dbldt ,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_CM1,ierr)
 #endif
 
       dt = dbldt
@@ -741,7 +741,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -825,7 +825,7 @@
             print *,'  -------------------------------- '
             endif
 #ifdef MPI
-            call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+            call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
             call stopcm1
           endif
@@ -1435,7 +1435,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1462,7 +1462,7 @@
         enddo
       endif
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1528,7 +1528,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1545,7 +1545,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj+1
@@ -1608,7 +1608,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1625,7 +1625,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1673,7 +1673,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1700,7 +1700,7 @@
         enddo
       endif
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1766,7 +1766,7 @@
       enddo
       enddo
       enddo
-      IF( bbc.eq.1 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -1783,7 +1783,7 @@
         enddo
         enddo
       ENDIF
-      IF( tbc.eq.1 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 )THEN
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
         do j=1,nj
@@ -2145,7 +2145,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -2188,9 +2188,9 @@
       enddo
 
 #ifdef MPI
-      call MPI_REDUCE(bot,var,1,MPI_REAL,MPI_MIN,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE(bot,var,1,MPI_REAL,MPI_MIN,0,MPI_COMM_CM1,ierr)
       bot=var
-      call MPI_REDUCE(top,var,1,MPI_REAL,MPI_MAX,0,MPI_COMM_WORLD,ierr)
+      call MPI_REDUCE(top,var,1,MPI_REAL,MPI_MAX,0,MPI_COMM_CM1,ierr)
       top=var
       if(myid.eq.0)then
 #endif
@@ -2225,7 +2225,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -2357,7 +2357,7 @@
     ENDIF  kcheck
 #ifdef MPI
         call MPI_REDUCE(vmax,var,1,MPI_REAL,MPI_MAX,0,   &
-                        MPI_COMM_WORLD,ierr)
+                        MPI_COMM_CM1,ierr)
         vmax=var
         if(myid.eq.0)then
 #endif
@@ -2385,7 +2385,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2481,13 +2481,13 @@
       mmax(1)=fmax
       mmax(2)=myid
       call MPI_ALLREDUCE(mmax,nmax,1,MPI_2REAL,MPI_MAXLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmax(2))
       imax=imax+(myi-1)*ni
       jmax=jmax+(myj-1)*nj
-      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kmax,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kmax,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
       fmax=nmax(1)
 
       if(myid.eq.0)then
@@ -2527,7 +2527,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2589,7 +2589,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,fmax,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,fmax,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
       if(fmax.ge.1.50) stopit=.true.
@@ -2610,7 +2610,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2666,7 +2666,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,fmax,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,fmax,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
       ksmax = fmax
@@ -2687,7 +2687,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2790,25 +2790,25 @@
       mmax(1)=fhmax
       mmax(2)=myid
       call MPI_ALLREDUCE(mmax,nmax,1,MPI_2REAL,MPI_MAXLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmax(2))
       imaxh=imaxh+(myi-1)*ni
       jmaxh=jmaxh+(myj-1)*nj
-      call MPI_BCAST(imaxh,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmaxh,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kmaxh,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imaxh,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmaxh,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kmaxh,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
       fhmax=nmax(1)
 
       mmax(1)=fvmax
       mmax(2)=myid
       call MPI_ALLREDUCE(mmax,nmax,1,MPI_2REAL,MPI_MAXLOC,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       loc=nint(nmax(2))
       imaxv=imaxv+(myi-1)*ni
       jmaxv=jmaxv+(myj-1)*nj
-      call MPI_BCAST(imaxv,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jmaxv,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(kmaxv,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(imaxv,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jmaxv,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(kmaxv,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
       fvmax=nmax(1)
 
       if(myid.eq.0)then
@@ -2912,7 +2912,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2946,7 +2946,7 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(tmass,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmass=var
       if(myid.eq.0)then
 #endif
@@ -2977,7 +2977,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3017,7 +3017,7 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(tmass,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmass=var
       if(myid.eq.0)then
 #endif
@@ -3050,7 +3050,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3090,7 +3090,7 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(tmass,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmass=var
       if(myid.eq.0)then
 #endif
@@ -3122,7 +3122,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3189,19 +3189,19 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(ek,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       ek=var
       var=0.0d0
       call MPI_REDUCE(ei,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       ei=var
       var=0.0d0
       call MPI_REDUCE(ep,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       ep=var
       var=0.0d0
       call MPI_REDUCE(le,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,   &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       le=var
       if(myid.eq.0)then
 #endif
@@ -3240,7 +3240,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
  
@@ -3301,15 +3301,15 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(tmu,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmu=var
       var=0.0d0
       call MPI_REDUCE(tmv,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmv=var
       var=0.0d0
       call MPI_REDUCE(tmw,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmw=var
       if(myid.eq.0)then
 #endif
@@ -3344,7 +3344,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -3383,11 +3383,11 @@
 #ifdef MPI
       var=0.0d0
       call MPI_REDUCE(tmfu,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmfu=var
       var=0.0d0
       call MPI_REDUCE(tmfd,var,1,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       tmfd=var
       if(myid.eq.0)then
 #endif

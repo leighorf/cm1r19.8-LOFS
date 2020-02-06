@@ -27,7 +27,7 @@
       use writeout_nc_module, only : writestat_nc
 #endif
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -81,7 +81,7 @@
 #ifdef MPI
       cfoo = 0.0
       call MPI_REDUCE(qbudget(1),cfoo(1),nbudget,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                      MPI_COMM_WORLD,ierr)
+                      MPI_COMM_CM1,ierr)
       if( myid.eq.0 )then
         do n=1,nbudget
           qbudget(n)=cfoo(n)
@@ -92,7 +92,7 @@
       if( imoist.eq.1 )then
         afoo = 0.0
         call MPI_REDUCE(asq(1),afoo(1),numq,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                        MPI_COMM_WORLD,ierr)
+                        MPI_COMM_CM1,ierr)
         if( myid.eq.0 )then
           do n=1,numq
             asq(n)=afoo(n)
@@ -102,7 +102,7 @@
         endif
         bfoo = 0.0
         call MPI_REDUCE(bsq(1),bfoo(1),numq,MPI_DOUBLE_PRECISION,MPI_SUM,0,  &
-                        MPI_COMM_WORLD,ierr)
+                        MPI_COMM_CM1,ierr)
         if( myid.eq.0 )then
           do n=1,numq
             bsq(n)=bfoo(n)

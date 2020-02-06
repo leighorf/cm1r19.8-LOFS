@@ -34,7 +34,7 @@
 #ifdef MPI
       subroutine getcorner(s,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: s
@@ -59,7 +59,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,nk,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,nk,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -70,7 +70,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,nk,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,nk,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -81,7 +81,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,nk,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,nk,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -92,7 +92,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,nk,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,nk,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -108,7 +108,7 @@
           se1(k)=s(ni,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(se1,nk,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,nk,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
  
@@ -121,7 +121,7 @@
           ne1(k)=s(ni,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(ne1,nk,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,nk,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
  
@@ -134,7 +134,7 @@
           sw1(k)=s(1,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(sw1,nk,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,nk,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
  
@@ -147,7 +147,7 @@
           nw1(k)=s(1,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(nw1,nk,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,nk,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
  
@@ -208,7 +208,7 @@
 
       subroutine getcornert(t,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: t
@@ -233,7 +233,7 @@
 
       if(ibw.eq.0 .and. ibn.eq.0)then
         nr = nr + 1
-        call mpi_irecv(nw2,nkp1,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,nkp1,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -244,7 +244,7 @@
 
       if(ibw.eq.0 .and. ibs.eq.0)then
         nr = nr + 1
-        call mpi_irecv(sw2,nkp1,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,nkp1,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -255,7 +255,7 @@
 
       if(ibe.eq.0 .and. ibn.eq.0)then
         nr = nr + 1
-        call mpi_irecv(ne2,nkp1,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,nkp1,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -266,7 +266,7 @@
 
       if(ibe.eq.0 .and. ibs.eq.0)then
         nr = nr + 1
-        call mpi_irecv(se2,nkp1,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,nkp1,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -282,7 +282,7 @@
           se1(k)=t(ni,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(se1,nkp1,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,nkp1,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -295,7 +295,7 @@
           ne1(k)=t(ni,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(ne1,nkp1,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,nkp1,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -308,7 +308,7 @@
           sw1(k)=t(1,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(sw1,nkp1,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,nkp1,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -321,7 +321,7 @@
           nw1(k)=t(1,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(nw1,nkp1,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,nkp1,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -382,7 +382,7 @@
 
       subroutine getcorneru(u,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -408,7 +408,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -420,7 +420,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -432,7 +432,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -444,7 +444,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -463,7 +463,7 @@
           se1(k)=u(ni,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -479,7 +479,7 @@
           ne1(k)=u(ni,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -495,7 +495,7 @@
           sw1(k)=u(2,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -511,7 +511,7 @@
           nw1(k)=u(2,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -572,7 +572,7 @@
 
       subroutine getcornerv(v,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -598,7 +598,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -610,7 +610,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -622,7 +622,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -634,7 +634,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -653,7 +653,7 @@
           se1(k)=v(ni,2,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -669,7 +669,7 @@
           ne1(k)=v(ni,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -685,7 +685,7 @@
           sw1(k)=v(1,2,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -701,7 +701,7 @@
           nw1(k)=v(1,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -762,7 +762,7 @@
 
       subroutine getcornerw(w,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: w
@@ -788,7 +788,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -800,7 +800,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -812,7 +812,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -824,7 +824,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -843,7 +843,7 @@
           se1(k)=w(ni,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -859,7 +859,7 @@
           ne1(k)=w(ni,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -875,7 +875,7 @@
           sw1(k)=w(1,1,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -891,7 +891,7 @@
           nw1(k)=w(1,nj,k)
         enddo
         nrb = nrb + 1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -951,7 +951,7 @@
 
       subroutine getcorner3(s,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: s
@@ -976,7 +976,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,cmp*cmp*nk,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,cmp*cmp*nk,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -987,7 +987,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,cmp*cmp*nk,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,cmp*cmp*nk,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -998,7 +998,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,cmp*cmp*nk,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,cmp*cmp*nk,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -1009,7 +1009,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,cmp*cmp*nk,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,cmp*cmp*nk,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -1025,7 +1025,7 @@
         enddo
         enddo
         enddo
-        call mpi_isend(se1,cmp*cmp*nk,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,cmp*cmp*nk,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(5),ierr)
       endif
  
@@ -1040,7 +1040,7 @@
         enddo
         enddo
         enddo
-        call mpi_isend(ne1,cmp*cmp*nk,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,cmp*cmp*nk,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(6),ierr)
       endif
  
@@ -1055,7 +1055,7 @@
         enddo
         enddo
         enddo
-        call mpi_isend(sw1,cmp*cmp*nk,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,cmp*cmp*nk,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(7),ierr)
       endif
  
@@ -1070,7 +1070,7 @@
         enddo
         enddo
         enddo
-        call mpi_isend(nw1,cmp*cmp*nk,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,cmp*cmp*nk,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(8),ierr)
       endif
  
@@ -1153,7 +1153,7 @@
 
       subroutine comm_2we_start(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1175,7 +1175,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs2we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1187,7 +1187,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs2we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -1207,7 +1207,7 @@
         enddo
         nr = nr+1
         call mpi_isend(west,cs2we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1225,7 +1225,7 @@
         enddo
         nr = nr+1
         call mpi_isend(east,cs2we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1242,7 +1242,7 @@
 
       subroutine comm_2we_end(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1324,7 +1324,7 @@
 
       subroutine comm_2sn_start(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1346,7 +1346,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs2sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1358,7 +1358,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs2sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1378,7 +1378,7 @@
         enddo
         nr = nr+1
         call mpi_isend(north,cs2sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1396,7 +1396,7 @@
         enddo
         nr = nr+1
         call mpi_isend(south,cs2sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1413,7 +1413,7 @@
 
       subroutine comm_2sn_end(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real s(ib:ie,jb:je,kb:ke)
@@ -1496,7 +1496,7 @@
       subroutine comm_3s_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -1520,7 +1520,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs3we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -1532,7 +1532,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs3we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -1544,7 +1544,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs3sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -1556,7 +1556,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs3sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -1578,7 +1578,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cs3we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -1597,7 +1597,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cs3we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1616,7 +1616,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cs3sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1635,7 +1635,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cs3sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1653,7 +1653,7 @@
       subroutine comm_3s_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -1872,7 +1872,7 @@
       subroutine comm_3t_start(t,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -1896,7 +1896,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,ct3we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1908,7 +1908,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,ct3we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1920,7 +1920,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,ct3sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1932,7 +1932,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,ct3sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -1954,7 +1954,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,ct3we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1972,7 +1972,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,ct3we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -1990,7 +1990,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,ct3sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -2008,7 +2008,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,ct3sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -2026,7 +2026,7 @@
       subroutine comm_3t_end(t,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -2243,7 +2243,7 @@
       subroutine comm_3u_start(u,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real u(ib:ie+1,jb:je,kb:ke)
@@ -2267,7 +2267,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs3we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2279,7 +2279,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs3we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2291,7 +2291,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cu3sn,MPI_REAL,mynorth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2303,7 +2303,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cu3sn,MPI_REAL,mysouth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -2325,7 +2325,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cs3we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2343,7 +2343,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cs3we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -2361,7 +2361,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cu3sn,MPI_REAL,mysouth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2379,7 +2379,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cu3sn,MPI_REAL,mynorth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2397,7 +2397,7 @@
       subroutine comm_3u_end(u,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real u(ib:ie+1,jb:je,kb:ke)
@@ -2615,7 +2615,7 @@
       subroutine comm_3v_start(v,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real v(ib:ie,jb:je+1,kb:ke)
@@ -2639,7 +2639,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cv3we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2651,7 +2651,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cv3we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2663,7 +2663,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs3sn,MPI_REAL,mynorth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2675,7 +2675,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs3sn,MPI_REAL,mysouth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -2697,7 +2697,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cv3we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2714,7 +2714,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cv3we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -2732,7 +2732,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cs3sn,MPI_REAL,mysouth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2750,7 +2750,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cs3sn,MPI_REAL,mynorth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -2767,7 +2767,7 @@
       subroutine comm_3v_end(v,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real v(ib:ie,jb:je+1,kb:ke)
@@ -2985,7 +2985,7 @@
       subroutine comm_3w_start(w,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -3009,7 +3009,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cw3we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3021,7 +3021,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cw3we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3033,7 +3033,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cw3sn,MPI_REAL,mynorth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3045,7 +3045,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cw3sn,MPI_REAL,mysouth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -3067,7 +3067,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cw3we,MPI_REAL,mywest,tag1,    &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3085,7 +3085,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cw3we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3103,7 +3103,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cw3sn,MPI_REAL,mysouth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3121,7 +3121,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cw3sn,MPI_REAL,mynorth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3138,7 +3138,7 @@
       subroutine comm_3w_end(w,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -3356,7 +3356,7 @@
       subroutine comm_1s2d_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je)
@@ -3380,7 +3380,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,nj,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3392,7 +3392,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,nj,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3404,7 +3404,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,ni,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3416,7 +3416,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,ni,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -3434,7 +3434,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,nj,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3448,7 +3448,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,nj,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3462,7 +3462,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,ni,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3476,7 +3476,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,ni,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3493,7 +3493,7 @@
       subroutine comm_1s2d_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je)
@@ -3663,7 +3663,7 @@
       subroutine comm_1s_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -3687,7 +3687,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs1we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3699,7 +3699,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs1we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3711,7 +3711,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs1sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3723,7 +3723,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs1sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -3743,7 +3743,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cs1we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3759,7 +3759,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cs1we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3775,7 +3775,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cs1sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -3791,7 +3791,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cs1sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -3809,7 +3809,7 @@
       subroutine comm_1s_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -4019,7 +4019,7 @@
       subroutine comm_1p_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke)
@@ -4134,7 +4134,7 @@
       subroutine comm_1t_start(t,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -4158,7 +4158,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,ct1we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4170,7 +4170,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,ct1we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4182,7 +4182,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,ct1sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4194,7 +4194,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,ct1sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -4214,7 +4214,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,ct1we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4230,7 +4230,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,ct1we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4246,7 +4246,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,ct1sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4262,7 +4262,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,ct1sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4279,7 +4279,7 @@
       subroutine comm_1t_end(t,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real t(ib:ie,jb:je,kb:ke+1)
@@ -4489,7 +4489,7 @@
       subroutine comm_1u_start(u,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(in   ), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -4513,7 +4513,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs1we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4525,7 +4525,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs1we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4537,7 +4537,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cu1sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4549,7 +4549,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cu1sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -4569,7 +4569,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cs1we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4585,7 +4585,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cs1we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4601,7 +4601,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cu1sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4617,7 +4617,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cu1sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4634,7 +4634,7 @@
       subroutine comm_1u_end(u,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -4845,7 +4845,7 @@
       subroutine comm_1v_start(v,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(in   ), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -4869,7 +4869,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cv1we,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4881,7 +4881,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cv1we,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4893,7 +4893,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs1sn,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4905,7 +4905,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs1sn,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -4925,7 +4925,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cv1we,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4941,7 +4941,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cv1we,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4957,7 +4957,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cs1sn,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -4973,7 +4973,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cs1sn,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -4990,7 +4990,7 @@
       subroutine comm_1v_end(v,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -5200,7 +5200,7 @@
       subroutine comm_1w_start(w,ww1,ww2,we1,we2,   &
                                  ws1,ws2,wn1,wn2,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -5224,7 +5224,7 @@
         if(ibe.eq.0)then
           nr = nr+1
           call mpi_irecv(we2,cw1we,MPI_REAL,myeast,tag1,   &
-                        MPI_COMM_WORLD,reqs(nr),ierr)
+                        MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
 !-----
@@ -5236,7 +5236,7 @@
         if(ibw.eq.0)then
           nr = nr+1
           call mpi_irecv(ww2,cw1we,MPI_REAL,mywest,tag2,   &
-                        MPI_COMM_WORLD,reqs(nr),ierr)
+                        MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
 !-----
@@ -5248,7 +5248,7 @@
         if(ibn.eq.0)then
           nr = nr+1
           call mpi_irecv(wn2,cw1sn,MPI_REAL,mynorth,tag3,   &
-                        MPI_COMM_WORLD,reqs(nr),ierr)
+                        MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
 !-----
@@ -5260,7 +5260,7 @@
         if(ibs.eq.0)then
           nr = nr+1
           call mpi_irecv(ws2,cw1sn,MPI_REAL,mysouth,tag4,   &
-                        MPI_COMM_WORLD,reqs(nr),ierr)
+                        MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
 !------------------------------------------------
@@ -5280,7 +5280,7 @@
           enddo
           nr = nr+1
           call mpi_isend(ww1,cw1we,MPI_REAL,mywest,tag1,   &
-                         MPI_COMM_WORLD,reqs(nr),ierr)
+                         MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
         ! send east
@@ -5294,7 +5294,7 @@
           enddo
           nr = nr+1
           call mpi_isend(we1,cw1we,MPI_REAL,myeast,tag2,   &
-                         MPI_COMM_WORLD,reqs(nr),ierr)
+                         MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
         ! send south
@@ -5308,7 +5308,7 @@
           enddo
           nr = nr+1
           call mpi_isend(ws1,cw1sn,MPI_REAL,mysouth,tag3,   &
-                         MPI_COMM_WORLD,reqs(nr),ierr)
+                         MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
         ! send north
@@ -5322,7 +5322,7 @@
           enddo
           nr = nr+1
           call mpi_isend(wn1,cw1sn,MPI_REAL,mynorth,tag4,   &
-                         MPI_COMM_WORLD,reqs(nr),ierr)
+                         MPI_COMM_CM1,reqs(nr),ierr)
         endif
 
 !-----
@@ -5339,7 +5339,7 @@
       subroutine comm_1w_end(w,ww1,ww2,we1,we2,   &
                                ws1,ws2,wn1,wn2,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real w(ib:ie,jb:je,kb:ke+1)
@@ -5576,7 +5576,7 @@
       subroutine comm_2d_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5598,7 +5598,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cmp*nj,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5610,7 +5610,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cmp*nj,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5622,7 +5622,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,ni*cmp,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5634,7 +5634,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,ni*cmp,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -5654,7 +5654,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cmp*nj,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5670,7 +5670,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cmp*nj,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5686,7 +5686,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,ni*cmp,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5702,7 +5702,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,ni*cmp,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -5719,7 +5719,7 @@
 
       subroutine comm_2dew_end(s,west,newwest,east,neweast,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5778,7 +5778,7 @@
 
       subroutine comm_2dns_end(s,south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5869,7 +5869,7 @@
 
       subroutine comm_2d_corner(s)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, dimension(ib:ie,jb:je) :: s
@@ -5887,7 +5887,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(s(0,nj+1),1,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(s(0,nj+1),1,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
       endif
 
@@ -5897,7 +5897,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(s(0,0),1,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(s(0,0),1,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
       endif
 
@@ -5907,7 +5907,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(s(ni+1,nj+1),1,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(s(ni+1,nj+1),1,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
       endif
 
@@ -5917,7 +5917,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(s(ni+1,0),1,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(s(ni+1,0),1,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
       endif
 
@@ -5929,7 +5929,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nrb = nrb + 1
-        call mpi_isend(s(ni,1),1,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(s(ni,1),1,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -5937,7 +5937,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nrb = nrb + 1
-        call mpi_isend(s(ni,nj),1,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(s(ni,nj),1,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -5945,7 +5945,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nrb = nrb + 1
-        call mpi_isend(s(1,1),1,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(s(1,1),1,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -5953,7 +5953,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nrb = nrb + 1
-        call mpi_isend(s(1,nj),1,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(s(1,nj),1,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(nrb),ierr)
       endif
 
@@ -5985,7 +5985,7 @@
 
       subroutine getcorner3_2d(s)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real, intent(inout), dimension(ib:ie,jb:je) :: s
@@ -6010,7 +6010,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(nw2,cmp*cmp,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,cmp*cmp,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_nw = nr
       endif
@@ -6021,7 +6021,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(sw2,cmp*cmp,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,cmp*cmp,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_sw = nr
       endif
@@ -6032,7 +6032,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr = nr + 1
-        call mpi_irecv(ne2,cmp*cmp,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,cmp*cmp,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_ne = nr
       endif
@@ -6043,7 +6043,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr = nr + 1
-        call mpi_irecv(se2,cmp*cmp,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,cmp*cmp,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr),ierr)
         index_se = nr
       endif
@@ -6056,7 +6056,7 @@
           se1(i,j)=s(ni-cmp+i,j)
         enddo
         enddo
-        call mpi_isend(se1,cmp*cmp,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,cmp*cmp,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(5),ierr)
       endif
  
@@ -6068,7 +6068,7 @@
           ne1(i,j)=s(ni-cmp+i,nj-cmp+j)
         enddo
         enddo
-        call mpi_isend(ne1,cmp*cmp,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,cmp*cmp,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(6),ierr)
       endif
  
@@ -6080,7 +6080,7 @@
           sw1(i,j)=s(i,j)
         enddo
         enddo
-        call mpi_isend(sw1,cmp*cmp,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,cmp*cmp,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(7),ierr)
       endif
  
@@ -6092,7 +6092,7 @@
           nw1(i,j)=s(i,nj-cmp+j)
         enddo
         enddo
-        call mpi_isend(nw1,cmp*cmp,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,cmp*cmp,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(8),ierr)
       endif
  
@@ -6164,7 +6164,7 @@
       subroutine comm_3r_start(th,pp,west,newwest,east,neweast,   &
                                      south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real th(ib:ie,jb:je,kb:ke)
@@ -6189,7 +6189,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs3we*2,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6201,7 +6201,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs3we*2,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
 
       endif
 
@@ -6214,7 +6214,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs3sn*2,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6226,7 +6226,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs3sn*2,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -6253,7 +6253,7 @@
       enddo
         nr = nr + 1
         call mpi_isend(west,cs3we*2,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6276,7 +6276,7 @@
       enddo
         nr = nr + 1
         call mpi_isend(east,cs3we*2,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6299,7 +6299,7 @@
       enddo
         nr = nr + 1
         call mpi_isend(north,cs3sn*2,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6322,7 +6322,7 @@
       enddo
         nr = nr + 1
         call mpi_isend(south,cs3sn*2,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6340,7 +6340,7 @@
       subroutine comm_3r_end(th,pp,west,newwest,east,neweast,   &
                                    south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real th(ib:ie,jb:je,kb:ke)
@@ -6591,7 +6591,7 @@
       subroutine comm_3q_start(s,west,newwest,east,neweast,   &
                                  south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke,numq)
@@ -6615,7 +6615,7 @@
       if(ibe.eq.0)then
         nr = nr + 1
         call mpi_irecv(neweast,cs3weq,MPI_REAL,myeast,tag1,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6627,7 +6627,7 @@
       if(ibw.eq.0)then
         nr = nr + 1
         call mpi_irecv(newwest,cs3weq,MPI_REAL,mywest,tag2,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !----------
@@ -6639,7 +6639,7 @@
       if(ibs.eq.0)then
         nr = nr + 1
         call mpi_irecv(newsouth,cs3snq,MPI_REAL,mysouth,tag3,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6651,7 +6651,7 @@
       if(ibn.eq.0)then
         nr = nr + 1
         call mpi_irecv(newnorth,cs3snq,MPI_REAL,mynorth,tag4,   &
-                      MPI_COMM_WORLD,reqs(nr),ierr)
+                      MPI_COMM_CM1,reqs(nr),ierr)
       endif
 
 !------------------------------------------------
@@ -6675,7 +6675,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(west,cs3weq,MPI_REAL,mywest,tag1,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6695,7 +6695,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(east,cs3weq,MPI_REAL,myeast,tag2,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6715,7 +6715,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(north,cs3snq,MPI_REAL,mynorth,tag3,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6735,7 +6735,7 @@
         enddo
         nr = nr + 1
         call mpi_isend(south,cs3snq,MPI_REAL,mysouth,tag4,   &
-                       MPI_COMM_WORLD,reqs(nr),ierr)
+                       MPI_COMM_CM1,reqs(nr),ierr)
       endif
  
 !----------
@@ -6753,7 +6753,7 @@
       subroutine comm_3q_end(s,west,newwest,east,neweast,   &
                                south,newsouth,north,newnorth,reqs)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
  
       real s(ib:ie,jb:je,kb:ke,numq)
@@ -7055,7 +7055,7 @@
       call bcs2(s)
 #endif
 
-      IF( bbc.eq.1 .or. bbc.eq.2 .or. bbc.eq.3 )THEN
+      IF( bbc.eq.1 .or. bbc.eq.11 .or. bbc.eq.2 .or. bbc.eq.3 )THEN
         ! extrapolate:
 !$omp parallel do default(shared)  &
 !$omp private(i,j)
@@ -7066,7 +7066,7 @@
         enddo
       ENDIF
 
-      IF( tbc.eq.1 .or. tbc.eq.2 )THEN
+      IF( tbc.eq.1 .or. tbc.eq.11 .or. tbc.eq.2 )THEN
         ! extrapolate:
 !$omp parallel do default(shared)  &
 !$omp private(i,j)
@@ -7157,7 +7157,7 @@
 
       subroutine getcorneru3(u,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u
@@ -7181,7 +7181,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_nw = nr1
       endif
@@ -7192,7 +7192,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_sw = nr1
       endif
@@ -7203,7 +7203,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_ne = nr1
       endif
@@ -7214,7 +7214,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_se = nr1
       endif
@@ -7234,7 +7234,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7247,7 +7247,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7260,7 +7260,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7273,7 +7273,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7345,7 +7345,7 @@
 
       subroutine getcornerv3(v,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v
@@ -7369,7 +7369,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_nw = nr1
       endif
@@ -7380,7 +7380,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_sw = nr1
       endif
@@ -7391,7 +7391,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_ne = nr1
       endif
@@ -7402,7 +7402,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_se = nr1
       endif
@@ -7422,7 +7422,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7435,7 +7435,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7448,7 +7448,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7461,7 +7461,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7533,7 +7533,7 @@
 
       subroutine getcornerw3(w,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2)
       use input
-      use mpi
+      use mpi_newcomm !LOFS
       implicit none
 
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: w
@@ -7557,7 +7557,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_WORLD,   &
+        call mpi_irecv(nw2,count,MPI_REAL,mynw,tag1,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_nw = nr1
       endif
@@ -7568,7 +7568,7 @@
 
       if((ibw.eq.0.or.ibw.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_WORLD,   &
+        call mpi_irecv(sw2,count,MPI_REAL,mysw,tag2,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_sw = nr1
       endif
@@ -7579,7 +7579,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibn.eq.0.or.ibn.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_WORLD,   &
+        call mpi_irecv(ne2,count,MPI_REAL,myne,tag3,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_ne = nr1
       endif
@@ -7590,7 +7590,7 @@
 
       if((ibe.eq.0.or.ibe.eq.2) .and. (ibs.eq.0.or.ibs.eq.2))then
         nr1 = nr1+1
-        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_WORLD,   &
+        call mpi_irecv(se2,count,MPI_REAL,myse,tag4,MPI_COMM_CM1,   &
                        reqs(nr1),ierr)
         index_se = nr1
       endif
@@ -7610,7 +7610,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_WORLD,   &
+        call mpi_isend(se1,count,MPI_REAL,myse,tag1,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7623,7 +7623,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_WORLD,   &
+        call mpi_isend(ne1,count,MPI_REAL,myne,tag2,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7636,7 +7636,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_WORLD,   &
+        call mpi_isend(sw1,count,MPI_REAL,mysw,tag3,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 
@@ -7649,7 +7649,7 @@
         enddo
         enddo
         nr2 = nr2+1
-        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_WORLD,   &
+        call mpi_isend(nw1,count,MPI_REAL,mynw,tag4,MPI_COMM_CM1,   &
                        reqs(4+nr2),ierr)
       endif
 

@@ -1848,7 +1848,7 @@
       subroutine restrict_openbc_we(rvh,rmh,rho0,u3d)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -1903,11 +1903,11 @@
 #ifdef MPI
       tem=0.0d0
       call MPI_ALLREDUCE(fluxout,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxout=tem
       tem=0.0d0
       call MPI_ALLREDUCE(fluxin,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxin=tem
 #endif
 
@@ -1954,7 +1954,7 @@
       subroutine restrict_openbc_sn(ruh,rmh,rho0,v3d)
       use input
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -2009,11 +2009,11 @@
 #ifdef MPI
       tem=0.0d0
       call MPI_ALLREDUCE(fluxout,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxout=tem
       tem=0.0d0
       call MPI_ALLREDUCE(fluxin,tem,1,MPI_DOUBLE_PRECISION,MPI_SUM,   &
-                         MPI_COMM_WORLD,ierr)
+                         MPI_COMM_CM1,ierr)
       fluxin=tem
 #endif
 

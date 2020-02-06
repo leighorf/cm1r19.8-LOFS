@@ -13,7 +13,7 @@
       use input
       use constants
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -81,9 +81,9 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,ubar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,vbar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,sbar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,ubar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,vbar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,sbar,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0/dble(nx*ny)

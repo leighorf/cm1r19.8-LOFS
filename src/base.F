@@ -40,7 +40,7 @@
       use cm1libs , only : rslf,rsif
       use getcape_module
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -559,15 +559,15 @@
       ENDIF  prc0
 
 #ifdef MPI
-        call MPI_BCAST(nsnd    ,  1 ,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(p_sfc   ,  1 ,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(th_sfc  ,  1 ,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(qv_sfc  ,  1 ,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(zsnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(thsnd(1),nsnd,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(qvsnd(1),nsnd,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(usnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(vsnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(nsnd    ,  1 ,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(p_sfc   ,  1 ,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(th_sfc  ,  1 ,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(qv_sfc  ,  1 ,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(zsnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(thsnd(1),nsnd,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(qvsnd(1),nsnd,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(usnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(vsnd(1) ,nsnd,MPI_REAL   ,0,MPI_COMM_CM1,ierr)
 #endif
 
         if(imoist.eq.0) qv_sfc = 0.0
@@ -1478,7 +1478,7 @@
             print *
           endif
 #ifdef MPI
-          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
+          call MPI_BARRIER (MPI_COMM_CM1,ierr)
 #endif
           call stopcm1
         endif
@@ -2022,9 +2022,9 @@
       IF( psurf.ge.tsmall .and. tsurf.ge.tsmall .and. (.not.terrain_flag) )THEN
         ! this section of code only if no terrain
 #ifdef MPI
-        call MPI_BCAST(psurf,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(tsurf,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-        call MPI_BCAST(qsurf,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+        call MPI_BCAST(psurf,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(tsurf,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+        call MPI_BCAST(qsurf,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
         thsurf = tsurf/( (psurf*rp00)**rovcp )
         do j=jb,je
@@ -2720,7 +2720,7 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(mpi_in_place,pmin,1,MPI_REAL,MPI_MIN,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(mpi_in_place,pmin,1,MPI_REAL,MPI_MIN,MPI_COMM_CM1,ierr)
 #endif
 
 !--------------------------------------------------------------

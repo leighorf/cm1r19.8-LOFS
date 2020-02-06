@@ -59,7 +59,7 @@
     use cm1libs , only : rslf,rsif
     use getcape_module
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -701,8 +701,8 @@
         enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(mpi_in_place,zimin,1,MPI_REAL,MPI_MIN,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(mpi_in_place,zimax,1,MPI_REAL,MPI_MAX,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(mpi_in_place,zimin,1,MPI_REAL,MPI_MIN,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(mpi_in_place,zimax,1,MPI_REAL,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
       !c-c-c-c-c-c-c-c-c-c
@@ -1087,11 +1087,11 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qcfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qrfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qlfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qifrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qtfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qcfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qrfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qlfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qifrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qtfrac,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/dble(nx*ny)
@@ -1175,12 +1175,12 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qcb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qrb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qlb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,ncb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,nrb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,nlb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qcb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qrb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qlb,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,ncb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,nrb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,nlb,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       qcb = qcb/dble(max(1,ncb))
@@ -1327,12 +1327,12 @@
       enddo
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qct,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qrt,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,qlt,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,nct,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,nrt,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,nlt,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qct,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qrt,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,qlt,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,nct,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,nrt,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,nlt,1,MPI_INTEGER         ,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       qct = qct/dble(max(1,nct))
@@ -2403,11 +2403,11 @@
       ENDDO
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,tmass(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,clw(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,cli(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,plw(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,pli(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,tmass(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,clw(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,cli(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,plw(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,pli(1)  ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       do k=1,nk
@@ -6422,7 +6422,7 @@
         enddo
 
 #ifdef MPI
-        call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
         call write3d(savg,trecs,trecw,vargrid,nvar,varname,vardesc,varunit)
@@ -6446,7 +6446,7 @@
         enddo
 
 #ifdef MPI
-        call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+        call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
         call write3d(savg,trecs,trecw,vargrid,nvar,varname,vardesc,varunit)
@@ -6749,7 +6749,7 @@
       use constants
       use interp_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -6826,7 +6826,7 @@
         !buh4
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,ubar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,ubar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     temd = 1.0d0/dble(nx*ny)
@@ -6909,7 +6909,7 @@
         !buh4
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,vbar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,vbar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     temd = 1.0d0/dble(nx*ny)
@@ -6958,13 +6958,13 @@
     !-------------------------------------------------------
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,ufr(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-    call MPI_ALLREDUCE(MPI_IN_PLACE,ufs(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-    call MPI_ALLREDUCE(MPI_IN_PLACE,ufd(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,ufr(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,ufs(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,ufd(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 
-    call MPI_ALLREDUCE(MPI_IN_PLACE,vfr(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-    call MPI_ALLREDUCE(MPI_IN_PLACE,vfs(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-    call MPI_ALLREDUCE(MPI_IN_PLACE,vfd(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,vfr(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,vfs(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,vfd(1) ,nk,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     temd = 1.0d0/dble(nx*ny)
@@ -6991,7 +6991,7 @@
       use constants
       use interp_routines
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -7067,7 +7067,7 @@
         !buh4
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,sbar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,sbar(2),(nk-1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     temd = 1.0d0/dble(nx*ny)
@@ -7157,9 +7157,9 @@
       ENDIF
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,sfr(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,sfs(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,sfd(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,sfr(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,sfs(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,sfd(1) ,nk+1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       temd = 1.0d0/dble(nx*ny)
@@ -7233,7 +7233,7 @@
     subroutine getavg2d(s2d,savg2d)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7251,7 +7251,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg2d,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg2d,1,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     savg2d = savg2d/dble(nx*ny)
@@ -7267,7 +7267,7 @@
     subroutine getavg3d(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7295,7 +7295,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     temd = 1.0d0/dble(nx*ny)
@@ -7314,7 +7314,7 @@
     subroutine getmax(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7342,7 +7342,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_MAX,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_MAX,MPI_COMM_CM1,ierr)
 #endif
 
     end subroutine getmax
@@ -7356,7 +7356,7 @@
     subroutine getmin(s,savg,nkm)
     use input
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -7384,7 +7384,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_MIN,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg(1),k2,MPI_DOUBLE_PRECISION,MPI_MIN,MPI_COMM_CM1,ierr)
 #endif
 
     end subroutine getmin

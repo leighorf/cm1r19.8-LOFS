@@ -286,7 +286,7 @@
       subroutine getlanduse(season,myid,ib,ie,jb,je,ibl,iel,jbl,jel,   &
                             lu_index,xland,emiss,thc,albedo,znt,mavail)
 #ifdef MPI
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
       implicit none
 
@@ -348,13 +348,13 @@
       ENDIF
 
 #ifdef MPI
-      call MPI_BCAST(albd  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(slmo  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sfem  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sfz0  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(therin,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(scfx  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(sfhc  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(albd  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(slmo  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sfem  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sfz0  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(therin,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(scfx  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(sfhc  ,max_cats*max_seas,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
 
 !-----------------------------------------------------------------------

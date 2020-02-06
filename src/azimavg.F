@@ -40,7 +40,7 @@
     use constants
     use cm1libs , only : rslf,rsif
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -278,8 +278,8 @@
       ycenter = ysave
 
 #ifdef MPI
-      call MPI_ALLREDUCE(MPI_IN_PLACE,navg,icrs,MPI_INTEGER,MPI_SUM,MPI_COMM_WORLD,ierr)
-      call MPI_ALLREDUCE(MPI_IN_PLACE,area,icrs,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,navg,icrs,MPI_INTEGER,MPI_SUM,MPI_COMM_CM1,ierr)
+      call MPI_ALLREDUCE(MPI_IN_PLACE,area,icrs,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
       ravg = 0.0
@@ -1698,7 +1698,7 @@
     use input
     use constants , only : grads_undef
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1725,7 +1725,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg2d,icrs,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg2d,icrs,MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     do i=1,icrs
@@ -1748,7 +1748,7 @@
     use input
     use constants , only : grads_undef
 #ifdef MPI
-    use mpi
+    use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1777,7 +1777,7 @@
     enddo
 
 #ifdef MPI
-    call MPI_ALLREDUCE(MPI_IN_PLACE,savg,icrs*(nk+1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,ierr)
+    call MPI_ALLREDUCE(MPI_IN_PLACE,savg,icrs*(nk+1),MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_CM1,ierr)
 #endif
 
     do k=1,nk+1
@@ -1879,7 +1879,7 @@
     use constants
 #ifdef MPI
       use comm_module
-      use mpi
+      use mpi_newcomm !LOFS
 #endif
     implicit none
 
@@ -1990,14 +1990,14 @@
 #ifdef MPI
       valmin(1) = ppmin
       valmin(2) = myid
-      call mpi_allreduce(mpi_in_place,valmin,1,MPI_2REAL,MPI_MINLOC,MPI_COMM_WORLD,ierr)
+      call mpi_allreduce(mpi_in_place,valmin,1,MPI_2REAL,MPI_MINLOC,MPI_COMM_CM1,ierr)
 
       ppmin = valmin(1)
       loc = nint(valmin(2))
       ipmin = ipmin + (myi-1)*ni
       jpmin = jpmin + (myj-1)*nj
-      call MPI_BCAST(ipmin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
-      call MPI_BCAST(jpmin,1,MPI_INTEGER,loc,MPI_COMM_WORLD,ierr)
+      call MPI_BCAST(ipmin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(jpmin,1,MPI_INTEGER,loc,MPI_COMM_CM1,ierr)
 #endif
 
       if( myid.eq.0 )then
@@ -2166,11 +2166,11 @@
 !  communicate:
 #ifdef MPI
         if( myid.eq.0 )then
-          call MPI_REDUCE(mpi_in_place,davg,nr*kmax,mpi_double_precision,mpi_sum,0,mpi_comm_world,ierr)
-          call MPI_REDUCE(mpi_in_place,navg,nr     ,mpi_integer         ,mpi_sum,0,mpi_comm_world,ierr)
+          call MPI_REDUCE(mpi_in_place,davg,nr*kmax,mpi_double_precision,mpi_sum,0,MPI_COMM_CM1,ierr)
+          call MPI_REDUCE(mpi_in_place,navg,nr     ,mpi_integer         ,mpi_sum,0,MPI_COMM_CM1,ierr)
         else
-          call MPI_REDUCE(  davg      ,davg,nr*kmax,mpi_double_precision,mpi_sum,0,mpi_comm_world,ierr)
-          call MPI_REDUCE(  navg      ,navg,nr     ,mpi_integer         ,mpi_sum,0,mpi_comm_world,ierr)
+          call MPI_REDUCE(  davg      ,davg,nr*kmax,mpi_double_precision,mpi_sum,0,MPI_COMM_CM1,ierr)
+          call MPI_REDUCE(  navg      ,navg,nr     ,mpi_integer         ,mpi_sum,0,MPI_COMM_CM1,ierr)
         endif
 #endif
 !-----------------------------------------------------------------------
@@ -2272,10 +2272,10 @@
 !  more comms:
 
 #ifdef MPI
-    call MPI_BCAST(icenter,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-    call MPI_BCAST(jcenter,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
-    call MPI_BCAST(xcenter,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
-    call MPI_BCAST(ycenter,1,MPI_REAL,0,MPI_COMM_WORLD,ierr)
+    call MPI_BCAST(icenter,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+    call MPI_BCAST(jcenter,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+    call MPI_BCAST(xcenter,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
+    call MPI_BCAST(ycenter,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
 #endif
 
 !-----------------------------------------------------------------------
