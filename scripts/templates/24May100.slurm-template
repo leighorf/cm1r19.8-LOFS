@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH -J IDENTIFIER
+#SBATCH -N 16
+#SBATCH -n 224
+#SBATCH -p development
+#SBATCH --mail-type=all
+#SBATCH --mail-user=leigh.orf@gmail.com
+#SBATCH -o IDENTIFIER.o
+#SBATCH -e IDENTIFIER.e
+#SBATCH -t 0:30:00
+#------------------------------------------------------
+
+pwd
+date
+
+export OMP_NUM_THREADS=4
+ibrun ./cm1.exe namelist.input.IDENTIFIER IDENTIFIER/history.IDENTIFIER IDENTIFIER IDENTIFIER/restart.IDENTIFIER > outfiles/IDENTIFIER.out 2>&1
