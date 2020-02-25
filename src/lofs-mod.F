@@ -81,6 +81,7 @@ ptb_pbl_acc,ptb_subs_acc,td_efall_acc,tt_cond_acc,tt_evac_acc,tt_evar_acc,&
 tt_dep_acc,tt_subl_acc,tt_melt_acc,tt_frz_acc
 
 logical :: we_are_dumping_hist_data,we_are_doing_new_cycle,we_are_saving_2d_data
+logical :: we_are_dumping_restarts
 
 real, dimension(:), allocatable :: MCMrootranks,x1dranks,y1dranks,myMCMxranks,myMCMyranks
 real, dimension (:,:), allocatable :: var2d

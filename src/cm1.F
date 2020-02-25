@@ -2361,6 +2361,7 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
 !begin LOFS
 !We follow George's booleans (dorestart, dowriteout).
 !The extra stuff for LOFS is when to flush files !to disk
+we_are_dumping_restarts = dorestart !Needed for lofs-writeout.F for flushing
 we_are_doing_new_cycle = (mod(nwrite,time_levels_per_histfile).eq.0.or.dorestart)
 !end LOFS
 
