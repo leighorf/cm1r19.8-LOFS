@@ -105,6 +105,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             CALL h5pclose_f(fcpl_id, ierr); check_err(ierr)
             CALL h5pclose_f(plist_id, ierr); check_err(ierr)
             if(iprintinfo) write(6,1729) iotime
+!1729 format("New (empty) LOFS files created on disk at t = ",f9.3)
             if(iprintinfo) call FFLUSH(6)
     
             call h5gcreate_f(file_3d_id,grid_group_name,grid_group_id,ierr); check_err(ierr)
@@ -174,6 +175,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             call h5gclose_f(threed_group_id,ierr); check_err(ierr)
             call h5gclose_f(fileindex_group_id,ierr); check_err(ierr)
             if(iprintinfo) write(*,1720)iotime
+!1720 format("Flushing LOFS data to disk at t = ",f9.3)
             if(iprintinfo) call FFLUSH(6)
             call h5fclose_f(file_3d_id,ierr); check_err(ierr) !Everything should get flushed to disk here
 !Free any memory blobs that may be accumulating (avoid OOM)
@@ -182,6 +184,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
 !groups/datasets (see h5fclose - "delayed close")
             call h5garbage_collect_f(ierr); check_err(ierr)
             if(iprintinfo) write(*,1730)iotime
+!1730 format("Done flushing LOFS data to disk at t = ",f9.3)
             if(iprintinfo) call FFLUSH(6)
 
             i3d_time_index = 0
@@ -196,6 +199,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
             CALL h5pset_fclose_degree_f(plist_id, H5F_CLOSE_SEMI_F, ierr); check_err(ierr)
             CALL h5pset_fapl_core_f(plist_id, blocksize, backing_store, ierr); check_err(ierr)
             if(iprintinfo) write(6,1729) iotime
+!1729 format("New (empty) LOFS files created on disk at t = ",f9.3)
             if(iprintinfo) call FFLUSH(6)
 
             call h5fcreate_f(trim(filename),H5F_ACC_TRUNC_F,file_3d_id,ierr,creation_prp=fcpl_id,access_prp=plist_id);check_err(ierr)
