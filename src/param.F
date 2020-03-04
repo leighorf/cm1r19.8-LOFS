@@ -2667,7 +2667,7 @@
 
           cm1D_b =   var4 !ORF droplet breakup diameter threshold
           cm1NImax = var5 !ORF max ice number concentration, changed from r16
-          call graupel_init(ihail,inum,ndcnst,cm1D_b,cm1NImax)
+          call graupel_init(ihail,inum,ndcnst,cm1D_b)
 
           if(dowr) write(outfile,*) 'Returned from GRAUPEL_INIT'
           if(dowr) write(outfile,*)

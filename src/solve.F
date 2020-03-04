@@ -3416,6 +3416,7 @@
             enddo
           ENDIF
           ! cm1r17:  get fall velocities (store in qten array)
+          ! ORF cm1NImax is var5
           call MP_GRAUPEL(nstep,dum1,dum5,                            &
                           q3d(ib,jb,kb, 1),q3d(ib,jb,kb, 2),q3d(ib,jb,kb, 3), &
                           q3d(ib,jb,kb, 4),q3d(ib,jb,kb, 5),q3d(ib,jb,kb, 6), &
@@ -3427,7 +3428,7 @@
                           ruh,rvh,rmh,dum3,getdbz,                            &
                           qten(ib,jb,kb,nqc),qten(ib,jb,kb,nqr),qten(ib,jb,kb,nqi),  &
                           qten(ib,jb,kb,nqs),qten(ib,jb,kb,nqg),getvt,dorad,  &
-                          dotbud,doqbud,tdiag,qdiag,out3d)
+                          dotbud,doqbud,tdiag,qdiag,out3d,cm1NImax)
           IF(numq.eq.11)THEN
             ! ppten stores ncc:
 !$omp parallel do default(shared)  &

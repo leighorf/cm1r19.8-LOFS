@@ -301,7 +301,7 @@ MODULE module_mp_GRAUPEL
 CONTAINS
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst,cm1D_b,cm1NImax)
+SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst,cm1D_b)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! THIS SUBROUTINE INITIALIZES ALL PHYSICAL CONSTANTS AMND PARAMETERS 
 ! NEEDED BY THE MICROPHYSICS SCHEME.
@@ -692,7 +692,7 @@ SUBROUTINE MP_GRAUPEL(ITIMESTEP,                       &
                 tcond,tevac,tevar,train,                           &
                 ruh,rvh,rmh,rr,getdbz,                             &
                 vtc,vtr,vti,vts,vtg,getvt,dorad,                   &
-                dotbud,doqbud,tdiag,qdiag,out3d)
+                dotbud,doqbud,tdiag,qdiag,out3d,cm1NImax)
  
 ! QV - water vapor mixing ratio (kg/kg)
 ! QC - cloud water mixing ratio (kg/kg)
@@ -785,6 +785,7 @@ SUBROUTINE MP_GRAUPEL(ITIMESTEP,                       &
       real, intent(inout) , dimension(ibdt:iedt,jbdt:jedt,kbdt:kedt,ntdiag) :: tdiag
       real, intent(inout) , dimension(ibdq:iedq,jbdq:jedq,kbdq:kedq,nqdiag) :: qdiag
       real, intent(inout) , dimension(ib3d:ie3d,jb3d:je3d,kb3d:ke3d,nout3d) :: out3d
+      real, intent(in) :: cm1NImax
 
 !!!   REAL, DIMENSION(ims:ime, jms:jme), INTENT(INOUT):: &
 !!!                          RAINNC, RAINNCV, SR
@@ -1001,7 +1002,7 @@ SUBROUTINE MP_GRAUPEL(ITIMESTEP,                       &
                                   PRE,EVPMS,EVPMG,PCC,FR,FI,FC,FS,FG,      &
                                   PRD,PRDS,PRDG,EPRD,EPRDS,EPRDG,MNUCCD,   &
                                   tbcond,tbevar,tbmelt,tbfrz,tbdep,tbsub,  &
-                                  eqtset,dorad,tsmall,effis1d,testcase)
+                                  eqtset,dorad,tsmall,effis1d,testcase,cm1NImax)
 
 
    !
@@ -1209,7 +1210,7 @@ END SUBROUTINE MP_GRAUPEL
                         PRE,EVPMS,EVPMG,PCC,FR,FI,FC,FS,FG,      &
                         PRD,PRDS,PRDG,EPRD,EPRDS,EPRDG,MNUCCD,   &
                         tbcond,tbevar,tbmelt,tbfrz,tbdep,tbsub,  &
-                        eqtset,dorad,tsmall,effis,testcase)
+                        eqtset,dorad,tsmall,effis,testcase,cm1NImax)
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 ! THIS PROGRAM IS THE MAIN TWO-MOMENT MICROPHYSICS SUBROUTINE DESCRIBED BY
@@ -1284,6 +1285,7 @@ END SUBROUTINE MP_GRAUPEL
       integer, intent(in) :: eqtset
       logical, intent(in) :: dorad
       real, intent(in) :: tsmall
+      real, intent(in) :: cm1NImax
 
 ! OUTPUT VARIABLES
 
