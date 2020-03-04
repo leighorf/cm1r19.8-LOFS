@@ -116,7 +116,8 @@ character(len=strsize) executable_cmdline,namelist_cmdline,output_path_cmdline,o
 character(len=strsize) restart_path_cmdline,restart_basename_cmdline
 
 integer :: n_cmd_args
-real :: cm1D_b ! we pass Morrison's D_b value from var4 in namelist
+real :: cm1D_b   ! we pass Morrison's D_b value from var4 in namelist
+real :: cm1NImax ! we pass Morrison's NImax from var5 in namelist
 
 logical :: firstvisit,newcycle,writingrestart,nobuffer,adjust_box_speed_from_restart
 

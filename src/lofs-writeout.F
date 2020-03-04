@@ -625,6 +625,20 @@
       call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,prespert_acc)
     endif
 
+    if(imoist.eq.1.and.output_qv.eq.1)then
+        varname="qvpert"
+        description = "water vapor mixing ratio perturbation"
+        units = "g/kg"
+          do k=1,nk
+          do j=1,nj
+          do i=1,ni
+            var3d(i,j,k)=1000.0*(qa(i,j,k,nqv))
+          enddo
+          enddo
+          enddo
+          call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qv_acc)
+    endif
+
     if(imoist.eq.1.and.output_qvpert.eq.1)then
         varname="qvpert"
         description = "water vapor mixing ratio perturbation"

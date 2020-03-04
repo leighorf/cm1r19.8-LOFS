@@ -301,7 +301,7 @@ MODULE module_mp_GRAUPEL
 CONTAINS
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst,cm1D_b)
+SUBROUTINE GRAUPEL_INIT(cm1hail,cm1inum,cm1ndcnst,cm1D_b,cm1NImax)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! THIS SUBROUTINE INITIALIZES ALL PHYSICAL CONSTANTS AMND PARAMETERS 
 ! NEEDED BY THE MICROPHYSICS SCHEME.
@@ -5136,8 +5136,10 @@ END SUBROUTINE MP_GRAUPEL
 ! OF EXCESSIVE AND PERSISTENT ANVIL
 ! NOTE: THIS MAY CHANGE/REDUCE SENSITIVITY TO AEROSOL/CCN CONCENTRATION
 ! ORF we set back to r16 value , perhaps this is responsible for our super cold cold pools (as compared to r16)
-          NI3D(K) = MIN(NI3D(K),10.E6/RHO(K))
+! ORF we now make this selectable - var5
+!         NI3D(K) = MIN(NI3D(K),10.E6/RHO(K))
 !         NI3D(K) = MIN(NI3D(K),0.3E6/RHO(K))
+          NI3D(K) = MIN(NI3D(K),cm1NImax/RHO(K))
 
 ! ADD BOUND ON DROPLET NUMBER - CANNOT EXCEED AEROSOL CONCENTRATION
           IF (INUM.EQ.0.AND.IACT.EQ.2) THEN
