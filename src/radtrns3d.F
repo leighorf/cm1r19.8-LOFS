@@ -809,7 +809,8 @@ SUBROUTINE radtrns(nx,ny,nz,rbufsz,tipa,myid,dx,dy,                     &
 !              'Program stopped in RADTRNS.'
 !          CALL arpsstop('arpsstop stopped RADTRNS problem with sounding',1)
           print *,'Program stopped in RADTRNS.'
-          call stopcm1
+          print *,'...FUCK THAT! BLAST ONWARD BRAVE ASSHOLES!'
+!         call stopcm1
         END IF
       END DO
     END DO

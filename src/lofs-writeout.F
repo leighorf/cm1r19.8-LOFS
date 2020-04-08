@@ -1691,9 +1691,9 @@ thbudget: if (output_thbudget.eq.1) then
 
        varname="ptb_hadv"
        if( hadvordrs.eq.3 .or. hadvordrs.eq.5 .or. hadvordrs.eq.7 .or. hadvordrs.eq.9 .or. advwenos.ge.1 )then
-            description = "pt budget: horiz advection (non-diff component)"
+            description = "pot temp budget: horiz advection (non-diff component)"
        else
-            description = "pt budget: horiz advection"
+            description = "pot temp budget: horiz advection"
        endif
        units = "K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hadv_acc)
@@ -1710,9 +1710,9 @@ thbudget: if (output_thbudget.eq.1) then
 
        varname="ptb_vadv"
        if( vadvordrs.eq.3 .or. vadvordrs.eq.5 .or. vadvordrs.eq.7 .or. vadvordrs.eq.9 .or. advwenos.ge.1 )then
-            description = "pt budget: vert advection (non-diff component)"
+            description = "pot temp budget: vert advection (non-diff component)"
        else
-            description = "pt budget: vert advection"
+            description = "pot temp budget: vert advection"
        endif
        units = "K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vadv_acc)
@@ -1777,6 +1777,7 @@ thbudget: if (output_thbudget.eq.1) then
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vidiff_acc)
 
+       if(idiff.eq.1)  then
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
        do k=1,maxk
@@ -1791,7 +1792,9 @@ thbudget: if (output_thbudget.eq.1) then
        description="pot temp budget: horiz explicit diffusion"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_hediff_acc)
+       endif
 
+       if(idiff.eq.1)  then
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
        do k=1,maxk
@@ -1806,6 +1809,7 @@ thbudget: if (output_thbudget.eq.1) then
        description="pot temp budget: vert explicit diffusion"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_vediff_acc)
+       endif
 
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
@@ -1837,6 +1841,7 @@ thbudget: if (output_thbudget.eq.1) then
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_rdamp_acc)
 
+       if(radopt.ne.0) then
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
        do k=1,maxk
@@ -1851,6 +1856,7 @@ thbudget: if (output_thbudget.eq.1) then
        description="pot temp budget: radiation scheme"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_rad_acc)
+       endif
 
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
@@ -1882,6 +1888,7 @@ thbudget: if (output_thbudget.eq.1) then
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_diss_acc)
 
+       if(ipbl.eq.1) then
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
        do k=1,maxk
@@ -1896,6 +1903,7 @@ thbudget: if (output_thbudget.eq.1) then
        description="pot temp budget: PBL scheme"
        units="K/s"
        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ptb_pbl_acc)
+       endif
 
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
