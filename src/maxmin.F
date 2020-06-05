@@ -6,6 +6,7 @@
       use input
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -101,9 +102,9 @@
 
     if(myid.eq.0)then
 #endif
-      write(6,100) amax,fmax,imax,jmax,kmax,    &
+      write(6,100) iotime,amax,fmax,imax,jmax,kmax,    &
                    amin,fmin,imin,jmin,kmin
-100   format(2x,a6,':',1x,g13.6,i5,i5,i5,    &
+100   format('t=',f8.2,2x,a6,':',1x,g13.6,i5,i5,i5,    &
              4x,a6,':',1x,g13.6,i5,i5,i5)
 
       nstat = nstat + 1
@@ -128,6 +129,7 @@
       use input
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
         
@@ -208,9 +210,9 @@
 
     if(myid.eq.0)then
 #endif
-      write(6,100) amax,fmax,imax,jmax,1,    &
+      write(6,100) iotime,amax,fmax,imax,jmax,1,    &
                    amin,fmin,imin,jmin,1
-100   format(2x,a6,':',1x,g13.6,i5,i5,i5,    &
+100   format('t=',f8.2,2x,a6,':',1x,g13.6,i5,i5,i5,    &
              4x,a6,':',1x,g13.6,i5,i5,i5)
 
       nstat = nstat + 1

@@ -2146,6 +2146,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -2197,9 +2198,9 @@
 
       if(bot.eq.maxz) bot=0.0
 
-      write(6,100) 'QCTOP ',top,1,1,1,   &
+      write(6,100) iotime,'QCTOP ',top,1,1,1,   &
                    'QCBOT ',bot,1,1,1
-100   format(2x,a6,':',1x,f13.6,i5,i5,i5,   &
+100   format('t=',f8.2,2x,a6,':',1x,f13.6,i5,i5,i5,   &
              4x,a6,':',1x,f13.6,i5,i5,i5)
  
       nstat = nstat + 1
@@ -2226,6 +2227,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -2361,7 +2363,7 @@
         vmax=var
         if(myid.eq.0)then
 #endif
-        write(6,100) text,vmax
+        write(6,100) iotime,text,vmax
         nstat = nstat + 1
         rstat(nstat) = vmax
 #ifdef MPI
@@ -2369,7 +2371,7 @@
 #endif
       ENDDO
 
-100   format(2x,a6,':',1x,e13.6)
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
 
       if(timestats.ge.1) time_stat=time_stat+mytime()
  
@@ -2386,6 +2388,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2496,13 +2499,13 @@
     IF(writeit.eq.1)THEN
       nstat = nstat + 1
       IF( adapt_dt.eq.1 )THEN
-        write(6,100) 'CFLMAX',sngl(acfl),imax,jmax,kmax
+        write(6,100) iotime,'CFLMAX',sngl(acfl),imax,jmax,kmax
         rstat(nstat) = sngl(acfl)
       ELSE
-        write(6,100) 'CFLMAX',fmax,imax,jmax,kmax
+        write(6,100) iotime,'CFLMAX',fmax,imax,jmax,kmax
         rstat(nstat) = fmax
       ENDIF
-100   format(2x,a6,':',1x,f13.6,i5,i5,i5)
+100   format('t=',f8.2,2x,a6,':',1x,f13.6,i5,i5,i5)
     ENDIF
 
 #ifdef MPI
@@ -2688,6 +2691,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2814,17 +2818,17 @@
       if(myid.eq.0)then
 #endif
 
-      write(6,100) 'KSHMAX',fhmax,imaxh,jmaxh,kmaxh
+      write(6,100) iotime,'KSHMAX',fhmax,imaxh,jmaxh,kmaxh
 
       nstat = nstat + 1
       rstat(nstat) = fhmax
 
-      write(6,100) 'KSVMAX',fvmax,imaxv,jmaxv,kmaxv
+      write(6,100) iotime,'KSVMAX',fvmax,imaxv,jmaxv,kmaxv
 
       nstat = nstat + 1
       rstat(nstat) = fvmax
 
-100   format(2x,a6,':',1x,g13.6,i5,i5,i5)
+100   format('t=',f8.2,2x,a6,':',1x,g13.6,i5,i5,i5)
 
 #ifdef MPI
       endif
@@ -2913,6 +2917,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2953,8 +2958,8 @@
 
       tmass=tmass*(dx*dy*dz)
  
-      write(6,100) 'TMASS ',tmass
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,'TMASS ',tmass
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -2978,6 +2983,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3026,8 +3032,8 @@
       ! cm1r18:  do not include rain:
       tmass=tmass*(dx*dy*dz)
 
-      write(6,100) 'TMOIS ',tmass
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,'TMOIS ',tmass
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -3051,6 +3057,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3097,8 +3104,8 @@
 
       tmass=tmass*(dx*dy*dz)
 
-      write(6,100) aname,tmass
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,aname,tmass
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -3123,6 +3130,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3208,8 +3216,8 @@
 
       et=ek+ei+ep+le
  
-      write(6,100) 'TENERG',et
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,'TENERG',et
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = ek
@@ -3241,6 +3249,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -3314,10 +3323,10 @@
       if(myid.eq.0)then
 #endif
  
-      write(6,100) 'TMU   ',tmu
-      write(6,100) 'TMV   ',tmv
-      write(6,100) 'TMW   ',tmw
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,'TMU   ',tmu
+      write(6,100) iotime,'TMV   ',tmv
+      write(6,100) iotime,'TMW   ',tmw
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmu
@@ -3345,6 +3354,7 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3395,9 +3405,9 @@
       tmfu=tmfu*dx*dy
       tmfd=tmfd*dx*dy
 
-      write(6,100) 'TMFU  ',tmfu
-      write(6,100) 'TMFD  ',tmfd
-100   format(2x,a6,':',1x,e13.6)
+      write(6,100) iotime,'TMFU  ',tmfu
+      write(6,100) iotime,'TMFD  ',tmfd
+100   format('t=',f8.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = tmfu

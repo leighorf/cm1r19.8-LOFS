@@ -1,6 +1,6 @@
 #ORF - MPI/OMP version
 
-ZFP=/work/06618/orf/frontera/build/git/zfp
+ZFP=/home1/06618/orf/build/2020/zfp-0.5.5
 HDF5ZFP=/home1/06618/orf/H5Z-ZFP-install
 FC=h5pfc
 OPTS =  -I$(HDF5ZFP)/include

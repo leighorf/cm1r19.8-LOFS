@@ -28,6 +28,7 @@
 #endif
 #ifdef MPI
       use mpi_newcomm !LOFS
+      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -549,9 +550,9 @@
 
       IF(imoist.eq.1 .and. stat_pcn.eq.1)THEN
       if(myid.eq.0)then
-100     format(2x,a6,':',1x,e13.6)
+100     format('t=',f8.2,2x,a6,':',1x,e13.6)
         do n=1,nbudget
-          write(6,100) budname(n),qbudget(n)
+          write(6,100) iotime,budname(n),qbudget(n)
           nstat = nstat + 1
           rstat(nstat) = qbudget(n)
         enddo
@@ -563,14 +564,14 @@
         do n=1,numq
           text1='as    '
           write(text1(3:5),121) qname(n)
-          write(6,100) text1,asq(n)
+          write(6,100) iotime,text1,asq(n)
           nstat = nstat + 1
           rstat(nstat) = asq(n)
         enddo
         do n=1,numq
           text1='bs    '
           write(text1(3:5),121) qname(n)
-          write(6,100) text1,bsq(n)
+          write(6,100) iotime,text1,bsq(n)
           nstat = nstat + 1
           rstat(nstat) = bsq(n)
         enddo
