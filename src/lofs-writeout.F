@@ -7,6 +7,7 @@
                           t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                     &
                           znt,ust,u1,v1,s1,rr,tdiag,qdiag,udiag,vdiag,wdiag,pdiag)
 
+      use misclibs, only : calcvort
       character*3, dimension(maxq), intent(in) :: qname
       real, dimension(ib:ie), intent(in) :: xh,uh
       real, dimension(ib:ie+1), intent(in) :: xf,uf

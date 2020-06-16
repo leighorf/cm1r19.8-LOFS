@@ -2146,7 +2146,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -2227,7 +2226,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -2388,7 +2386,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2691,7 +2688,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2917,7 +2913,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -2983,7 +2978,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3057,7 +3051,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3130,7 +3123,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 
@@ -3249,7 +3241,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
  
@@ -3354,7 +3345,6 @@
       use constants
 #ifdef MPI
       use mpi_newcomm !LOFS
-      use module_lofs, only : iotime
 #endif
       implicit none
 

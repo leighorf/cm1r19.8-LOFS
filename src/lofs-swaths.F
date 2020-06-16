@@ -2,6 +2,7 @@
 subroutine do_lofs_swaths(rtime,dum1,uh,vh,reqs_s,sw31,sw32,se31,se32,ss31,ss32,sn31,sn32,dt, &
       uf,vf,w3d,ua,va,prs,prs0)  
         
+use adv_routines, only : movesfc
 implicit none
 real :: tem
 double precision :: weps

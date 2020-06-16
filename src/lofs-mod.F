@@ -4,8 +4,8 @@ use h5zzfp_props_f
 use mpi_newcomm
 use input
 use constants
-use adv_routines, only: movesfc
-use misclibs, only: calcvort !ORF TODO don't need this? Calc post-hoc from u,v,w.
+! use adv_routines, only: movesfc
+! use misclibs, only: calcvort !ORF TODO don't need this? Calc post-hoc from u,v,w.
 !ORF TODO see the "only:" where I have to use module_lofs but "only" need one or two vars
 implicit none
 !include 'input.incl'
@@ -29,7 +29,8 @@ integer :: nkwrite
 !ORF wr3dindex no longer serves any purpose but to keep track of the number of
 !history writes undertaken, which is not really useful for anything
 integer :: wr3dindex
-double precision :: iotime
+! Now stored in newcomm
+! double precision :: iotime
 real :: tapfrq_save,numconctime
 
 namelist /lofs/ save_full_domain,save_full_vertical_extent, &
