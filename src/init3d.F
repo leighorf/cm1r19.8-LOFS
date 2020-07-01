@@ -167,6 +167,10 @@
       double precision :: tem1,tem2,temd
       logical :: doit
 
+! ORF testing LOFT trajectories
+      real :: loft_minx,loft_miny,loft_minz,loft_dx,loft_dy,loft_dz
+      integer :: loft_nx, loft_ny, loft_nz
+
 
       ! Note:  By default, CM1 uses the same set of psuedorandom numbers 
       !        every time it is called.  To use truly random perturbations 
@@ -356,9 +360,20 @@
         if(dowr) write(outfile,*) '  npvals,nparcels = ',npvals,nparcels
         if(dowr) write(outfile,*) '  Initial parcel locations (x,y,z):'
         n = 0
-        do k=1,10
-        do j=1,60
-        do i=1,60
+! Reproducing Kelton's LOFT trajectories
+        loft_minx = -61000.0
+        loft_miny = -12000.0
+        loft_minz = 12000.0
+        loft_dx=100.0
+        loft_dy=100.0
+        loft_dz=50.0
+        loft_nx=30
+        loft_ny=30
+        loft_nz=20
+
+        do k=1,loft_nz
+        do j=1,loft_ny
+        do i=1,loft_nx
           n = n + 1
           if(n.gt.nparcels)then
             if(dowr) write(outfile,*)
@@ -368,13 +383,34 @@
             if(dowr) write(outfile,*)
             call stopcm1
           endif
-          pdata(n,prx) = minx + 2000.0*(i-1)
-          pdata(n,pry) = miny + 2000.0*(j-1)
-          pdata(n,prz) = zh(1,1,1) + 1000.0*(k-1)
+          pdata(n,prx) = loft_minx + loft_dx*(i-1)
+          pdata(n,pry) = loft_miny + loft_dy*(j-1)
+          pdata(n,prz) = loft_minz + loft_dz*(k-1)
 !!!          if(dowr) write(outfile,*) n,pdata(n,prx),pdata(n,pry),pdata(n,prz)
         enddo
         enddo
         enddo
+
+! ORF: Original
+!        do k=1,10
+!        do j=1,60
+!        do i=1,60
+!          n = n + 1
+!          if(n.gt.nparcels)then
+!            if(dowr) write(outfile,*)
+!            if(dowr) write(outfile,*) ' You are trying to define too many parcels'
+!            if(dowr) write(outfile,*)
+!            if(dowr) write(outfile,*) ' Increase the value of nparcels in namelist.input'
+!            if(dowr) write(outfile,*)
+!            call stopcm1
+!          endif
+!          pdata(n,prx) = minx + 2000.0*(i-1)
+!          pdata(n,pry) = miny + 2000.0*(j-1)
+!          pdata(n,prz) = zh(1,1,1) + 1000.0*(k-1)
+!!!!          if(dowr) write(outfile,*) n,pdata(n,prx),pdata(n,pry),pdata(n,prz)
+!        enddo
+!        enddo
+!        enddo
         if(dowr) write(outfile,*)
 
 #ifdef MPI
