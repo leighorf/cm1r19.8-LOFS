@@ -9,6 +9,7 @@ if spack find --format "{compiler}" zfp | grep -q intel; then
     echo "It appears ZFP was compiled with Intel. Using Intel Makefile..."
     export HDF5_FC=mpiifort
     PREFIX=$PREFIX make -f Makefile.spack.intel clean 
+    PREFIX=$PREFIX make -f Makefile.spack.intel lofs
     PREFIX=$PREFIX make -j 8 -f Makefile.spack.intel all
 elif spack find --format "{compiler}" zfp | grep -q gcc; then
     export HDF5_FC=mpifort

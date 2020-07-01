@@ -69,7 +69,7 @@ interp_routines.o: constants.o input.o
 irrad3d.o: radlib3d.o
 kessler.o: constants.o input.o
 lfoice.o: input.o
-maxmin.o: input.o
+maxmin.o: input.o lofs-mod.o
 misclibs.o: constants.o input.o goddard.o lfoice.o
 module_mp_radar.o: module_ra_etc.o
 module_ra_rrtmg_lw.o: module_ra_etc.o
