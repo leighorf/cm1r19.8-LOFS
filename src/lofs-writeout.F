@@ -722,16 +722,12 @@
 ! ORF TODO: Note that some of the diagnostics are saved on the scalar grid, some on the velocity / staggered grid
 ! George saves metadata for this for each variable... perhaps we should as well.
 
-! ORF TODO: Must set all of the new _acc values and add them to namelist, declare them, etc.
-
-
-
-
+! Yes, we should. Currently hdf2nc handles this based upon variable name but an hdf5 attribute would be a good idea
 
 ! ORF We deviate from George's approach here and do not save the extra stagger point (not using dumu array)
 ! stagger points are duplicated on adjacent ranks anyway
 
-! But, we should interpolate to the scalar mesh when we read these into hdf2nc or whatever
+! But, we should have the option interpolating to the scalar mesh when we read these into hdf2nc or whatever
 
 wbudget: if (output_wbudget.eq.1) then
 
@@ -1145,6 +1141,9 @@ vbudget: if (output_vbudget.eq.1) then
           call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vb_pbl_acc)
 
 !       elseif( trim(name_output(n)).eq.'ub_subs' )then
+
+! ORF: Check for dosub, if it's false (which it hsould be) skip all _subs budgets, they are for test cases.
+! Create a boolean 'odd_order_advection' or similar to determine whether to do _ediff (and check what_idiff is)
 
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
