@@ -1213,7 +1213,7 @@
           enddo
           enddo
           ! wait for receives to finish:
-          call mpi_waitall(ppnode-1,reqt(1:ppnode-1),MPI_STATUS_IGNORE,ierr)
+          call mpi_waitall(ppnode-1,reqt(1:ppnode-1),MPI_STATUSES_IGNORE,ierr)
           ! send data to processor msk:
           call MPI_ISEND(dat3(1,1,myid),ni*nj*ppnode,MPI_REAL,msk,tag+1,MPI_COMM_CM1,reqs,ierr)
           ! wait for send to finish:

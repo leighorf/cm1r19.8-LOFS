@@ -1,1 +1,1 @@
-Makefile.frontera.orf.parallel
+Makefile.spack.gcc
