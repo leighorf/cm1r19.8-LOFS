@@ -1658,8 +1658,8 @@
 
       subroutine parcel_write(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc)
       use input
-#ifdef NETCDF
-      use writeout_nc_module, only : writepdata_nc
+#ifdef PARCELS 
+      use writeout_pcl_nc_module, only : writepdata_nc
 #endif
       implicit none
 
@@ -1677,28 +1677,11 @@
 
     IF(myid.eq.0)THEN
 
-      IF(output_format.eq.1)THEN
-        ! GrADS format:
+#ifdef PARCELS 
 
-        string(totlen+1:totlen+22) = '_pdata.dat            '
-        if(dowr) write(outfile,*) string
-        open(unit=61,file=string,form='unformatted',access='direct',   &
-             recl=4*npvals*nparcels,status='unknown')
-
-        if(dowr) write(outfile,*)
-        if(dowr) write(outfile,*) '  pdata prec = ',prec
-
-        write(61,rec=prec) ((pdata(np,n),np=1,nparcels),n=1,npvals)
-
-        close(unit=61)
-
-#ifdef NETCDF
-      ELSEIF(output_format.eq.2)THEN
-
-        call     writepdata_nc(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc(1,1))
+      call     writepdata_nc(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc(1,1))
 
 #endif
-      ENDIF
       if(dowr) write(outfile,*)
 
     ENDIF   ! endif for myid=0
@@ -2149,91 +2132,7 @@
         unit_prcl(prcl_out) = 'nondimensional'
       endif
 
-!-----------------------------------------------------------------------
-
-      if( prcl_out.gt.0 .and. output_format.eq.1 )then
-        ! write GrADS descriptor file:
-        call write_prclctl(name_prcl,desc_prcl,unit_prcl,tdef)
-      endif
-
-!-----------------------------------------------------------------------
-
       end subroutine setup_parcel_vars
-
-
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-
-
-      subroutine write_prclctl(name_prcl,desc_prcl,unit_prcl,tdef)
-      use input
-      use constants , only : grads_undef
-      implicit none
-
-      character(len=40), intent(inout), dimension(maxvars) :: name_prcl,desc_prcl,unit_prcl
-      character(len=15), intent(inout) :: tdef
-
-      integer :: n,nn
-      character(len=16) :: a16
-
-      !---------------------------------------------------------------
-      ! This subroutine writes the GrADS descriptor file for parcels
-      !---------------------------------------------------------------
-
-    idcheck:  &
-    IF( myid.eq.0 )THEN
-
-      string(totlen+1:totlen+22) = '_pdata.ctl            '
-      if(dowr) write(outfile,*) string
-      open(unit=50,file=string,status='unknown')
-
-      sstring(baselen+1:baselen+1+12) = '_pdata.dat  '
-
-      write(50,401) sstring
-      write(50,402)
-      write(50,403) grads_undef
-      write(50,404) nparcels
-      write(50,405)
-      write(50,406)
-      if( prclfrq.gt.0 )then
-        write(50,407) 1+int(timax/prclfrq),tdef,max(1,int(prclfrq/60.0))
-      else
-        write(50,407) 1000000000,tdef,max(1,int(prclfrq/60.0))
-      endif
-
-      write(50,408) prcl_out
-
-      DO n = 1 , prcl_out
-        a16 = '                '
-        nn = len(trim(unit_prcl(n)))
-        write(a16(2:15),214) unit_prcl(n)
-        write(a16(1:1),201 )       '('
-        write(a16(nn+2:nn+2),201 ) ')'
-        write(50,409) name_prcl(n),desc_prcl(n),a16
-      ENDDO
-
-      write(50,410)
-
-      close(unit=50)
-
-    ENDIF  idcheck
-
-201   format(a1)
-214   format(a14)
-
-401   format('dset ^',a70)
-402   format('title cm1r19 output, parcel data')
-403   format('undef ',f10.1)
-404   format('xdef ',i10,' linear 1 1')
-405   format('ydef          1 linear 1 1')
-406   format('zdef          1 linear 1 1')
-407   format('tdef ',i10,' linear ',a15,' ',i5,'MN')
-408   format('vars ',i6)
-409   format(a12,' 1 99 ',a40,1x,a16)
-410   format('endvars')
-
-      end subroutine write_prclctl
 
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
