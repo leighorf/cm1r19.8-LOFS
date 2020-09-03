@@ -3,7 +3,7 @@
   implicit none
 
   private
-#ifdef PARCELS 
+#ifdef PARCELS
   public :: writepdata_nc,disp_err
 #endif
 
@@ -48,7 +48,6 @@
 
       subroutine writepdata_nc(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,pdata2)
       use input
-      use constants
       use netcdf
       implicit none
 
@@ -59,7 +58,7 @@
       real, intent(in), dimension(nparcels,npvals) :: pdata
       real, intent(inout), dimension(nparcels) :: pdata2
 
-      integer :: i,ncid,status,dimid,varid,time_index,n,n2,np,timeid,tfile,xid
+      integer :: ncid,status,dimid,varid,time_index,n,n2,np,timeid,tfile,xid
       integer :: npid,yhid,zhid
       logical :: allinfo
 
@@ -67,11 +66,7 @@
 
       if( myid.eq.0 ) print *,'  Entering writepdata_nc '
 
-    do i=totlen+1,maxstring
-      string(i:i) = ' '
-    enddo
-
-    string(totlen+1:totlen+22) = '_pdata.nc             '
+    string(:) = 'cm1out_pdata.nc'
 
     allinfo = .false.
     IF(prec.eq.1) allinfo=.true.
@@ -150,7 +145,7 @@
 
   !---------------------------------------------------------------------------!
 
-    call disp_err( nf90_put_att(ncid,NF90_GLOBAL,'cm1 version','cm1r19.9') , .true. )
+    call disp_err( nf90_put_att(ncid,NF90_GLOBAL,'cm1 version','cm1r19.1') , .true. )
     call disp_err( nf90_put_att(ncid, NF90_GLOBAL, 'Conventions','COARDS') , .true. )
 
     call disp_err( nf90_enddef(ncid) , .true. )
