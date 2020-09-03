@@ -191,7 +191,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -365,7 +365,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -555,7 +555,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -745,7 +745,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -935,7 +935,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -1309,7 +1309,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(3:3+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(3:3+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps4=time_mps4+mytime()
@@ -1480,7 +1480,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(3:3+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(3:3+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps4=time_mps4+mytime()
@@ -1853,7 +1853,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -2226,7 +2226,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -2597,7 +2597,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mpu2=time_mpu2+mytime()
@@ -2967,7 +2967,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mpv2=time_mpv2+mytime()
@@ -3338,7 +3338,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mpw2=time_mpw2+mytime()
@@ -3645,7 +3645,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -4001,7 +4001,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -4116,7 +4116,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -4471,7 +4471,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -4827,7 +4827,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mpu2=time_mpu2+mytime()
@@ -5182,7 +5182,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -5436,7 +5436,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mpw2=time_mpw2+mytime()
@@ -5852,7 +5852,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !----------
@@ -5962,7 +5962,7 @@
 !------------------------------------------------
 
       if( nr.ge.1 )then
-        call MPI_WAITALL(nr,reqs(1:nr),MPI_STATUS_IGNORE,ierr)
+        call MPI_WAITALL(nr,reqs(1:nr),MPI_STATUSES_IGNORE,ierr)
       endif
 
 !-----
@@ -5970,7 +5970,7 @@
     nrb = nrb-4
 
     if( nrb.ge.1 )then
-      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nrb,reqs(5:5+nrb-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -6573,7 +6573,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -6981,7 +6981,7 @@
       endif
 
     if( nr.ge.1 )then
-      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr,reqs(5:5+nr-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
       if(timestats.ge.1) time_mps2=time_mps2+mytime()
@@ -7328,7 +7328,7 @@
 !------------------------------------------------
 
     if( nr2.ge.1 )then
-      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -7516,7 +7516,7 @@
 !------------------------------------------------
 
     if( nr2.ge.1 )then
-      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----
@@ -7704,7 +7704,7 @@
 !------------------------------------------------
 
     if( nr2.ge.1 )then
-      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUS_IGNORE,ierr)
+      call MPI_WAITALL(nr2,reqs(5:5+nr2-1),MPI_STATUSES_IGNORE,ierr)
     endif
 
 !-----

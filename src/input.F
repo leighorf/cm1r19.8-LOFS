@@ -9,6 +9,7 @@
 
       integer, parameter :: maxvars = 10000   ! maximum possible number of
                                               ! output variables
+      integer, parameter :: maxstring = 120
 
 !-----------------------------------------------------------------------
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
