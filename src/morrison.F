@@ -5139,9 +5139,10 @@ END SUBROUTINE MP_GRAUPEL
 ! NOTE: THIS MAY CHANGE/REDUCE SENSITIVITY TO AEROSOL/CCN CONCENTRATION
 ! ORF we set back to r16 value , perhaps this is responsible for our super cold cold pools (as compared to r16)
 ! ORF we now make this selectable - var5
+! ORF now that we fixed our muckup with D_b (being 100x too small) we set this back to what Hugh had for this version.
 !         NI3D(K) = MIN(NI3D(K),10.E6/RHO(K))
-!         NI3D(K) = MIN(NI3D(K),0.3E6/RHO(K))
-          NI3D(K) = MIN(NI3D(K),cm1NImax/RHO(K))
+          NI3D(K) = MIN(NI3D(K),0.3E6/RHO(K))
+!         NI3D(K) = MIN(NI3D(K),cm1NImax/RHO(K))
 
 ! ADD BOUND ON DROPLET NUMBER - CANNOT EXCEED AEROSOL CONCENTRATION
           IF (INUM.EQ.0.AND.IACT.EQ.2) THEN
