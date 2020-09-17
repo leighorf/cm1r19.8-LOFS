@@ -506,6 +506,9 @@ tt_frz_acc      = 1.0e-6,
  prcl_rho      = 1,
  prcl_qsat     = 1,
  prcl_sfc      = 1,
+ prcl_ubud     = 1,
+ prcl_vbud     = 1,
+ prcl_wbud     = 1,
  /
 
  &param14
