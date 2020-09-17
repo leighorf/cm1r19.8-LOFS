@@ -306,7 +306,7 @@
       namelist /param13/                                                      &
               prcl_th,prcl_t,prcl_prs,prcl_ptra,prcl_q,prcl_nc,               &
               prcl_km,prcl_kh,prcl_tke,prcl_dbz,prcl_b,prcl_vpg,prcl_vort,    &
-              prcl_rho,prcl_qsat,prcl_sfc
+              prcl_rho,prcl_qsat,prcl_sfc,prcl_ubud,prcl_vbud,prcl_wbud
       namelist /param14/                                                      &
               doturbdiag,turbfrq
       namelist /param15/                                                      &
