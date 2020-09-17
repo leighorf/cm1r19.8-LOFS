@@ -1948,6 +1948,250 @@
       desc_prcl(prcl_out) = 'w velocity'
       unit_prcl(prcl_out) = 'm/s'
 
+      !ud_hadv,ud_vadv,ud_hturb,ud_vturb,ud_pgrad,ud_rdamp,            &
+      !ud_pbl,ud_cor,ud_cent,ud_subs,                                  &
+      !vd_hadv,vd_vadv,vd_hturb,vd_vturb,vd_pgrad,vd_rdamp,            &
+      !vd_pbl,vd_cor,vd_cent,vd_subs,                                  &
+      !wd_hadv,wd_vadv,wd_hturb,wd_vturb,wd_pgrad,wd_rdamp,wd_buoy,    &
+      if (prubud.ge.1)then
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'ub_hadv'
+        desc_prcl(prcl_out) = 'u budget: horizontal advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'ub_vadv'
+        desc_prcl(prcl_out) = 'u budget: vertical advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if( cm1setup.ge.1 .or. ipbl.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_hturb'
+          desc_prcl(prcl_out) = 'u budget: horizontal turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_vturb'
+          desc_prcl(prcl_out) = 'u budget: vertical turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( hadvordrv.eq.3 .or. hadvordrv.eq.5 .or. hadvordrv.eq.7 .or. hadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_hidiff'
+          desc_prcl(prcl_out) = 'u budget: horizontal implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( vadvordrv.eq.3 .or. vadvordrv.eq.5 .or. vadvordrv.eq.7 .or. vadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_vidiff'
+          desc_prcl(prcl_out) = 'u budget: vertical implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( idiff.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_hediff'
+          desc_prcl(prcl_out) = 'u budget: horizontal explicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          if (difforder.eq.2)then
+            prcl_out = prcl_out+1
+            name_prcl(prcl_out) = 'ub_vediff'
+            desc_prcl(prcl_out) = 'u budget: vertical explicit diffusion'
+            unit_prcl(prcl_out) = 'm/s^2'
+          endif
+        endif
+        
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'ub_pgrad'
+        desc_prcl(prcl_out) = 'u budget: pressure gradient'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if (irdamp.ge.1 .or. hrdamp.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_rdamp'
+          desc_prcl(prcl_out) = 'u budget: Rayleigh damper'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if ( icor.eq.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_cor'
+          desc_prcl(prcl_out) = 'u budget: Coriolis acceleration'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+        
+        if ( ipbl.eq.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_pbl'
+          desc_prcl(prcl_out) = 'u budget: PBL scheme'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if ( dosub )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'ub_subs'
+          desc_prcl(prcl_out) = 'u budget: large scale subsidence'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+      endif
+
+      if (prvbud.ge.1)then
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'vb_hadv'
+        desc_prcl(prcl_out) = 'v budget: horizontal advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'vb_vadv'
+        desc_prcl(prcl_out) = 'v budget: vertical advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if( cm1setup.ge.1 .or. ipbl.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_hturb'
+          desc_prcl(prcl_out) = 'v budget: horizontal turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_vturb'
+          desc_prcl(prcl_out) = 'v budget: vertical turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( hadvordrv.eq.3 .or. hadvordrv.eq.5 .or. hadvordrv.eq.7 .or. hadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_hidiff'
+          desc_prcl(prcl_out) = 'v budget: horizontal implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( vadvordrv.eq.3 .or. vadvordrv.eq.5 .or. vadvordrv.eq.7 .or. vadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_vidiff'
+          desc_prcl(prcl_out) = 'v budget: vertical implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( idiff.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_hediff'
+          desc_prcl(prcl_out) = 'v budget: horizontal explicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          if (difforder.eq.2)then
+            prcl_out = prcl_out+1
+            name_prcl(prcl_out) = 'vb_vediff'
+            desc_prcl(prcl_out) = 'v budget: vertical explicit diffusion'
+            unit_prcl(prcl_out) = 'm/s^2'
+          endif
+        endif
+        
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'vb_pgrad'
+        desc_prcl(prcl_out) = 'v budget: pressure gradient'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if (irdamp.ge.1 .or. hrdamp.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_rdamp'
+          desc_prcl(prcl_out) = 'v budget: Rayleigh damper'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if ( icor.eq.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_cor'
+          desc_prcl(prcl_out) = 'v budget: Coriolis acceleration'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+        
+        if ( ipbl.eq.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_pbl'
+          desc_prcl(prcl_out) = 'v budget: PBL scheme'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if ( dosub )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'vb_subs'
+          desc_prcl(prcl_out) = 'v budget: large scale subsidence'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+      endif
+
+      if (prwbud.ge.1)then
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'wb_hadv'
+        desc_prcl(prcl_out) = 'w budget: horizontal advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'wb_vadv'
+        desc_prcl(prcl_out) = 'w budget: vertical advection'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if( cm1setup.ge.1 .or. ipbl.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_hturb'
+          desc_prcl(prcl_out) = 'w budget: horizontal turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_vturb'
+          desc_prcl(prcl_out) = 'w budget: vertical turbulence'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( hadvordrv.eq.3 .or. hadvordrv.eq.5 .or. hadvordrv.eq.7 .or. hadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_hidiff'
+          desc_prcl(prcl_out) = 'w budget: horizontal implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( vadvordrv.eq.3 .or. vadvordrv.eq.5 .or. vadvordrv.eq.7 .or. vadvordrv.eq.9 .or. advwenov.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_vidiff'
+          desc_prcl(prcl_out) = 'w budget: vertical implicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        if( idiff.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_hediff'
+          desc_prcl(prcl_out) = 'w budget: horizontal explicit diffusion'
+          unit_prcl(prcl_out) = 'm/s^2'
+
+          if (difforder.eq.2)then
+            prcl_out = prcl_out+1
+            name_prcl(prcl_out) = 'wb_vediff'
+            desc_prcl(prcl_out) = 'w budget: vertical explicit diffusion'
+            unit_prcl(prcl_out) = 'm/s^2'
+          endif
+        endif
+        
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'wb_pgrad'
+        desc_prcl(prcl_out) = 'w budget: pressure gradient'
+        unit_prcl(prcl_out) = 'm/s^2'
+
+        if (irdamp.ge.1 .or. hrdamp.ge.1 )then
+          prcl_out = prcl_out+1
+          name_prcl(prcl_out) = 'wb_rdamp'
+          desc_prcl(prcl_out) = 'w budget: Rayleigh damper'
+          unit_prcl(prcl_out) = 'm/s^2'
+        endif
+
+        prcl_out = prcl_out+1
+        name_prcl(prcl_out) = 'wb_buoy'
+        desc_prcl(prcl_out) = 'w budget: buoyancy'
+        unit_prcl(prcl_out) = 'm/s^2' 
+      endif
+
       if( prth.ge.1 )then
         prcl_out = prcl_out+1
         name_prcl(prcl_out) = 'th'

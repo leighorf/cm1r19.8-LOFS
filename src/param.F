@@ -5150,18 +5150,6 @@
         prv = 5
         prw = 6
 
-        if( prcl_th.eq.1 )then
-          npvals = npvals+1
-          prth = npvals
-        endif
-        if( prcl_t.eq.1 )then
-          npvals = npvals+1
-          prt = npvals
-        endif
-        if( prcl_prs.eq.1 )then
-          npvals = npvals+1
-          prprs = npvals
-        endif
         if (prcl_ubud.eq.1)then
           npvals = npvals + nudiag 
           prubud = npvals
@@ -5173,6 +5161,19 @@
         if (prcl_wbud.eq.1)then
           npvals = npvals + nwdiag 
           prwbud = npvals
+        endif
+
+        if( prcl_th.eq.1 )then
+          npvals = npvals+1
+          prth = npvals
+        endif
+        if( prcl_t.eq.1 )then
+          npvals = npvals+1
+          prt = npvals
+        endif
+        if( prcl_prs.eq.1 )then
+          npvals = npvals+1
+          prprs = npvals
         endif
 
         ! passive tracers:
