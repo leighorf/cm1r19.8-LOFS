@@ -4343,8 +4343,8 @@
 
         endif  prltrn
 
-        call     parcel_driver(dt,xh,uh,ruh,xf,yh,vh,rvh,yf,zh,mh,rmh,zf,mf,zs,    &
-                               sigma,sigmaf,znt,rho,rru,rrv,rrw,pdata)
+        if (mtime.ge.4200) call parcel_driver(dt,xh,uh,ruh,xf,yh,vh,rvh,yf,zh,mh,rmh,zf,mf,zs,    &
+                                              sigma,sigmaf,znt,rho,rru,rrv,rrw,pdata)
         if(timestats.ge.1) time_parcels=time_parcels+mytime()
       ENDIF
 

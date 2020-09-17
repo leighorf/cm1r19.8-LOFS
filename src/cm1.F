@@ -2488,7 +2488,7 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
 
 
       if(iprcl.eq.1)then
-      IF( doprclout )THEN
+      IF( doprclout .and. mtime.ge.4200 )THEN
         call     parcel_interp(dt,xh,uh,ruh,xf,uf,yh,vh,rvh,yf,vf,     &
                                zh,mh,rmh,zf,mf,znt,ust,c1,c2,          &
                                zs,sigma,sigmaf,rds,gz,                 &
