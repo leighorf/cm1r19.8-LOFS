@@ -361,15 +361,15 @@
         if(dowr) write(outfile,*) '  Initial parcel locations (x,y,z):'
         n = 0
 ! Reproducing Kelton's LOFT trajectories
-        loft_minx = -61000.0
-        loft_miny = -12000.0
-        loft_minz = 12000.0
-        loft_dx=100.0
-        loft_dy=100.0
-        loft_dz=50.0
+        loft_minx = 0.0
+        loft_miny = 0.0
+        loft_minz = 30.0
+        loft_dx=30.0
+        loft_dy=30.0
+        loft_dz=30.0
         loft_nx=30
         loft_ny=30
-        loft_nz=20
+        loft_nz=30
 
         do k=1,loft_nz
         do j=1,loft_ny

@@ -473,6 +473,9 @@
       call MPI_BCAST(prcl_rho    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(prcl_qsat   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(prcl_sfc    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_ubud   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_vbud   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_BCAST(prcl_wbud   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
       call MPI_BCAST(radopt   ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(dtrad  ,1,MPI_REAL,0,MPI_COMM_CM1,ierr)
@@ -4983,6 +4986,9 @@
       prcl_rho      = max(0,min(1,prcl_rho))
       prcl_qsat     = max(0,min(1,prcl_qsat))
       prcl_sfc      = max(0,min(1,prcl_sfc))
+      prcl_ubud     = max(0,min(1,prcl_ubud))
+      prcl_vbud     = max(0,min(1,prcl_vbud))
+      prcl_wbud     = max(0,min(1,prcl_wbud))
 
 
       if( iptra.eq.0 )then
@@ -5030,6 +5036,9 @@
       if(dowr) write(outfile,*) 'prcl_rho     = ',prcl_rho
       if(dowr) write(outfile,*) 'prcl_qsat    = ',prcl_qsat
       if(dowr) write(outfile,*) 'prcl_sfc     = ',prcl_sfc
+      if(dowr) write(outfile,*) 'prcl_ubud    = ',prcl_ubud
+      if(dowr) write(outfile,*) 'prcl_vbud    = ',prcl_vbud
+      if(dowr) write(outfile,*) 'prcl_wbud    = ',prcl_wbud
       if(dowr) write(outfile,*)
 
 !------------------------------------------------------------------
@@ -5098,6 +5107,9 @@
       pru = 0
       prv = 0
       prw = 0
+      prubud = 0
+      prvbud = 0
+      prwbud = 0
       prth = 0
       prt = 0
       prprs = 0
@@ -5149,6 +5161,18 @@
         if( prcl_prs.eq.1 )then
           npvals = npvals+1
           prprs = npvals
+        endif
+        if (prcl_ubud.eq.1)then
+          npvals = npvals + nudiag 
+          prubud = npvals
+        endif
+        if (prcl_vbud.eq.1)then
+          npvals = npvals + nvdiag 
+          prvbud = npvals
+        endif
+        if (prcl_wbud.eq.1)then
+          npvals = npvals + nwdiag 
+          prwbud = npvals
         endif
 
         ! passive tracers:
@@ -5256,6 +5280,9 @@
       if(dowr) write(outfile,*) '    prth     = ',prth
       if(dowr) write(outfile,*) '    prt      = ',prt
       if(dowr) write(outfile,*) '    prprs    = ',prprs
+      if(dowr) write(outfile,*) '    prubud   = ',prubud
+      if(dowr) write(outfile,*) '    prvbud   = ',prvbud
+      if(dowr) write(outfile,*) '    prwbud   = ',prwbud
       if(dowr) write(outfile,*) '    prpt1    = ',prpt1
       if(dowr) write(outfile,*) '    prpt2    = ',prpt2
       if(dowr) write(outfile,*) '    prqv     = ',prqv

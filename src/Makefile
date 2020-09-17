@@ -1,1 +1,1 @@
-Makefile.spack.gcc
+Makefile.kth.parallel

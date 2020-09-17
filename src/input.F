@@ -70,7 +70,7 @@
               imirror,jmirror,                                                &
               imp,jmp,kmp,kmt,rmp,cmp,nrain,                                  &
               numq,nqv,nqc,nqr,nqi,nqs,nqg,                                   &
-              prx,pry,prz,pru,prv,prw,prth,prt,prprs,                         &
+              prx,pry,prz,pru,prv,prw,prth,prt,prprs,prubud,prvbud,prwbud,    &
               prpt1,prpt2,prqv,prq1,prq2,prnc1,prnc2,prkm,prkh,prtke,         &
               prdbz,prb,prvpg,przv,prrho,prqsl,prqsi,prznt,prust,przs,prsig,  &
               nql1,nql2,nqs1,nqs2,nnc1,nnc2,nvl1,nvl2,nzl1,nzl2,              &
@@ -133,7 +133,7 @@
 !end LOFS
               prcl_th,prcl_t,prcl_prs,prcl_ptra,prcl_q,prcl_nc,               &
               prcl_km,prcl_kh,prcl_tke,prcl_dbz,prcl_b,prcl_vpg,prcl_vort,    &
-              prcl_rho,prcl_qsat,prcl_sfc,                                    &
+              prcl_rho,prcl_qsat,prcl_sfc,prcl_ubud,prcl_vbud,prcl_wbud,      &
               n_out,s_out,u_out,v_out,w_out,z_out,sout2d,sout3d,              &
               stat_w,stat_wlevs,stat_u,stat_v,stat_rmw,                       &
               stat_pipert,stat_prspert,stat_thpert,stat_q,                    &

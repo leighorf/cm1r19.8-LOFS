@@ -2500,7 +2500,8 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
                                tdiag,qdiag,                            &
                                pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,        &
                                nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,reqs_p, &
-                               tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2)
+                               tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2,&
+                               udiag,vdiag,wdiag)
         call     parcel_write(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc)
         prec = prec+1
         if(prclfrq.gt.0.0)then
