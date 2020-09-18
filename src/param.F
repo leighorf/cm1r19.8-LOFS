@@ -5278,12 +5278,12 @@
       if(dowr) write(outfile,*) '    pru      = ',pru
       if(dowr) write(outfile,*) '    prv      = ',prv
       if(dowr) write(outfile,*) '    prw      = ',prw
-      if(dowr) write(outfile,*) '    prth     = ',prth
-      if(dowr) write(outfile,*) '    prt      = ',prt
-      if(dowr) write(outfile,*) '    prprs    = ',prprs
       if(dowr) write(outfile,*) '    prubud   = ',prubud
       if(dowr) write(outfile,*) '    prvbud   = ',prvbud
       if(dowr) write(outfile,*) '    prwbud   = ',prwbud
+      if(dowr) write(outfile,*) '    prth     = ',prth
+      if(dowr) write(outfile,*) '    prt      = ',prt
+      if(dowr) write(outfile,*) '    prprs    = ',prprs
       if(dowr) write(outfile,*) '    prpt1    = ',prpt1
       if(dowr) write(outfile,*) '    prpt2    = ',prpt2
       if(dowr) write(outfile,*) '    prqv     = ',prqv

@@ -1994,7 +1994,7 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
 
         doprclout  =  .false.
         if( iprcl.eq.1 )then
-          if( (mtime+dbldt).ge.(prcltim-0.1*dt) .or. prclfrq.lt.0.0 ) doprclout  =  .true.
+          if((mtime+dbldt).ge.(prcltim-0.1*dt) .or. prclfrq.lt.0.0 ) doprclout  =  .true.
         endif
 
 
@@ -2488,7 +2488,7 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
 
 
       if(iprcl.eq.1)then
-      IF( doprclout .and. mtime.ge.4200 )THEN
+      IF( doprclout )THEN
         call     parcel_interp(dt,xh,uh,ruh,xf,uf,yh,vh,rvh,yf,vf,     &
                                zh,mh,rmh,zf,mf,znt,ust,c1,c2,          &
                                zs,sigma,sigmaf,rds,gz,                 &
