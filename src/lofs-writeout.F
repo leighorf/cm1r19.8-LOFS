@@ -729,7 +729,7 @@
 
 ! But, we should have the option interpolating to the scalar mesh when we read these into hdf2nc or whatever
 
-wbudget: if (output_wbudget.eq.1) then
+wbudget: if (output_wbudget.eq.100) then
 
 !       elseif( trim(name_output(n)).eq.'wb_hadv' )then
 
@@ -927,7 +927,7 @@ wbudget: if (output_wbudget.eq.1) then
           call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,wb_buoy_acc)
 endif wbudget
 
-vbudget: if (output_vbudget.eq.1) then
+vbudget: if (output_vbudget.eq.100) then
 !       elseif( trim(name_output(n)).eq.'ub_hadv' )then
 
 !$omp parallel do default(shared)  &
@@ -1162,7 +1162,7 @@ vbudget: if (output_vbudget.eq.1) then
 
 endif vbudget
 
-ubudget: if (output_ubudget.eq.1) then
+ubudget: if (output_ubudget.eq.100) then
 !       elseif( trim(name_output(n)).eq.'ub_hadv' )then
 
 !$omp parallel do default(shared)  &
