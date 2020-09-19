@@ -679,7 +679,7 @@
                                dum7,dum8,buoy,vpg  ,                   &
                                u3d,v3d,w3d,pp3d,th   ,t     ,th3d,q3d, &
                                kmh,kmv,khh,khv,tke3d,pt3d,pdata,       &
-                               tdiag,qdiag,                            &
+                               tdiag,qdiag,udiag,vdiag,wdiag,          &
                                pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,        &
                                nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,reqs_p, &
                                tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2)
@@ -728,15 +728,15 @@
       real, intent(inout), dimension(nparcels,npvals) :: pdata
       real, intent(inout) , dimension(ibdt:iedt,jbdt:jedt,kbdt:kedt,ntdiag) :: tdiag
       real, intent(inout) , dimension(ibdq:iedq,jbdq:jedq,kbdq:kedq,nqdiag) :: qdiag
+      real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
+      real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
+      real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
       real, intent(inout), dimension(jmp,kmp) :: pw1,pw2,pe1,pe2
       real, intent(inout), dimension(imp,kmp) :: ps1,ps2,pn1,pn2
       real, intent(inout), dimension(kmt) :: nw1,nw2,ne1,ne2,sw1,sw2,se1,se2
       integer, intent(inout), dimension(rmp) :: reqs_p
       real, intent(inout), dimension(cmp,jmp,kmt) :: tkw1,tkw2,tke1,tke2
       real, intent(inout), dimension(imp,cmp,kmt) :: tks1,tks2,tkn1,tkn2
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
 
       integer :: n,np,i,j,k,iflag,jflag,kflag
       real :: tem,tem1
