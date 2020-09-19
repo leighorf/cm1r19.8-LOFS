@@ -986,7 +986,7 @@ vbudget: if (output_vbudget.eq.1) then
           do k=1,maxk
           do j=1,nj
           do i=1,ni
-            var3d(i,j,k) = =vdiag(i,j,k,vd_vturb)
+            var3d(i,j,k) = vdiag(i,j,k,vd_vturb)
           enddo
           enddo
           enddo
