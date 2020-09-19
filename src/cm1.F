@@ -2497,7 +2497,7 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
                                dum7,dum8,wten,wten1,                   &
                                u3d,v3d,w3d,pp3d,thten,thten1,th3d,q3d, &
                                kmh,kmv,khh,khv,tke3d,pt3d,pdata,       &
-                               tdiag,qdiag,                            &
+                               tdiag,qdiag,udiag,vdiag,wdiag,          &
                                pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,        &
                                nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,reqs_p, &
                                tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2)

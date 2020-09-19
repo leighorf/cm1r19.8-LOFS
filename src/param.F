@@ -5151,16 +5151,16 @@
         prw = 6
 
         if (prcl_ubud.eq.1)then
+          prubud = npvals + 1
           npvals = npvals + nudiag 
-          prubud = npvals
         endif
         if (prcl_vbud.eq.1)then
+          prvbud = npvals + 1
           npvals = npvals + nvdiag 
-          prvbud = npvals
         endif
         if (prcl_wbud.eq.1)then
+          prwbud = npvals + 1
           npvals = npvals + nwdiag 
-          prwbud = npvals
         endif
 
         if( prcl_th.eq.1 )then
