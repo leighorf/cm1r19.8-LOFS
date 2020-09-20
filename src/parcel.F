@@ -1277,9 +1277,11 @@
         ENDIF
 
         call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,u3d,uval)
-        do diag=0,nudiag-1
-          call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag,pdata(np,prubud+diag))
-        enddo
+        if( prubud.ge.1 )then
+          do diag=0,nudiag-1
+            call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(:, :, :, diag+1),pdata(np,prubud+diag))
+          enddo
+        endif
 
 !----------------------------------------------------------------------
 !  Data on v points
@@ -1343,9 +1345,11 @@
         ENDIF
 
         call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,v3d,vval)
-        do diag=0,nvdiag-1
-          call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag,pdata(np,prvbud+diag))
-        enddo
+        if( prvbud.ge.1 )then
+          do diag=0,nvdiag-1
+            call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(:, :, :,diag+1),pdata(np,prvbud+diag))
+          enddo
+        endif
 
 !----------------------------------------------------------------------
 !  Data on w points
@@ -1425,9 +1429,11 @@
       if( prvpg.ge.1 )then
         call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vpg,pdata(np,prvpg))
       endif
-      do diag=0,nwdiag-1
-        call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag,pdata(np,prwbud+diag))
-      enddo
+      if( prwbud.ge.1 )then
+        do diag=0,nwdiag-1
+          call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag(:, :, :, diag+1),pdata(np,prwbud+diag))
+        enddo
+      endif
 
 !----------------------------------------------------------------------
 !  Data on scalar points
