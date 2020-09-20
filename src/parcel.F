@@ -1069,21 +1069,21 @@
         do diag=1,nudiag
           call prepcorners(udiag(ibdv,jbdv,kbdv,diag),  &
                            nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
         enddo
       endif
       if( prvbud.ge.1 )then
         do diag=1,nvdiag
           call prepcorners(vdiag(ibdv,jbdv,kbdv,diag),  &
                            nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
         enddo
       endif
       if( prwbud.ge.1 )then
         do diag=1,nwdiag
           call prepcorners(wdiag(ibdv,jbdv,kbdv,diag),  &
                            nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
         enddo
       endif
 
@@ -1279,7 +1279,7 @@
         call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,u3d,uval)
         if( prubud.ge.1 )then
           do diag=0,nudiag-1
-            call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(:, :, :, diag+1),pdata(np,prubud+diag))
+            call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prubud+diag))
           enddo
         endif
 
@@ -1347,7 +1347,7 @@
         call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,v3d,vval)
         if( prvbud.ge.1 )then
           do diag=0,nvdiag-1
-            call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(:, :, :,diag+1),pdata(np,prvbud+diag))
+            call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prvbud+diag))
           enddo
         endif
 
@@ -1431,7 +1431,7 @@
       endif
       if( prwbud.ge.1 )then
         do diag=0,nwdiag-1
-          call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag(:, :, :, diag+1),pdata(np,prwbud+diag))
+          call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prwbud+diag))
         enddo
       endif
 
