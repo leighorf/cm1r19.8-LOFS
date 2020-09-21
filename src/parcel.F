@@ -908,6 +908,29 @@
       call bcv2(v3d)
       call getcornerw(w3d,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
       call bcw2(w3d)
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
+      !! iterate over the number of diagnostics for each budget
+      if( prubud.ge.1 )then
+        do diag=1,nudiag
+          call getcorneru(udiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+          call bcu2(udiag(ibdv, jbdv, kbdv, diag))
+        enddo
+      endif
+      if( prvbud.ge.1 )then
+        do diag=1,nvdiag
+          call getcornerv(vdiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+          call bcv2(vdiag(ibdv, jbdv, kbdv, diag))
+        enddo
+      endif
+      if( prwbud.ge.1 )then
+        do diag=1,nwdiag
+          call getcornerw(wdiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+          call bcw2(wdiag(ibdv, jbdv, kbdv, diag))
+        enddo
+      endif
+
 #endif
 
 !----------------------------------------------------------------------
@@ -1061,32 +1084,6 @@
                              nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
                              pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
       endif
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
-      !! iterate over the number of diagnostics for each budget
-      if( prubud.ge.1 )then
-        do diag=1,nudiag
-          call prepcorners(udiag(ibdv,jbdv,kbdv,diag),  &
-                           nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
-        enddo
-      endif
-      if( prvbud.ge.1 )then
-        do diag=1,nvdiag
-          call prepcorners(vdiag(ibdv,jbdv,kbdv,diag),  &
-                           nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
-        enddo
-      endif
-      if( prwbud.ge.1 )then
-        do diag=1,nwdiag
-          call prepcorners(wdiag(ibdv,jbdv,kbdv,diag),  &
-                           nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                           pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
-        enddo
-      endif
-
 !----------------------------------------------------------------------
 
     IF( prqsl.ge.1 )THEN
