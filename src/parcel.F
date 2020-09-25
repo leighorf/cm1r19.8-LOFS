@@ -908,28 +908,6 @@
       call bcv2(v3d)
       call getcornerw(w3d,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
       call bcw2(w3d)
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
-      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
-      !! iterate over the number of diagnostics for each budget
-      if( prubud.ge.1 )then
-        do diag=1,nudiag
-          call getcorneru(udiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-          call bcu2(udiag(ibdv, jbdv, kbdv, diag))
-        enddo
-      endif
-      if( prvbud.ge.1 )then
-        do diag=1,nvdiag
-          call getcornerv(vdiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-          call bcv2(vdiag(ibdv, jbdv, kbdv, diag))
-        enddo
-      endif
-      if( prwbud.ge.1 )then
-        do diag=1,nwdiag
-          call getcornerw(wdiag(ibdv, jbdv, kbdv, diag),nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-          call bcw2(wdiag(ibdv, jbdv, kbdv, diag))
-        enddo
-      endif
 
 #endif
 
@@ -1083,6 +1061,31 @@
         call prepcorners(qdiag(ibdq,jbdq,kbdq,qd_dbz),  &
                              nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
                              pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+      endif
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nudiag) :: udiag
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nvdiag) :: vdiag
+      !real, intent(inout) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
+      !! iterate over the number of diagnostics for each budget
+      if( prubud.ge.1 )then
+        do diag=1,nudiag
+            call prepcorners(udiag(ibdv,jbdv,kbdv,diag),  &
+                                 nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+        enddo
+      endif
+      if( prvbud.ge.1 )then
+        do diag=1,nvdiag
+            call prepcorners(vdiag(ibdv,jbdv,kbdv,diag),  &
+                                 nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+        enddo
+      endif
+      if( prwbud.ge.1 )then
+        do diag=1,nwdiag
+            call prepcorners(wdiag(ibdv,jbdv,kbdv,diag),  &
+                                 nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+        enddo
       endif
 !----------------------------------------------------------------------
 
@@ -1274,11 +1277,6 @@
         ENDIF
 
         call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,u3d,uval)
-        if( prubud.ge.1 )then
-          do diag=0,nudiag-1
-            call tri_interp(ni+1,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prubud+diag))
-          enddo
-        endif
 
 !----------------------------------------------------------------------
 !  Data on v points
@@ -1342,11 +1340,6 @@
         ENDIF
 
         call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,v3d,vval)
-        if( prvbud.ge.1 )then
-          do diag=0,nvdiag-1
-            call tri_interp(ni,nj+1,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prvbud+diag))
-          enddo
-        endif
 
 !----------------------------------------------------------------------
 !  Data on w points
@@ -1425,11 +1418,6 @@
       endif
       if( prvpg.ge.1 )then
         call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vpg,pdata(np,prvpg))
-      endif
-      if( prwbud.ge.1 )then
-        do diag=0,nwdiag-1
-          call tri_interp(ni,nj,nk+1,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prwbud+diag))
-        enddo
       endif
 
 !----------------------------------------------------------------------
@@ -1522,6 +1510,21 @@
         if(prpt1.ge.1)then
           do n=1,npt
           call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,pt3d(ib,jb,kb,n),pdata(np,prpt1+n-1))
+          enddo
+        endif
+        if( prubud.ge.1 )then
+          do diag=0,nudiag-1
+            call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prubud+diag))
+          enddo
+        endif
+        if( prvbud.ge.1 )then
+          do diag=0,nvdiag-1
+            call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prvbud+diag))
+          enddo
+        endif
+        if( prwbud.ge.1 )then
+          do diag=0,nwdiag-1
+            call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,wdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prwbud+diag))
           enddo
         endif
 
