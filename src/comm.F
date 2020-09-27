@@ -7107,7 +7107,7 @@
         call comm_1s_end(  d,pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p)
       ENDIF
       call getcorner(d,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
-      call bcs2(s)
+      call bcs2(d)
 #endif
       end subroutine prepcornerd
 
