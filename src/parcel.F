@@ -1068,23 +1068,43 @@
       !! iterate over the number of diagnostics for each budget
       if( prubud.ge.1 )then
         do diag=1,nudiag
-            call prepcorners(udiag(ibdv,jbdv,kbdv,diag),  &
+            call prepcornerd(udiag(ibdv,jbdv,kbdv,diag),  &
                                  nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
         enddo
       endif
       if( prvbud.ge.1 )then
         do diag=1,nvdiag
-            call prepcorners(vdiag(ibdv,jbdv,kbdv,diag),  &
+            call prepcornerd(vdiag(ibdv,jbdv,kbdv,diag),  &
                                  nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
         enddo
       endif
       if( prwbud.ge.1 )then
         do diag=1,nwdiag
             call prepcornerd(wdiag(ibdv,jbdv,kbdv,diag),  &
                                  nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1), &
-                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,0)
+                                 pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,reqs_p,1)
+        enddo
+        !Set boundary conditions on buoyancy. This is an extrapolation to the
+        !bottom and top surfaces, ie z=0
+        do j=0,nj+1
+        do i=0,ni+1
+          wdiag(i,j,1, wd_buoy) = wdiag(i,j,2,wd_buoy)+(wdiag(i,j,3,wd_buoy)-wdiag(i,j,2,wd_buoy))  &
+                                 *(  zf(i,j,1)-  zf(i,j,2))  &
+                                 /(  zf(i,j,3)-  zf(i,j,2))
+          wdiag(i,j,nk+1, wd_buoy) = wdiag(i,j,nk,wd_buoy)+(wdiag(i,j,nk,wd_buoy)-wdiag(i,j,nk-1,wd_buoy))  &
+                                     *(  zf(i,j,nk+1)-  zf(i,j,nk  ))  &
+                                     /(  zf(i,j,nk  )-  zf(i,j,nk-1))
+        enddo
+        enddo
+        ! Set boundary conditions on pressure gradient
+        ! cmr18:  at top/bottom boundaries, vpg + buoy = 0
+        do j=0,nj+1
+        do i=0,ni+1
+          wdiag(i,j,1,wd_pgrad) = -wdiag(i,j,1,wd_buoy)
+          wdiag(i,j,nk+1,wd_pgrad) = -wdiag(i,j,nk+1,wd_buoy)
+        enddo
         enddo
       endif
 !----------------------------------------------------------------------
@@ -1736,7 +1756,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-
 
       subroutine tri_interp(iz,jz,kz,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,s,pdata)
       use input

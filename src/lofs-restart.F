@@ -345,9 +345,10 @@ end subroutine read_val_restart
 ! NOTE SEE GEORGE CODE ONLY WRITES POSITION DATA
 ! He also writes these differently than he used to. When we start doing parcels we'll have to test this.
 ! ORF 3/19: Since we are doing trajectories offline, let's worry about this later
-!     if(iprcl.eq.1)then
-!           varname='pdata'; arshp2 = shape(pdata); call wr2dsimpler (f_id,pdata,arshp2(1),arshp2(2))
-!     endif
+! Kelton 9/28: I'm tired of having to run these parcels from t == 0 :|
+     if(iprcl.eq.1)then
+           varname='pdata'; arshp2 = shape(pdata); call wr2dsimpler (f_id,pdata,arshp2(1),arshp2(2))
+     endif
 
 ! No longer saved in a straightforward manner in default code due to
 ! different restart options, we save stuff the old simple way.
