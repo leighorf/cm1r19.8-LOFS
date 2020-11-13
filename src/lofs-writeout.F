@@ -627,7 +627,7 @@
     endif
 
     if(imoist.eq.1.and.output_qv.eq.1)then
-        varname="qvpert"
+        varname="qv"
         description = "water vapor mixing ratio perturbation"
         units = "g/kg"
           do k=1,nk
