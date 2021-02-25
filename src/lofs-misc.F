@@ -81,6 +81,8 @@ subroutine get_command_line_arguments()
     call get_command_argument(3,output_basename_cmdline)
     call get_command_argument(4,restart_path_cmdline)
 
+! print *,executable_cmdline,namelist_cmdline,output_path_cmdline,output_basename_cmdline,restart_path_cmdline
+
     return
 end subroutine get_command_line_arguments
 
@@ -282,8 +284,10 @@ end subroutine setvindices
       call mpi_comm_size(comm_in,world_size,ierr);check_err(ierr)
       call mpi_comm_rank(comm_in,myrank,ierr);check_err(ierr)
 1001  format("Error: world_size = ",i8," and nranks = ",i8". These should be equal. Exiting.")
+1002  format("nodex = ",i5,"    corex = ",i4, "     nodes_in_x = ",i6,"     nodey = ",i5,"     corey = ",i4,"      nodes_in_y = ",i6)
       if (world_size .ne. nranks) then
-            write(*,1001) world_size,nranks
+              if(myid.eq.0) write(*,1001) world_size,nranks
+              if(myid.eq.0) write(*,1002) nodex,corex,nodes_in_x,nodey,corey,nodes_in_y
             call stopcm1
       endif
 

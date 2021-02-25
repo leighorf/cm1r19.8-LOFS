@@ -3393,7 +3393,8 @@ do_write: IF(dowr)THEN
       write(outfile,*)
     ENDIF
 
-100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
+!is above
+!100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
 
 #ifdef MPI
       if(myid.eq.0) print *
