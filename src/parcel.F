@@ -676,7 +676,7 @@
                                zs,sigma,sigmaf,rds,gz,                 &
                                pi0,th0,thv0,qv0,qc0,qi0,rth0,          &
                                dum1,dum2,dum3,dum4,zv  ,qt  ,prs,rho,  &
-                               dum7,dum8,buoy,vpg  ,                   &
+                               dum7,dum8,buoy,vpg,xpg,ypg,             &
                                u3d,v3d,w3d,pp3d,th   ,t     ,th3d,q3d, &
                                kmh,kmv,khh,khv,tke3d,pt3d,pdata,       &
                                tdiag,qdiag,udiag,vdiag,wdiag,          &
@@ -716,8 +716,8 @@
       real, intent(in), dimension(ib:ie,jb:je,kb:ke) :: pi0,th0,thv0,qv0,qc0,qi0,rth0
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: dum1,dum2,dum3,dum4,zv,qt,prs,rho
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: dum7,dum8
-      real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u3d
-      real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v3d
+      real, intent(inout), dimension(ib:ie+1,jb:je,kb:ke) :: u3d,xpg
+      real, intent(inout), dimension(ib:ie,jb:je+1,kb:ke) :: v3d,ypg
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke+1) :: w3d,buoy,vpg
       real, intent(in), dimension(ib:ie,jb:je,kb:ke) :: pp3d,th3d
       real, intent(inout), dimension(ib:ie,jb:je,kb:ke) :: th,t
@@ -864,11 +864,29 @@
     IF( prvpg.ge.1 )THEN
     if( .not. terrain_flag )then
       do k=2,nk
-      tem1 = rdz*cp*mf(1,1,k)
+      tem1 = rdz*cp*0.5
       do j=1,nj
       do i=1,ni
-        vpg(i,j,k) = -tem1*(pp3d(i,j,k)-pp3d(i,j,k-1))  &
-                          *(c2(1,1,k)*dum8(i,j,k)+c1(1,1,k)*dum8(i,j,k-1))
+        vpg(i,j,k) = -tem1*(pp3d(i,j,k)-pp3d(i,j,k-1))*mf(1,1,k)  &
+                          *(dum8(i,j,k)+dum8(i,j,k-1))
+      enddo
+      enddo
+      enddo
+      do k=1,nk
+      tem1 = rdx*cp*0.5
+      do j=1,nj
+      do i=1,ni
+        xpg(i,j,k) = -tem1*(pp3d(i,j,k)-pp3d(i-1,j,k))*uf(i)  &
+                          *(dum8(i,j,k)+dum8(i-1,j,k))
+      enddo
+      enddo
+      enddo
+      do k=1,nk
+      tem1 = rdy*cp*0.5
+      do j=1,nj
+      do i=1,ni
+        ypg(i,j,k) = -tem1*(pp3d(i,j,k)-pp3d(i,j-1,k))*vf(j)  &
+                          *(dum8(i,j,k)+dum8(i,j-1,k))
       enddo
       enddo
       enddo
@@ -886,6 +904,10 @@
       if(timestats.ge.1) time_parcels=time_parcels+mytime()
       call    prepcornert(vpg ,nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,  &
                                tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2,reqs_p,1)
+      call getcorneru(xpg,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+      !call bcu2(xpg)
+      call getcornerv(ypg,nw1(1),nw2(1),ne1(1),ne2(1),sw1(1),sw2(1),se1(1),se2(1))
+      !call bcv2(ypg)
       ! cmr18:  at top/bottom boundaries, vpg + buoy = 0
       do j=0,nj+1
       do i=0,ni+1
@@ -1301,6 +1323,7 @@
           do diag=0,nudiag-1
             call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,udiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prubud+diag))
           enddo
+          call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,xpg,pdata(np,prubud+ud_pgrad))
         endif
 
 !----------------------------------------------------------------------
@@ -1369,6 +1392,7 @@
           do diag=0,nvdiag-1
             call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,vdiag(ibdv, jbdv, kbdv, diag+1),pdata(np,prvbud+diag))
           enddo
+          call tri_interp(ni,nj,nk,i,j,k,w1,w2,w3,w4,w5,w6,w7,w8,ypg,pdata(np,prvbud+vd_pgrad))
         endif
 
 !----------------------------------------------------------------------
