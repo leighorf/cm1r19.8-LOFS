@@ -2196,10 +2196,10 @@
 #endif
 
       if(bot.eq.maxz) bot=0.0
-
+!ORF
       write(6,100) iotime,'QCTOP ',top,1,1,1,   &
                    'QCBOT ',bot,1,1,1
-100   format('t=',f8.2,2x,a6,':',1x,f13.6,i5,i5,i5,   &
+100   format('t=',f10.2,2x,a6,':',1x,f13.6,i5,i5,i5,   &
              4x,a6,':',1x,f13.6,i5,i5,i5)
  
       nstat = nstat + 1
@@ -2369,7 +2369,8 @@
 #endif
       ENDDO
 
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
 
       if(timestats.ge.1) time_stat=time_stat+mytime()
  
@@ -2502,7 +2503,8 @@
         write(6,100) iotime,'CFLMAX',fmax,imax,jmax,kmax
         rstat(nstat) = fmax
       ENDIF
-100   format('t=',f8.2,2x,a6,':',1x,f13.6,i5,i5,i5)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,f13.6,i5,i5,i5)
     ENDIF
 
 #ifdef MPI
@@ -2824,7 +2826,8 @@
       nstat = nstat + 1
       rstat(nstat) = fvmax
 
-100   format('t=',f8.2,2x,a6,':',1x,g13.6,i5,i5,i5)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,g13.6,i5,i5,i5)
 
 #ifdef MPI
       endif
@@ -2954,7 +2957,8 @@
       tmass=tmass*(dx*dy*dz)
  
       write(6,100) iotime,'TMASS ',tmass
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -3027,7 +3031,8 @@
       tmass=tmass*(dx*dy*dz)
 
       write(6,100) iotime,'TMOIS ',tmass
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -3098,7 +3103,8 @@
       tmass=tmass*(dx*dy*dz)
 
       write(6,100) iotime,aname,tmass
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = tmass
@@ -3209,7 +3215,8 @@
       et=ek+ei+ep+le
  
       write(6,100) iotime,'TENERG',et
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = ek
@@ -3317,7 +3324,8 @@
       write(6,100) iotime,'TMU   ',tmu
       write(6,100) iotime,'TMV   ',tmv
       write(6,100) iotime,'TMW   ',tmw
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
  
       nstat = nstat + 1
       rstat(nstat) = tmu
@@ -3397,7 +3405,8 @@
 
       write(6,100) iotime,'TMFU  ',tmfu
       write(6,100) iotime,'TMFD  ',tmfd
-100   format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100   format('t=',f10.2,2x,a6,':',1x,e13.6)
 
       nstat = nstat + 1
       rstat(nstat) = tmfu
