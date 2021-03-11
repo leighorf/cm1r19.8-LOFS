@@ -2931,7 +2931,7 @@ dotimestats: IF(timestats.ge.1)THEN
 #endif
 
       if(dowr) write(outfile,*)
-      if(dowr) write(outfile,*) 'Total time: ',time_solve
+      if(dowr) write(outfile,*) 'Total time between restart saves: ',time_solve
       if(dowr) write(outfile,*)
       time_solve=0.01*time_solve
       if(time_solve.lt.0.0001) time_solve=1.
@@ -3141,8 +3141,14 @@ do_write: IF(dowr)THEN
 #endif
 !----------------------------------------------------------------------
 
-    IF(timestats.ge.1)THEN
+timestatsend:    IF(timestats.ge.1)THEN
 
+!ORF keep the code in place for now but don't execute it. This is because
+!you get all zeroes due to the way I've inserted this code at the end of
+!the restart block
+
+#undef DO_LAST_STATS
+#ifdef DO_LAST_STATS
 #ifdef MPI
       ! for MPI runs without procfiles, average the timestat terms:
       IF(.not.procfiles)THEN
@@ -3393,7 +3399,11 @@ do_write: IF(dowr)THEN
       write(outfile,*)
     ENDIF
 
-100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
+!ORF the endif below corresponds to DO_LAST_STATS
+#endif
+
+!is above
+!100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
 
 #ifdef MPI
       if(myid.eq.0) print *
@@ -3402,7 +3412,7 @@ do_write: IF(dowr)THEN
       if(myid.eq.0) print *
 #endif
 
-    ENDIF
+    ENDIF timestatsend
 
 !  End time loop
 !----------------------------------------------------------------------

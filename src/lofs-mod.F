@@ -29,17 +29,14 @@ integer :: nkwrite
 !ORF wr3dindex no longer serves any purpose but to keep track of the number of
 !history writes undertaken, which is not really useful for anything
 integer :: wr3dindex
-! Now stored in newcomm
-! double precision :: iotime
-real :: tapfrq_save,numconctime
 
 namelist /lofs/ save_full_domain,save_full_vertical_extent, &
 save_all_times,save_x0,save_y0,save_y1,save_x1, nkwrite_val,wr2dfreq, &
 time_levels_per_histfile,save_start_time,prespert_swath_start_time,u_adjust,v_adjust,adjust_box_speed_from_restart
 
-double precision :: dtl_dbl_orf
-logical :: use_dtinv,save_full_domain,save_full_vertical_extent,save_all_times
-integer :: dtinv,save_x0, save_y0, save_y1, save_x1
+!double precision :: dtl_dbl_orf
+logical :: save_full_domain,save_full_vertical_extent,save_all_times
+integer :: save_x0, save_y0, save_y1, save_x1
 integer :: nkwrite_val, time_levels_per_histfile
 real :: numconcfreq,save_start_time,prespert_swath_start_time,wr2dfreq
 
