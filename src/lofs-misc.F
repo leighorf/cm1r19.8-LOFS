@@ -88,9 +88,9 @@ end subroutine get_command_line_arguments
 
 subroutine bcast_lofs()
     implicit none
-      call MPI_BCAST(dtl_dbl_orf ,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(use_dtinv ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(dtinv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(dtl_dbl_orf ,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(use_dtinv ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(dtinv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(time_levels_per_histfile,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(save_full_domain ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(save_x0,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
@@ -326,6 +326,7 @@ end subroutine setvindices
 
 1969 format('DEBUG2: myid_orig = ',i3,' myid = ',i3)
 
+2020  format(a10,'=',i5)
         if(myid.eq.0) then
             print *,"MPI_COMM_CM1 and myMCMcomm communicators succesfully mapped to hardware."
             print *,"We were called as: ",trim(executable_cmdline)
@@ -333,6 +334,17 @@ end subroutine setvindices
             print *,"output_path_cmdline is: ",trim(output_path_cmdline)
             print *,"output_basename_cmdline is: ",trim(output_basename_cmdline)
             print *,"restart_path_cmdline is: ",trim(restart_path_cmdline)
+            write(*,*) '-----------------------'
+            write(*,2020) "nodex",nodex
+            write(*,2020) "corex",corex
+            write(*,2020) "nodes_in_x",nodes_in_x
+            write(*,2020) "cores_in_x",nodes_in_x*corex
+            write(*,*)
+            write(*,2020) "nodey",nodey
+            write(*,2020) "corey",corey
+            write(*,2020) "nodes_in_y",nodes_in_y
+            write(*,2020) "cores_in_y",nodes_in_y*corey
+            write(*,*) '-----------------------'
         endif
 
 

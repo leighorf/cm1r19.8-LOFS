@@ -342,10 +342,10 @@ write_3d_once:    if (wr3d_once) then
            call h5_write_val_iamio  (misc_group_id,intval=nkwrite_val)
         endif
 
-        varname='dt_long'
-        description='The model long time step. This is a 32 bit float in r16.'
-        units='s'
-        call h5_write_val_iamio  (misc_group_id,floatval=real(dtl_dbl_orf))
+!       varname='dt_long'
+!       description='The model long time step. This is a 32 bit float in r16.'
+!       units='s'
+!       call h5_write_val_iamio  (misc_group_id,floatval=real(dtl_dbl_orf))
     
         varname='kdiff6'
         description='Coefficient of sixth order diffusion filter (only written if used)'
@@ -596,10 +596,10 @@ write_3d_once:    if (wr3d_once) then
 
 !lofs
 
-        varname='dtl_dbl_orf' !ORF TODO shouldn't need this anymore
-        description='model time step'
-        units='s'
-        call h5_write_val_iamio(lofs_group_id,doubleval=dtl_dbl_orf)
+!       varname='dtl_dbl_orf' !ORF TODO shouldn't need this anymore
+!       description='model time step'
+!       units='s'
+!       call h5_write_val_iamio(lofs_group_id,doubleval=dtl_dbl_orf)
 
         varname='numconcfreq' !ORF TODO just forget this
         description='number concentration save interval'
