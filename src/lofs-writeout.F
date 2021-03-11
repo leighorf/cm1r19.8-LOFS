@@ -627,8 +627,8 @@
     endif
 
     if(imoist.eq.1.and.output_qv.eq.1)then
-        varname="qvpert"
-        description = "water vapor mixing ratio perturbation"
+        varname="qv"
+        description = "total water vapor mixing ratio"
         units = "g/kg"
           do k=1,nk
           do j=1,nj
@@ -642,7 +642,7 @@
 
     if(imoist.eq.1.and.output_qvpert.eq.1)then
         varname="qvpert"
-        description = "water vapor mixing ratio perturbation"
+        description = "perturbation water vapor mixing ratio"
         units = "g/kg"
           do k=1,nk
           do j=1,nj
