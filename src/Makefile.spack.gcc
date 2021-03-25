@@ -1,13 +1,18 @@
-#ORF - MPI/OMP version
+#ORF - MPI/OMP version for gcc/gfortran
 
 FC=h5pfc
-OPTS = -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -fopenmp
+
+HDF5ZFP=/home/orf/build/git/spack/opt/spack/linux-fedora31-zen/gcc-9.2.1/h5z-zfp-0.8.0-5o3w6jtmzl7lcvvqcc7iqz53x422dqkf
+
+#OPTS = -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -fopenmp
+OPTS = -I$(HDF5ZFP)/include
+OPTS += -ffree-form -ffree-line-length-none -O3 -finline-functions -fopenmp
 CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
-OUTPUTOPT =  -DCOREX=2 -DCOREY=7
+OUTPUTOPT =  -DCOREX=1 -DCOREY=1
 OUTPUTOPT += -DFFLUSH=flush -DMPIO=H5FD_MPIO_COLLECTIVE_F -DUSE_ZFP_COMPRESSION -DNFILES_PER_WRITE=5000
 
-LINKOPTS  = -liomp5 -lh5zzfp -lzfp -lhdf5 -lhdf5_hl 
+LINKOPTS  = -L$(HDF5ZFP)/lib -lh5zzfp -lzfp -lhdf5 -lhdf5_hl 
 
 SRC   = lofs-newcomm.F lofs-mod.F constants.F input.F adv.F adv_routines.F anelp.F azimavg.F base.F bc.F cm1.F cm1libs.F comm.F testcase_simple_phys.F \
 		diff2.F goddard.F hifrq.F init3d.F init_physics.F init_surface.F init_terrain.F interp_routines.F kessler.F lfoice.F maxmin.F \
