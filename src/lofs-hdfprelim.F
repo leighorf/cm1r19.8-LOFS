@@ -333,13 +333,15 @@ write_3d_once:    if (wr3d_once) then
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=myMCMy1)
 
+! ORF I save this in 2 groups: namelist/lofs and grid, used to be in misc.
+
         varname='nkwrite_val'
-        description='Top index, as we often do not save up to nz'
+        description='Actual top (vertical) index saved (we often do not save up to nz)'
         units='index'
         if(save_full_vertical_extent) then
-           call h5_write_val_iamio  (misc_group_id,intval=nk)
+           call h5_write_val_iamio  (grid_group_id,intval=nk)
         else
-           call h5_write_val_iamio  (misc_group_id,intval=nkwrite_val)
+           call h5_write_val_iamio  (grid_group_id,intval=nkwrite_val)
         endif
 
 !       varname='dt_long'

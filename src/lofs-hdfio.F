@@ -634,7 +634,7 @@ iamioandwrite3d: &
          call h5awrite_f(localmin_id,maxmintype_id,localmin,strdims,ierr);check_err(ierr)
 #ifdef USE_ZFP_COMPRESSION
          call h5acreate_f(dset_id,"zfp_accuracy",zfpacctype_id,aspace_id,zfpacc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-         call h5awrite_f(desc_id,desctype_id,description,strdims,ierr);check_err(ierr)
+         call h5awrite_f(zfpacc_id,zfpacctype_id,description,strdims,ierr);check_err(ierr)
 #endif
          call h5dwrite_f(dset_id, H5T_NATIVE_REAL, MCM3d,dims, ierr);check_err(ierr)
          threedbytes = threedbytes + int(dims(1)*dims(2)*dims(3)*4,kind=8) 
