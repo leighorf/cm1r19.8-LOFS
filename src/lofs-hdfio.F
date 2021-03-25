@@ -569,7 +569,6 @@ subroutine h5_write_val_iamio (f_id,intval,floatval,doubleval)
 
 iamioandwrite3d: &
      if (iamio.and.iwrite3d) then
-         print*, "TIME TO DO 3D SHIT FOR",varname,accuracy
 
 !ORF DONE: If we are not saving the full vertical extent, we should
 !only calculate prognostics up to the level we are saving - to save
@@ -609,28 +608,21 @@ iamioandwrite3d: &
          call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_REAL,maxmintype_id,ierr);check_err(ierr)
 #ifdef USE_ZFP_COMPRESSION
-print *,"A"
          call h5tcopy_f(H5T_NATIVE_DOUBLE,zfpacctype_id,ierr);check_err(ierr)
-print *,"B"
 #endif
          stringlen = len_trim(description)
          call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
          stringlen = len_trim(units)
          call h5tset_size_f(unitstype_id,stringlen,ierr);check_err(ierr)
          call h5screate_simple_f(rank,dims,dspace_id,ierr);check_err(ierr)
-print *,"C"
 #ifdef USE_ZFP_COMPRESSION
          call h5pcreate_f(H5P_DATASET_CREATE_F,chunk_id,ierr);check_err(ierr)
-print *,"D"
          call h5pset_chunk_f(chunk_id,rank,chunkdims,ierr);check_err(ierr)
-print *,"E"
          ierr = h5pset_zfp_accuracy(chunk_id,accuracy);check_err(ierr)
 1010 format(a20," accuracy = ",f10.6)
 !        if(myid.eq.0)write(*,1010)trim(varname),accuracy
 !        print*, myid, trim(varname)
-print *,"F"
          call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr,dcpl_id=chunk_id);check_err(ierr)
-print *,"G"
 #else
          call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr);check_err(ierr)
 #endif
@@ -643,14 +635,10 @@ print *,"G"
          call h5acreate_f(dset_id,"localmin",maxmintype_id,aspace_id,localmin_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(localmin_id,maxmintype_id,localmin,strdims,ierr);check_err(ierr)
 #ifdef USE_ZFP_COMPRESSION
-print *,"H"
          call h5acreate_f(dset_id,"zfp_accuracy",zfpacctype_id,aspace_id,zfpacc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-print *,"I"
-         call h5awrite_f(zfpacc_id,zfpacctype_id,description,strdims,ierr);check_err(ierr)
-print *,"J"
+         call h5awrite_f(zfpacc_id,zfpacctype_id,accuracy,strdims,ierr);check_err(ierr)
 #endif
          call h5dwrite_f(dset_id, H5T_NATIVE_REAL, MCM3d,dims, ierr);check_err(ierr)
-print *,"K"
          threedbytes = threedbytes + int(dims(1)*dims(2)*dims(3)*4,kind=8) 
          !4 byte floats, 3D array space. Note, compression will reduce actual space taken by data in file
 

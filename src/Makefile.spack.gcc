@@ -9,7 +9,7 @@ OPTS = -I$(HDF5ZFP)/include
 OPTS += -ffree-form -ffree-line-length-none -O3 -finline-functions -fopenmp
 CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
-OUTPUTOPT =  -DCOREX=1 -DCOREY=1
+OUTPUTOPT =  -DCOREX=2 -DCOREY=4
 OUTPUTOPT += -DFFLUSH=flush -DMPIO=H5FD_MPIO_COLLECTIVE_F -DUSE_ZFP_COMPRESSION -DNFILES_PER_WRITE=5000
 
 LINKOPTS  = -L$(HDF5ZFP)/lib -lh5zzfp -lzfp -lhdf5 -lhdf5_hl 
