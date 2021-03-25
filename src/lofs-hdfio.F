@@ -607,7 +607,9 @@ iamioandwrite3d: &
          call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_REAL,maxmintype_id,ierr);check_err(ierr)
+#ifdef USE_ZFP_COMPRESSION
          call h5tcopy_f(H5T_NATIVE_DOUBLE,zfpacctype_id,ierr);check_err(ierr)
+#endif
          stringlen = len_trim(description)
          call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
          stringlen = len_trim(units)
@@ -643,9 +645,12 @@ iamioandwrite3d: &
          call h5aclose_f (desc_id,ierr);check_err(ierr)
          call h5aclose_f (units_id,ierr);check_err(ierr)
          call h5sclose_f (aspace_id,ierr);check_err(ierr)
+#ifdef USE_ZFP_COMPRESSION
+         call h5aclose_f (zfpacc_id,ierr);check_err(ierr)
+         call h5tclose_f (zfpacctype_id,ierr);check_err(ierr)
+#endif
          call h5tclose_f (desctype_id,ierr);check_err(ierr)
          call h5tclose_f (unitstype_id,ierr);check_err(ierr)
-
          call h5tclose_f (maxmintype_id,ierr);check_err(ierr)
          call h5aclose_f (localmax_id,ierr);check_err(ierr)
          call h5aclose_f (localmin_id,ierr);check_err(ierr)
