@@ -440,7 +440,7 @@ write_3d_once:    if (wr3d_once) then
     
         varname='pres0'
         description='Pressure base state, (i.e., from sounding)'
-        units='dimensionless'
+        units='Pa'
         dims(1)=nz;count(1)=nz;offset(1)=0
         call h5_write_1d_float_iamio(basestate_group_id,prs0(1,1,1:nz),nz,dims,count,offset)
     
