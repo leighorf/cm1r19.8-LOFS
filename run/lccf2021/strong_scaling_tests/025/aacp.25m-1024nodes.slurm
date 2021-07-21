@@ -13,20 +13,20 @@
 # 
 #         <------ Setup Parameters ------>
 #
-#SBATCH -J aacp.50m-1024nodes
+#SBATCH -J aacp.25m-1024nodes
 #SBATCH -N 1024
 #SBATCH -n 8192
 #SBATCH -p large
 #SBATCH --mail-type=all
 #SBATCH --mail-user=leigh.orf@gmail.com
-#SBATCH -o aacp.50m-1024nodes.o
-#SBATCH -e aacp.50m-1024nodes.e
+#SBATCH -o aacp.25m-1024nodes.o
+#SBATCH -e aacp.25m-1024nodes.e
 #SBATCH -t 2:00:00
 #------------------------------------------------------
 
 pwd
 date
 
-RUN=aacp.50m-1024nodes
+RUN=aacp.25m-1024nodes
 export OMP_NUM_THREADS=7
 ibrun ./cm1.exe-OMP7 namelist.input.${RUN} ${RUN}/history.${RUN} $RUN ${RUN}/restart.${RUN} > ${RUN}-a.out 2>&1
