@@ -2366,6 +2366,8 @@ we_are_dumping_restarts = dorestart !Needed for lofs-writeout.F for flushing
 we_are_doing_new_cycle = (mod(nwrite,time_levels_per_histfile).eq.0.or.dorestart)
 !end LOFS
 
+!ORF 2021-07-22 Only for lccf2021 scaling tests
+dowriteout=.false.
 write_LOFS:      if( dowriteout )then
 !     otype:  &
 !     IF(output_format.eq.1.or.output_format.eq.2)THEN
@@ -2687,6 +2689,8 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
 
 
+!ORF 2021-07-22 Only for lccf2021 scaling tests
+dorestart=.false.
 write_restart:   if( dorestart )then
 !ORF TODO change to iprintinfo or whatever in case we are not on rank 0
           if (myid.eq.0) call h5_file_op_int(op_mkrestartdirs,int(mtime+1.0e-3))

@@ -28,5 +28,6 @@ pwd
 date
 
 RUN=aacp.50m-256nodes
+CM1=./cm1.exe-OMP7
 export OMP_NUM_THREADS=7
-ibrun ./cm1.exe-OMP7 namelist.input.${RUN} ${RUN}/history.${RUN} $RUN ${RUN}/restart.${RUN} > ${RUN}-a.out 2>&1
+ibrun $CM1 namelist.input.${RUN} ${RUN}/history.${RUN} $RUN ${RUN}/restart.${RUN} > ${RUN}-a.out 2>&1
