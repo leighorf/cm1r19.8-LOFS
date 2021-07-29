@@ -21,7 +21,7 @@
 #SBATCH --mail-user=leigh.orf@gmail.com
 #SBATCH -o aacp.25m-0256nodes.o
 #SBATCH -e aacp.25m-0256nodes.e
-#SBATCH -t 4:00:00
+#SBATCH -t 6:00:00
 #------------------------------------------------------
 
 pwd
