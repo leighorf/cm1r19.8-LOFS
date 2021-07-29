@@ -2701,19 +2701,21 @@ write_restart:   if( dorestart )then
 !more compaitble with all the default options of r19.
 !end LOFS
 
-          call  write_restart_hdf5_r19(wr3dindex,nstep,nrec,prec,nwrite,nrst, &
-                         dt,dtlast,mtime,ndt,adt,acfl,dbldt,                  &
-                         stattim,taptim,rsttim,radtim,prcltim,                &
-                         qbudget,asq,bsq,                                     &
-                         rain,sws,svs,sps,srs,sgs,sus,shs,                    &
-                         tsk,znt,ust,cd,u1,v1,thflux,qvflux,                  &
-                         radbcw,radbce,radbcs,radbcn,                         &
-                         rho,prs,ua,va,wa,ppi,tha,qa,tkea,                    &
-                         psfc,u10,v10,xland,                                  &
-                         qpten,qtten,qvten,qcten,pta,pdata,                   &
-                         arecs,arecw,icenter,jcenter,mass1,nwritea,nwritet,   &
-                         srec,trecs,trecw,urec,vrec,wrec,xcenter,ycenter,     &
-                         phi1,phi2,ch,cq,ppx,s1,s10)
+! ORF LCCF2021: No I/O but we want the statistics that are now linked to restart saves, so
+! we comment this out but keep the other stuff for timings.
+!         call  write_restart_hdf5_r19(wr3dindex,nstep,nrec,prec,nwrite,nrst, &
+!                        dt,dtlast,mtime,ndt,adt,acfl,dbldt,                  &
+!                        stattim,taptim,rsttim,radtim,prcltim,                &
+!                        qbudget,asq,bsq,                                     &
+!                        rain,sws,svs,sps,srs,sgs,sus,shs,                    &
+!                        tsk,znt,ust,cd,u1,v1,thflux,qvflux,                  &
+!                        radbcw,radbce,radbcs,radbcn,                         &
+!                        rho,prs,ua,va,wa,ppi,tha,qa,tkea,                    &
+!                        psfc,u10,v10,xland,                                  &
+!                        qpten,qtten,qvten,qcten,pta,pdata,                   &
+!                        arecs,arecw,icenter,jcenter,mass1,nwritea,nwritet,   &
+!                        srec,trecs,trecw,urec,vrec,wrec,xcenter,ycenter,     &
+!                        phi1,phi2,ch,cq,ppx,s1,s10)
 
 
         IF( nrst.eq.0 )THEN

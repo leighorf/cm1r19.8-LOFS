@@ -381,7 +381,7 @@ tt_frz_acc      = 1.0e-4,
  output_ncr       = 1,
  output_ncs       = 1,
  output_ncg       = 1,
- output_dbz       = 1,
+ output_dbz       = 0,
 !begin orf swaths/snapshots
 !Recommend keeping them all on, they are small 2D bits
  output_helicity_max_2_5km     = 1,
