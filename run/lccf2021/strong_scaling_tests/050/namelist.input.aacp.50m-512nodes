@@ -23,8 +23,8 @@
  timax  =  30.0,
  run_time =  -999.9,
 !tapfrq =  0.3333333334,
- tapfrq =  30.0, !ORF
- rstfrq =  30.0, ! Negative means no restarts
+ tapfrq =  300.0, !ORF
+ rstfrq =  300.0, ! Negative means no restarts
  statfrq =  10.0,
  prclfrq =  1.0, !ORF Negative means every time step
  /
