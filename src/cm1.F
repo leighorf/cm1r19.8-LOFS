@@ -2437,14 +2437,14 @@ endif
 
 !New call, with diagnostics and stuff.
 
-         call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
-             rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
-             zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
-             dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
-             t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
-             znt,ust,u1,v1,s1,rr,tdiag,qdiag,udiag,vdiag,wdiag,pdiag)
+!        call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
+!            rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
+!            zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
+!            dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
+!            t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
+!            znt,ust,u1,v1,s1,rr,tdiag,qdiag,udiag,vdiag,wdiag,pdiag)
 
-         call MPI_BARRIER(MPI_COMM_CM1,ierr)
+!        call MPI_BARRIER(MPI_COMM_CM1,ierr)
 
 !ORF TODO change to iprintinfo or whatever in case we are not on rank 0
 if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFLUSH(outfile)
