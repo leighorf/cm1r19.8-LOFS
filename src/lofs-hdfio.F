@@ -1,4 +1,4 @@
-#define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
+#define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr, "myid= ",myid
 
 subroutine wr1dsimpler (f_id,var,niwrite)
     implicit none
@@ -546,8 +546,8 @@ subroutine h5_write_val_iamio (f_id,intval,floatval,doubleval)
      integer :: arank = 1
      integer(HSIZE_T), DIMENSION(1) :: adims = (/1/)
      integer(SIZE_T) :: stringlen
-     integer(HID_T) :: f_id,dset_id,dspace_id,chunk_id,datatype_id,desctype_id,unitstype_id,desc_id,units_id,aspace_id
-     integer(HID_T) :: localmax_id,localmin_id,globalmax_id,globalmin_id,maxmintype_id
+     integer(HID_T) :: f_id,dset_id,dspace_id,chunk_id,datatype_id,desctype_id,unitstype_id,desc_id,units_id,aspace_id,zfpacc_id
+     integer(HID_T) :: localmax_id,localmin_id,globalmax_id,globalmin_id,maxmintype_id,zfpacctype_id
      integer(HID_T) :: memspace_id,filespace_id,plist_id
      integer :: mcmtype
      integer :: rank,i,j,k
@@ -607,6 +607,9 @@ iamioandwrite3d: &
          call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_REAL,maxmintype_id,ierr);check_err(ierr)
+#ifdef USE_ZFP_COMPRESSION
+         call h5tcopy_f(H5T_NATIVE_DOUBLE,zfpacctype_id,ierr);check_err(ierr)
+#endif
          stringlen = len_trim(description)
          call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
          stringlen = len_trim(units)
@@ -632,6 +635,10 @@ iamioandwrite3d: &
          call h5acreate_f(dset_id,"localmin",maxmintype_id,aspace_id,localmin_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(localmin_id,maxmintype_id,localmin,strdims,ierr);check_err(ierr)
          call h5dwrite_f(dset_id, H5T_NATIVE_REAL, MCM3d,dims, ierr);check_err(ierr)
+#ifdef USE_ZFP_COMPRESSION
+         call h5acreate_f(dset_id,"zfp_accuracy",zfpacctype_id,aspace_id,zfpacc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
+         call h5awrite_f(zfpacc_id,zfpacctype_id,accuracy,strdims,ierr);check_err(ierr)
+#endif
          threedbytes = threedbytes + int(dims(1)*dims(2)*dims(3)*4,kind=8) 
          !4 byte floats, 3D array space. Note, compression will reduce actual space taken by data in file
 
@@ -639,12 +646,14 @@ iamioandwrite3d: &
          call h5aclose_f (units_id,ierr);check_err(ierr)
          call h5sclose_f (aspace_id,ierr);check_err(ierr)
          call h5tclose_f (desctype_id,ierr);check_err(ierr)
+#ifdef USE_ZFP_COMPRESSION
+         call h5aclose_f (zfpacc_id,ierr);check_err(ierr)
+         call h5tclose_f (zfpacctype_id,ierr);check_err(ierr)
+#endif
          call h5tclose_f (unitstype_id,ierr);check_err(ierr)
-
          call h5tclose_f (maxmintype_id,ierr);check_err(ierr)
          call h5aclose_f (localmax_id,ierr);check_err(ierr)
          call h5aclose_f (localmin_id,ierr);check_err(ierr)
-
          call h5dclose_f (dset_id,ierr);check_err(ierr)
          call h5sclose_f (dspace_id,ierr);check_err(ierr)
 #ifdef USE_ZFP_COMPRESSION

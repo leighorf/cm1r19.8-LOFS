@@ -438,7 +438,7 @@ write_3d_once:    if (wr3d_once) then
     
         varname='pres0'
         description='Pressure base state, (i.e., from sounding)'
-        units='dimensionless'
+        units='Pa'
         dims(1)=nz;count(1)=nz;offset(1)=0
         call h5_write_1d_float_iamio(basestate_group_id,prs0(1,1,1:nz),nz,dims,count,offset)
     
@@ -651,9 +651,9 @@ write_3d_once:    if (wr3d_once) then
         description='Actual top (vertical) index saved (we often do not save up to nz)'
         units='index'
         if(save_full_vertical_extent) then
-           call h5_write_val_iamio  (lofs_group_id,intval=nk)
+           call h5_write_val_iamio  (grid_group_id,intval=nk)
         else
-           call h5_write_val_iamio  (lofs_group_id,intval=nkwrite_val)
+           call h5_write_val_iamio  (grid_group_id,intval=nkwrite_val)
         endif
 
         varname='prespert_swath_start_time'
