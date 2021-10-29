@@ -1240,8 +1240,8 @@
             enddo
             enddo
           else
-            fooj = myid / nodex + 1
-            fooi = myid - (fooj-1)*nodex  + 1
+            fooj = myid / rankx + 1
+            fooi = myid - (fooj-1)*rankx  + 1
             fooi = (fooi-1)*ni
             fooj = (fooj-1)*nj
 !$omp parallel do default(shared)  &
@@ -1259,8 +1259,8 @@
             if( index.le.(ppnode-1) )then
               ! data from ordinary procs on node:
               proc = myid+index
-              fooj = proc / nodex + 1
-              fooi = proc - (fooj-1)*nodex  + 1
+              fooj = proc / rankx + 1
+              fooi = proc - (fooj-1)*rankx  + 1
               fooi = (fooi-1)*ni
               fooj = (fooj-1)*nj
 !$omp parallel do default(shared)  &
@@ -1280,8 +1280,8 @@
               n2 = (index2+1)*ppnode-1
               do nnn = n1,n2
                 proc = nnn
-                fooj = proc / nodex + 1
-                fooi = proc - (fooj-1)*nodex  + 1
+                fooj = proc / rankx + 1
+                fooi = proc - (fooj-1)*rankx  + 1
                 fooi = (fooi-1)*ni
                 fooj = (fooj-1)*nj
 !$omp parallel do default(shared)  &

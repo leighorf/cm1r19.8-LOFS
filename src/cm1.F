@@ -366,7 +366,7 @@
 !----------------------------------------------------------------------
 #ifdef MPI
 !begin LOFS
-      call create_hardware_rank_mapping(MPI_COMM_WORLD,corex,corey,nodex,nodey,MPI_COMM_CM1)
+      call create_hardware_rank_mapping(MPI_COMM_WORLD,corex,corey,rankx,ranky,MPI_COMM_CM1)
 !end LOFS
 #endif
 
@@ -384,19 +384,19 @@
 !Just coopt dowr for all LOFS output
       IF( myid.eq.0 ) dowr = .true.
 
-      nodex  = max(1,nodex)
-      nodey  = max(1,nodey)
+      rankx  = max(1,rankx)
+      ranky  = max(1,ranky)
       ppnode = max(1,ppnode)
 
 #ifndef MPI
       ! serial (i.e. single-processor) run:
-      nodex = 1
-      nodey = 1
+      rankx = 1
+      ranky = 1
       ppnode = 1
 #endif
 
-      ni = nx / nodex
-      nj = ny / nodey
+      ni = nx / rankx
+      nj = ny / ranky
       nk = nz
       nkp1 = nk+1
 

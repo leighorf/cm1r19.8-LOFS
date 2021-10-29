@@ -383,12 +383,12 @@ write_3d_once:    if (wr3d_once) then
         call h5_write_val_iamio  (grid_group_id,intval=myMCMid)
     
         varname='myi'
-        description='east/west index of hdf5 file in 2d decomposition. (1 < myi <= nodex)'
+        description='east/west index of hdf5 file in 2d decomposition. (1 < myi <= rankx)'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMi)
     
         varname='myj'
-        description='north/south index of hdf5 file in 2d decomposition. (1 < myj <= nodej)'
+        description='north/south index of hdf5 file in 2d decomposition. (1 < myj <= ranky)'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMj)
     
@@ -402,12 +402,12 @@ write_3d_once:    if (wr3d_once) then
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=myMCMnj)
     
-        varname='nodex'
+        varname='rankx'
         description='number of hdf5 files spanning the full east/west extent of the model domain'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMnx)
     
-        varname='nodey'
+        varname='ranky'
         description='number of hdf5 files spanning the full north/south extent of the model domain'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMny)
@@ -525,15 +525,15 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param0_group_id,intval=nz)
 
-        varname='nodex'
+        varname='rankx'
         description='number of MPI ranks x'
         units='#'
-        call h5_write_val_iamio(param0_group_id,intval=nodex)
+        call h5_write_val_iamio(param0_group_id,intval=rankx)
 
-        varname='nodey'
+        varname='ranky'
         description='number of MPI ranks y'
         units='#'
-        call h5_write_val_iamio(param0_group_id,intval=nodey)
+        call h5_write_val_iamio(param0_group_id,intval=ranky)
 
         varname='ppnode'
         description='number of cores per node'

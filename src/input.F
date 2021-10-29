@@ -39,7 +39,29 @@
 
 !-----------------------------------------------------------------------
 
-      integer nx,ny,nz,nodex,nodey,ppnode,timeformat,timestats,               &
+!ORF 2021-10-18
+
+!ORF once and for all get rid of nodex/nodey and change to rankx/ranky
+!Fucking confusing and a relic of older days when a NODE was synonymous
+!with a single core CPU machine
+!The term NODE today refers to a multicore machine where typically several MPI ranks live
+!Along with several OpenMP threads
+
+!THIS IS THE SHIT: 
+!rankx: MPI ranks in x (across total domain)
+!ranky: MPI ranks in y (across total domain)
+!corex: MPI ranks in x (on a single shared memory node)
+!corey: MPI ranks in y (on a single shared memory node)
+!nodes_in_x: rankx/corex = number of shared memory nodes in x
+!nodes_in_y: ranky/corey = number of shared memory nodes in y
+
+!corex*corey = number of MPI ranks per node
+!nodex*nodey = number of shared memory nodes used for this job
+
+!nodex and nodey are forever banished from this code
+!however I keep them here temporarily until things are working on the read side
+
+      integer nx,ny,nz,rankx,ranky,nodex,nodey,ppnode,timeformat,timestats,   &
               ni,nj,nk,nkp1,ngxy,ngz,                                         &
               ib,ie,jb,je,kb,ke,                                              &
               ibm,iem,jbm,jem,kbm,kem,                                        &
@@ -217,7 +239,7 @@
 
 !-----------------------------------------------------------------------
 
-      namelist /param0/ nx,ny,nz,nodex,nodey,ppnode,                    &
+      namelist /param0/ nx,ny,nz,rankx,ranky,nodex,nodey,ppnode,                    &
                         timeformat,timestats,terrain_flag,procfiles
       namelist /param1/ dx,dy,dz,dtl,timax,run_time,                    &
                         tapfrq,rstfrq,statfrq,prclfrq
