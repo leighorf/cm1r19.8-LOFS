@@ -274,6 +274,7 @@ end subroutine setvindices
       integer, intent(in) :: comm_in
       integer, intent(out) :: comm_out
       integer, dimension(:), allocatable :: newranks
+      integer :: errcode
 
       nodes_in_x=rankx/corex
       nodes_in_y=ranky/corey
@@ -288,7 +289,9 @@ end subroutine setvindices
       if (world_size .ne. nranks) then
               if(myid.eq.0) write(*,1001) world_size,nranks
               if(myid.eq.0) write(*,1002) rankx,corex,nodes_in_x,ranky,corey,nodes_in_y
-            call stopcm1
+              call MPI_Barrier(MPI_COMM_WORLD,ierr)
+              call MPI_Abort(MPI_COMM_WORLD,errcode,ierr)
+              stop
       endif
 
       allocate(newranks(nranks))
