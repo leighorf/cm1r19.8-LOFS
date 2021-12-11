@@ -204,8 +204,8 @@
       ! check for conflict:
     IF( (iflag.ge.1.and.iflag.le.ni) .and.   &
         (jflag.ge.1.and.jflag.le.nj) )THEN
-      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. nodex.gt.1 .and.  myi.ne.nodex ) iflag = -1
-      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. nodey.gt.1 .and.  myj.ne.nodey ) jflag = -1
+      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. rankx.gt.1 .and.  myi.ne.rankx ) iflag = -1
+      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. ranky.gt.1 .and.  myj.ne.ranky ) jflag = -1
     ENDIF
 #endif
 
@@ -1229,8 +1229,8 @@
       ! check for conflict:
     IF( (iflag.ge.1.and.iflag.le.ni) .and.   &
         (jflag.ge.1.and.jflag.le.nj) )THEN
-      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. nodex.gt.1 .and.  myi.ne.nodex ) iflag = -1
-      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. nodey.gt.1 .and.  myj.ne.nodey ) jflag = -1
+      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. rankx.gt.1 .and.  myi.ne.rankx ) iflag = -1
+      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. ranky.gt.1 .and.  myj.ne.ranky ) jflag = -1
     ENDIF
 #endif
 
@@ -1946,8 +1946,8 @@
       ! check for conflict:
     IF( (iflag.ge.1.and.iflag.le.ni) .and.   &
         (jflag.ge.1.and.jflag.le.nj) )THEN
-      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. nodex.gt.1 .and.  myi.ne.nodex ) iflag = -1
-      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. nodey.gt.1 .and.  myj.ne.nodey ) jflag = -1
+      IF( iflag.eq.ni .and. pdata(np,prx).eq.xf(iflag+1) .and. rankx.gt.1 .and.  myi.ne.rankx ) iflag = -1
+      IF( jflag.eq.nj .and. pdata(np,pry).eq.yf(jflag+1) .and. ranky.gt.1 .and.  myj.ne.ranky ) jflag = -1
     ENDIF
 #endif
 

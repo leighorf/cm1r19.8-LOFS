@@ -550,7 +550,8 @@
 
       IF(imoist.eq.1 .and. stat_pcn.eq.1)THEN
       if(myid.eq.0)then
-100     format('t=',f8.2,2x,a6,':',1x,e13.6)
+!ORF
+100     format('t=',f10.2,2x,a6,':',1x,e13.6)
         do n=1,nbudget
           write(6,100) iotime,budname(n),qbudget(n)
           nstat = nstat + 1

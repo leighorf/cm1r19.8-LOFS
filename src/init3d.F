@@ -474,13 +474,13 @@
         if(dowr) write(outfile,*)
         if(dowr) write(outfile,*) '  Warm bubble'
         if(dowr) write(outfile,*)
-
-        ric     =  centerx  ! center of bubble in x-direction (m)
-        rjc     =  centery  ! center of bubble in y-direction (m)
+! ORF put warm bubble location and amplitude parameters in var1-3 from namelist
+        ric     =  var1  ! center of bubble in x-direction (m)
+        rjc     =  var2  ! center of bubble in y-direction (m)
         zc      =   1400.0  ! height of center of bubble above ground (m)
         bhrad   =  10000.0  ! horizontal radius of bubble (m)
         bvrad   =   1400.0  ! vertical radius of bubble (m)
-        bptpert =      1.0  ! max potential temp perturbation (K)
+        bptpert =     var3  ! max potential temp perturbation (K)
 
         ! By default, CM1 sets qv=constant at a constant height level for 
         ! this value of iinit.  If you would rather have rh=constant at 

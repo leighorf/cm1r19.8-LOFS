@@ -366,7 +366,7 @@
 !----------------------------------------------------------------------
 #ifdef MPI
 !begin LOFS
-      call create_hardware_rank_mapping(MPI_COMM_WORLD,corex,corey,nodex,nodey,MPI_COMM_CM1)
+      call create_hardware_rank_mapping(MPI_COMM_WORLD,corex,corey,rankx,ranky,MPI_COMM_CM1)
 !end LOFS
 #endif
 
@@ -384,19 +384,19 @@
 !Just coopt dowr for all LOFS output
       IF( myid.eq.0 ) dowr = .true.
 
-      nodex  = max(1,nodex)
-      nodey  = max(1,nodey)
+      rankx  = max(1,rankx)
+      ranky  = max(1,ranky)
       ppnode = max(1,ppnode)
 
 #ifndef MPI
       ! serial (i.e. single-processor) run:
-      nodex = 1
-      nodey = 1
+      rankx = 1
+      ranky = 1
       ppnode = 1
 #endif
 
-      ni = nx / nodex
-      nj = ny / nodey
+      ni = nx / rankx
+      nj = ny / ranky
       nk = nz
       nkp1 = nk+1
 
@@ -2739,7 +2739,280 @@ write_restart:   if( dorestart )then
           enddo
         endif
         if(timestats.ge.1) time_restart=time_restart+mytime()
-      endif write_restart
+
+!ORF I'd like to see stats for what is going on every time we dump restarts
+!I just yanked the code at the bottom where George does this as the model finishes. Could make it a subroutine.
+
+dotimestats: IF(timestats.ge.1)THEN
+
+#ifdef MPI
+      ! for MPI runs without procfiles, average the timestat terms:
+      notprocfiles: IF(.not.procfiles)THEN
+        sum = 0.0
+        call MPI_REDUCE(time_sound   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_sound = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_poiss   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_poiss = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_advs    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_advs = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_advu    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_advu = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_advv    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_advv = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_advw    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_advw = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_divx    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_divx = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_buoyan  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_buoyan = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_turb    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_turb = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_sfcphys ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_sfcphys = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_ttend   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_ttend = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_cor     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_cor = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_diffu   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_diffu = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_rdamp   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_rdamp = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_microphy,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_microphy = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_satadj  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_satadj = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_dbz,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_dbz = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_fall    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_fall = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_rad     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_rad = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_pbl     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_pbl = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_stat    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_stat = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_cflq    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_cflq = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_bc      ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_bc = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_integ   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_integ = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_write   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_write = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_restart ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_restart = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_misc    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_misc = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_swath   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_swath = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_pdef    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_pdef = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_prsrho  ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_prsrho = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_turbdiag,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_turbdiag = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_azimavg ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_azimavg = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_hifrq ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_hifrq = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_parcels ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_parcels = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpu1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpu1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpv1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpv1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpw1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpw1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpp1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpp1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpu2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpu2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpv2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpv2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpw2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpw2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpp2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpp2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mps1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mps1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mps3    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mps3 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpq1    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpq1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mps2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mps2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mps4    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mps4 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpq2    ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpq2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mptk1   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mptk1 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mptk2   ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mptk2 = sum/float(numprocs)
+        sum = 0.0
+        call MPI_REDUCE(time_mpb     ,sum,1,MPI_REAL,MPI_SUM,0,MPI_COMM_CM1,ierr)
+        time_mpb = sum/float(numprocs)
+      ENDIF notprocfiles
+#endif
+
+      time_solve=time_sound+time_poiss+time_buoyan+time_turb+             &
+                  time_diffu+time_microphy+time_stat+time_cflq+           &
+                  time_bc+time_misc+time_integ+time_rdamp+time_divx+      &
+                  time_write+time_restart+time_ttend+time_cor+time_fall+  &
+                  time_satadj+time_dbz+time_sfcphys+time_parcels+         &
+                  time_rad+time_pbl+time_swath+time_pdef+time_prsrho+     &
+                  time_turbdiag+time_azimavg+time_hifrq+                  &
+#ifdef MPI
+                  time_mpu1+time_mpv1+time_mpw1+time_mpp1+                &
+                  time_mpu2+time_mpv2+time_mpw2+time_mpp2+                &
+                  time_mps1+time_mps3+time_mpq1+time_mptk1+                         &
+                  time_mps2+time_mps4+time_mpq2+time_mptk2+time_mpb+                &
+#endif
+                  time_advs+time_advu+time_advv+time_advw
+!ORF
+!      time_solve0 = time_solve
+
+#ifdef MPI
+      mp_total=time_mpu1+time_mpv1+time_mpw1+time_mpp1+                   &
+               time_mpu2+time_mpv2+time_mpw2+time_mpp2+                   &
+               time_mps1+time_mps3+time_mpq1+time_mptk1+                            &
+               time_mps2+time_mps4+time_mpq2+time_mptk2+time_mpb
+#endif
+
+      if(dowr) write(outfile,*)
+      if(dowr) write(outfile,*) 'Total time between restart saves: ',time_solve
+      if(dowr) write(outfile,*)
+      time_solve=0.01*time_solve
+      if(time_solve.lt.0.0001) time_solve=1.
+
+do_write: IF(dowr)THEN
+      write(outfile,100) 'sound   ',time_sound,time_sound/time_solve
+      write(outfile,100) 'poiss   ',time_poiss,time_poiss/time_solve
+      write(outfile,100) 'advs    ',time_advs,time_advs/time_solve
+      write(outfile,100) 'advu    ',time_advu,time_advu/time_solve
+      write(outfile,100) 'advv    ',time_advv,time_advv/time_solve
+      write(outfile,100) 'advw    ',time_advw,time_advw/time_solve
+      write(outfile,100) 'divx    ',time_divx,time_divx/time_solve
+      write(outfile,100) 'buoyan  ',time_buoyan,time_buoyan/time_solve
+      write(outfile,100) 'turb    ',time_turb,time_turb/time_solve
+      write(outfile,100) 'sfcphys ',time_sfcphys,time_sfcphys/time_solve
+      write(outfile,100) 'ttend   ',time_ttend,time_ttend/time_solve
+      write(outfile,100) 'cor     ',time_cor,time_cor/time_solve
+      write(outfile,100) 'diffu   ',time_diffu,time_diffu/time_solve
+      write(outfile,100) 'rdamp   ',time_rdamp,time_rdamp/time_solve
+      write(outfile,100) 'microphy',time_microphy,time_microphy/time_solve
+      write(outfile,100) 'satadj  ',time_satadj,time_satadj/time_solve
+      write(outfile,100) 'dbz     ',time_dbz,time_dbz/time_solve
+      write(outfile,100) 'fallout ',time_fall,time_fall/time_solve
+      write(outfile,100) 'radiatio',time_rad,time_rad/time_solve
+      write(outfile,100) 'pbl     ',time_pbl,time_pbl/time_solve
+      write(outfile,100) 'stat    ',time_stat,time_stat/time_solve
+      write(outfile,100) 'cflq    ',time_cflq,time_cflq/time_solve
+      write(outfile,100) 'bc      ',time_bc,time_bc/time_solve
+      write(outfile,100) 'integ   ',time_integ,time_integ/time_solve
+      write(outfile,100) 'write   ',time_write,time_write/time_solve
+      write(outfile,100) 'restart ',time_restart,time_restart/time_solve
+      write(outfile,100) 'misc    ',time_misc,time_misc/time_solve
+      write(outfile,100) 'swaths  ',time_swath,time_swath/time_solve
+      write(outfile,100) 'pdef    ',time_pdef,time_pdef/time_solve
+      write(outfile,100) 'prsrho  ',time_prsrho,time_prsrho/time_solve
+      write(outfile,100) 'parcels ',time_parcels,time_parcels/time_solve
+      if( doturbdiag )  &
+      write(outfile,100) 'turbdiag',time_turbdiag,time_turbdiag/time_solve
+      if( doazimavg )  &
+      write(outfile,100) 'azimavg ',time_azimavg,time_azimavg/time_solve
+      if( dohifrq )  &
+      write(outfile,100) 'hifrq   ',time_hifrq,time_hifrq/time_solve
+#ifdef MPI
+      write(outfile,100) 'mp_total',mp_total,mp_total/time_solve
+      write(outfile,*)
+      write(outfile,100) 'mpu1    ',time_mpu1,time_mpu1/time_solve
+      write(outfile,100) 'mpu2    ',time_mpu2,time_mpu2/time_solve
+      write(outfile,100) 'mpv1    ',time_mpv1,time_mpv1/time_solve
+      write(outfile,100) 'mpv2    ',time_mpv2,time_mpv2/time_solve
+      write(outfile,100) 'mpw1    ',time_mpw1,time_mpw1/time_solve
+      write(outfile,100) 'mpw2    ',time_mpw2,time_mpw2/time_solve
+      write(outfile,100) 'mpp1    ',time_mpp1,time_mpp1/time_solve
+      write(outfile,100) 'mpp2    ',time_mpp2,time_mpp2/time_solve
+      write(outfile,100) 'mps1    ',time_mps1,time_mps1/time_solve
+      write(outfile,100) 'mps2    ',time_mps2,time_mps2/time_solve
+      write(outfile,100) 'mps3    ',time_mps3,time_mps3/time_solve
+      write(outfile,100) 'mps4    ',time_mps4,time_mps4/time_solve
+      write(outfile,100) 'mpq1    ',time_mpq1,time_mpq1/time_solve
+      write(outfile,100) 'mpq2    ',time_mpq2,time_mpq2/time_solve
+      write(outfile,100) 'mptk1   ',time_mptk1,time_mptk1/time_solve
+      write(outfile,100) 'mptk2   ',time_mptk2,time_mptk2/time_solve
+      write(outfile,100) 'mpb     ',time_mpb,time_mpb/time_solve
+#endif
+      write(outfile,*)
+  ENDIF do_write
+
+100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
+
+!ORF 
+!#ifdef MPI
+!      if(myid.eq.0) print *
+!      time_solve0 = max( time_solve0 , 1.0e-20 )
+!      if(myid.eq.0) print *,'  MN = ',float(nx*ny*nz)*float(nstep-nstep0)/((time_solve0/3600.0)*float(numprocs))
+!      if(myid.eq.0) print *
+!#endif
+
+!ORF!!!!!
+! Must reset all times to zero. George already has a routine for this
+! So every time we dump restarts we dump time stats data too
+      call set_time_to_zero()
+      ENDIF dotimestats
+   endif write_restart
+
 
 
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
@@ -2835,6 +3108,7 @@ write_restart:   if( dorestart )then
     ENDDO  timeloop
     !c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-c-combo breaker!
 
+!ORF we have reached the end of integration, now we're out of the time loop
 
 !----------------------------------------------------------------------
 !  write new stats descriptor file, if necessary:
@@ -2865,8 +3139,14 @@ write_restart:   if( dorestart )then
 #endif
 !----------------------------------------------------------------------
 
-    IF(timestats.ge.1)THEN
+timestatsend:    IF(timestats.ge.1)THEN
 
+!ORF keep the code in place for now but don't execute it. This is because
+!you get all zeroes due to the way I've inserted this code at the end of
+!the restart block
+
+#undef DO_LAST_STATS
+#ifdef DO_LAST_STATS
 #ifdef MPI
       ! for MPI runs without procfiles, average the timestat terms:
       IF(.not.procfiles)THEN
@@ -3117,7 +3397,11 @@ write_restart:   if( dorestart )then
       write(outfile,*)
     ENDIF
 
-100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
+!ORF the endif below corresponds to DO_LAST_STATS
+#endif
+
+!is above
+!100   format(3x,a8,' :  ',f10.2,2x,f6.2,'%')
 
 #ifdef MPI
       if(myid.eq.0) print *
@@ -3126,7 +3410,7 @@ write_restart:   if( dorestart )then
       if(myid.eq.0) print *
 #endif
 
-    ENDIF
+    ENDIF timestatsend
 
 !  End time loop
 !----------------------------------------------------------------------

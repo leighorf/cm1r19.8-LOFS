@@ -163,9 +163,9 @@
 #ifndef MPI
 !--------------------------------------------------------------
 
-      if(nodex.ne.1 .or. nodey.ne.1)then
+      if(rankx.ne.1 .or. ranky.ne.1)then
         print *
-        print *,'  For non-MPI runs, nodex and nodey must be = 1 !'
+        print *,'  For non-MPI runs, rankx and ranky must be = 1 !'
         print *
         call stopcm1
       endif
@@ -2081,12 +2081,12 @@
 !  Check domain size (MPI only)
 #ifdef MPI
 
-        if((nodex*nodey).ne.numprocs)then
+        if((rankx*ranky).ne.numprocs)then
           if(myid.eq.0)then
           print *
           print *,'  WARNING!!! '
           print *,'  nodes does not equal numprocs!'
-          print *,'  nodex,nodey,nodes=',nodex,nodey,nodex*nodey
+          print *,'  rankx,ranky,nodes=',rankx,ranky,rankx*ranky
           print *,'  numprocs=',numprocs
           print *
           endif
@@ -2094,22 +2094,22 @@
           call stopcm1
         endif
 
-        if(mod(nx,nodex).ne.0)then
+        if(mod(nx,rankx).ne.0)then
           if(myid.eq.0)then
           print *
-          print *,'  nx does not divide exactly by nodex! '
-          print *,'  nx,nodex,mod(nx,nodex)=',nx,nodex,mod(nx,nodex)
+          print *,'  nx does not divide exactly by rankx! '
+          print *,'  nx,rankx,mod(nx,rankx)=',nx,rankx,mod(nx,rankx)
           print *
           endif
           call MPI_BARRIER (MPI_COMM_CM1,ierr)
           call stopcm1
         endif
 
-        if(mod(ny,nodey).ne.0)then
+        if(mod(ny,ranky).ne.0)then
           if(myid.eq.0)then
           print *
-          print *,'  ny does not divide exactly by nodey! '
-          print *,'  ny,nodey,mod(ny,nodey)=',ny,nodey,mod(ny,nodey)
+          print *,'  ny does not divide exactly by ranky! '
+          print *,'  ny,ranky,mod(ny,ranky)=',ny,ranky,mod(ny,ranky)
           print *
           endif
           call MPI_BARRIER (MPI_COMM_CM1,ierr)
@@ -2128,13 +2128,13 @@
           call stopcm1
         ENDIF
 
-        ppnode = min( ppnode , nodex*nodey )
+        ppnode = min( ppnode , rankx*ranky )
 
-        if(mod(nodex*nodey,ppnode).ne.0)then
+        if(mod(rankx*ranky,ppnode).ne.0)then
           if(myid.eq.0)then
           print *
-          print *,'  nodex*nodey does not divide exactly by ppnode! '
-          print *,'  nodex*nodey,ppnode=',nodex*nodey,ppnode
+          print *,'  rankx*ranky does not divide exactly by ppnode! '
+          print *,'  rankx*ranky,ppnode=',rankx*ranky,ppnode
           print *
           endif
           call MPI_BARRIER (MPI_COMM_CM1,ierr)
@@ -4764,7 +4764,7 @@
 #ifdef MPI
       mynode = int( float(myid)/float(ppnode) )
       nodemaster = mynode * ppnode
-      nodes = nodex * nodey / ppnode
+      nodes = rankx * ranky / ppnode
 #else
       mynode = 0
       nodemaster = 0
@@ -4797,12 +4797,12 @@
 
       IF( myid.eq.nodemaster )THEN
 
-        d2i   = (ni+1)*nodex
+        d2i   = (ni+1)*rankx
         d2is  = nx
         d2iu  = nx+1
         d2iv  = nx
 
-        d2j   = (nj+1)*nodey
+        d2j   = (nj+1)*ranky
         d2js  = ny
         d2ju  = ny
         d2jv  = ny+1
@@ -4826,7 +4826,7 @@
       if(dowr) write(outfile,*)
       if(dowr) write(outfile,*) '  myid,mynode             = ',myid,mynode
       if(dowr) write(outfile,*) '  nodemaster,nodes,ppnode = ',nodemaster,nodes,ppnode
-      if(dowr) write(outfile,*) '  nodex,nodey             = ',nodex,nodey
+      if(dowr) write(outfile,*) '  rankx,ranky             = ',rankx,ranky
       if(dowr) write(outfile,*)
       if(dowr) write(outfile,*) '  d2i   = ',d2i
       if(dowr) write(outfile,*) '  d2is  = ',d2is
@@ -5337,16 +5337,16 @@
       myj=1
 
 #ifdef MPI
-      myj = myid / nodex + 1
-      myi = myid - (myj-1)*nodex  + 1
+      myj = myid / rankx + 1
+      myi = myid - (myj-1)*rankx  + 1
 
       if(dowr) write(outfile,*) '  myi,myj=',myi,myj
       if(dowr) write(outfile,*)
 
-      mynorth = nabor(myi,   myj+1, nodex, nodey)
-      mysouth = nabor(myi,   myj-1, nodex, nodey)
-      myeast  = nabor(myi+1, myj,   nodex, nodey)
-      mywest  = nabor(myi-1, myj,   nodex, nodey)
+      mynorth = nabor(myi,   myj+1, rankx, ranky)
+      mysouth = nabor(myi,   myj-1, rankx, ranky)
+      myeast  = nabor(myi+1, myj,   rankx, ranky)
+      mywest  = nabor(myi-1, myj,   rankx, ranky)
 
       if(dowr) write(outfile,*) '  mywest  =',mywest
       if(dowr) write(outfile,*) '  myeast  =',myeast
@@ -5354,10 +5354,10 @@
       if(dowr) write(outfile,*) '  mynorth =',mynorth
       if(dowr) write(outfile,*)
 
-      mysw = nabor(myi-1, myj-1,   nodex, nodey)
-      mynw = nabor(myi-1, myj+1,   nodex, nodey)
-      myne = nabor(myi+1, myj+1,   nodex, nodey)
-      myse = nabor(myi+1, myj-1,   nodex, nodey)
+      mysw = nabor(myi-1, myj-1,   rankx, ranky)
+      mynw = nabor(myi-1, myj+1,   rankx, ranky)
+      myne = nabor(myi+1, myj+1,   rankx, ranky)
+      myse = nabor(myi+1, myj-1,   rankx, ranky)
 
       if(dowr) write(outfile,*) '  mysw    =',mysw
       if(dowr) write(outfile,*) '  mynw    =',mynw
@@ -5425,9 +5425,9 @@
       enddo
 
         i = ib
-        if(i+(myi-1)*nx/nodex.eq.(1-ngxy) .and. wbc.ne.1) ibw=1
+        if(i+(myi-1)*nx/rankx.eq.(1-ngxy) .and. wbc.ne.1) ibw=1
         i = ie
-        if(i+(myi-1)*nx/nodex.eq.(nx+ngxy) .and. ebc.ne.1) ibe=1
+        if(i+(myi-1)*nx/rankx.eq.(nx+ngxy) .and. ebc.ne.1) ibe=1
 
       do j=1-ngxy,ny+ngxy+1
         yfdp(j)=dble(dy)*(j-1)
@@ -5440,9 +5440,9 @@
       enddo
 
         j = jb
-        if(j+(myj-1)*ny/nodey.eq.(1-ngxy) .and. sbc.ne.1) ibs=1
+        if(j+(myj-1)*ny/ranky.eq.(1-ngxy) .and. sbc.ne.1) ibs=1
         j = je
-        if(j+(myj-1)*ny/nodey.eq.(ny+ngxy) .and. nbc.ne.1) ibn=1
+        if(j+(myj-1)*ny/ranky.eq.(ny+ngxy) .and. nbc.ne.1) ibn=1
 
     ELSEIF(iorigin.eq.2)THEN
 
@@ -5457,9 +5457,9 @@
       enddo
 
         i = ib
-        if(i+(myi-1)*nx/nodex.eq.(1-ngxy) .and. wbc.ne.1) ibw=1
+        if(i+(myi-1)*nx/rankx.eq.(1-ngxy) .and. wbc.ne.1) ibw=1
         i = ie
-        if(i+(myi-1)*nx/nodex.eq.(nx+ngxy) .and. ebc.ne.1) ibe=1
+        if(i+(myi-1)*nx/rankx.eq.(nx+ngxy) .and. ebc.ne.1) ibe=1
 
       do j=1-ngxy,ny+ngxy+1
         yfdp(j)=dble(dy)*(j-1)-0.5d0*dble(dy)*ny
@@ -5472,9 +5472,9 @@
       enddo
 
         j = jb
-        if(j+(myj-1)*ny/nodey.eq.(1-ngxy) .and. sbc.ne.1) ibs=1
+        if(j+(myj-1)*ny/ranky.eq.(1-ngxy) .and. sbc.ne.1) ibs=1
         j = je
-        if(j+(myj-1)*ny/nodey.eq.(ny+ngxy) .and. nbc.ne.1) ibn=1
+        if(j+(myj-1)*ny/ranky.eq.(ny+ngxy) .and. nbc.ne.1) ibn=1
 
     ELSE
 
@@ -5571,8 +5571,8 @@
 #ifdef MPI
       if(dowr) write(outfile,*)
 
-      if(dowr) write(outfile,*) 'nodex    =',nodex
-      if(dowr) write(outfile,*) 'nodey    =',nodey
+      if(dowr) write(outfile,*) 'rankx    =',rankx
+      if(dowr) write(outfile,*) 'ranky    =',ranky
       if(dowr) write(outfile,*) 'numprocs =',numprocs
       if(dowr) write(outfile,*) 'ppnode   =',ppnode
 #endif

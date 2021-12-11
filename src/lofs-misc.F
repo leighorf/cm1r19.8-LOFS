@@ -81,14 +81,16 @@ subroutine get_command_line_arguments()
     call get_command_argument(3,output_basename_cmdline)
     call get_command_argument(4,restart_path_cmdline)
 
+! print *,executable_cmdline,namelist_cmdline,output_path_cmdline,output_basename_cmdline,restart_path_cmdline
+
     return
 end subroutine get_command_line_arguments
 
 subroutine bcast_lofs()
     implicit none
-      call MPI_BCAST(dtl_dbl_orf ,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(use_dtinv ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
-      call MPI_BCAST(dtinv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(dtl_dbl_orf ,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(use_dtinv ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
+!     call MPI_BCAST(dtinv,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(time_levels_per_histfile,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(save_full_domain ,1,MPI_LOGICAL,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(save_x0,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
@@ -259,7 +261,7 @@ end subroutine setvindices
 
       subroutine create_hardware_rank_mapping(comm_in,       &
                                             corex,corey,     &
-                                            nodex,nodey,     &
+                                            rankx,ranky,     &
                                             comm_out)
       implicit none
 
@@ -267,14 +269,15 @@ end subroutine setvindices
       integer :: world_group,new_world_group,new_world_size
       integer :: world_size,new_world_rank
       integer, intent(in) :: corex,corey ! how many cores in one node, along each dimension
-      integer, intent(in) :: nodex,nodey ! how many cores in total along each dimension
+      integer, intent(in) :: rankx,ranky ! how many cores in total along each dimension
       integer :: myrank ! this process' rank in comm_in
       integer, intent(in) :: comm_in
       integer, intent(out) :: comm_out
       integer, dimension(:), allocatable :: newranks
+      integer :: errcode
 
-      nodes_in_x=nodex/corex
-      nodes_in_y=nodey/corey
+      nodes_in_x=rankx/corex
+      nodes_in_y=ranky/corey
       nnodes=nodes_in_x*nodes_in_y
       ncores=corex*corey
 
@@ -282,9 +285,13 @@ end subroutine setvindices
       call mpi_comm_size(comm_in,world_size,ierr);check_err(ierr)
       call mpi_comm_rank(comm_in,myrank,ierr);check_err(ierr)
 1001  format("Error: world_size = ",i8," and nranks = ",i8". These should be equal. Exiting.")
+1002  format("rankx = ",i5,"    corex = ",i4, "     nodes_in_x = ",i6,"     ranky = ",i5,"     corey = ",i4,"      nodes_in_y = ",i6)
       if (world_size .ne. nranks) then
-            write(*,1001) world_size,nranks
-            call stopcm1
+              if(myid.eq.0) write(*,1001) world_size,nranks
+              if(myid.eq.0) write(*,1002) rankx,corex,nodes_in_x,ranky,corey,nodes_in_y
+              call MPI_Barrier(MPI_COMM_WORLD,ierr)
+              call MPI_Abort(MPI_COMM_WORLD,errcode,ierr)
+              stop
       endif
 
       allocate(newranks(nranks))
@@ -322,6 +329,7 @@ end subroutine setvindices
 
 1969 format('DEBUG2: myid_orig = ',i3,' myid = ',i3)
 
+2020  format(a10,'=',i5)
         if(myid.eq.0) then
             print *,"MPI_COMM_CM1 and myMCMcomm communicators succesfully mapped to hardware."
             print *,"We were called as: ",trim(executable_cmdline)
@@ -329,6 +337,17 @@ end subroutine setvindices
             print *,"output_path_cmdline is: ",trim(output_path_cmdline)
             print *,"output_basename_cmdline is: ",trim(output_basename_cmdline)
             print *,"restart_path_cmdline is: ",trim(restart_path_cmdline)
+            write(*,*) '-----------------------'
+            write(*,2020) "rankx",rankx
+            write(*,2020) "corex",corex
+            write(*,2020) "nodes_in_x",nodes_in_x
+            write(*,2020) "cores_in_x",nodes_in_x*corex
+            write(*,*)
+            write(*,2020) "ranky",ranky
+            write(*,2020) "corey",corey
+            write(*,2020) "nodes_in_y",nodes_in_y
+            write(*,2020) "cores_in_y",nodes_in_y*corey
+            write(*,*) '-----------------------'
         endif
 
 
@@ -491,8 +510,8 @@ subroutine set_MCM_params(xh,yh,xf,yf)
     myfulloffseti = (myi-1)*ni !used in 2d collective write
     myfulloffsetj = (myj-1)*nj
 
-    MCMnx = nodex/corex
-    MCMny = nodey/corey
+    MCMnx = rankx/corex
+    MCMny = ranky/corey
     numMCM = MCMnx*MCMny
     MCMi = mod(myMCMid,MCMnx)
     MCMj = myMCMid/MCMnx !ORF 2019-11-14 BUG FOUND was MCMny... found on Frontera
@@ -567,8 +586,8 @@ if(iprintinfo) print *,"Hello, myid = ",myid,"and I am going to be printing I/O 
 
       allocate( MCMrootranks_old(MCMnx*MCMny))
       allocate( MCMrootranks(MCMnx*MCMny))
-      allocate( x1dranks(nodex))
-      allocate( y1dranks(nodey))
+      allocate( x1dranks(rankx))
+      allocate( y1dranks(ranky))
       allocate( myMCMxranks(corex))
       allocate( myMCMyranks(corey))
 
@@ -618,15 +637,15 @@ if(iprintinfo) print *,"Hello, myid = ",myid,"and I am going to be printing I/O 
                   call FFLUSH(6)
                   call stopcm1
             endif
-            if ( mod(nodex,corex).ne.0 .or. mod(nodey,corey).ne.0 )   then
-                  print *, "Exiting, nodex/corex or nodey/corey not evenly divisible"
-                  write(*,1918) nodex,corex,nodey,corey
+            if ( mod(rankx,corex).ne.0 .or. mod(ranky,corey).ne.0 )   then
+                  print *, "Exiting, rankx/corex or ranky/corey not evenly divisible"
+                  write(*,1918) rankx,corex,ranky,corey
                   call FFLUSH(6)
                   call stopcm1
             endif
       endif
 1917  format("numprocs = ",i5,"  cores_per_mcm = ",i5)
-1918  format("nodex = ",i5,"  corex = ",i5,"  nodey = ",i5,"  corey = ",i5)
+1918  format("rankx = ",i5,"  corex = ",i5,"  ranky = ",i5,"  corey = ",i5)
 
       do i=1,corex
             myMCMxranks(i)=i-1 
@@ -635,21 +654,21 @@ if(iprintinfo) print *,"Hello, myid = ",myid,"and I am going to be printing I/O 
             myMCMyranks(j)=(j-1)*corex
       end do
 
-      do i=1,nodex
+      do i=1,rankx
             x1dranks(i) = i-1
       enddo
 
       i=1
 
-      do j=0,numprocs-1,nodex
+      do j=0,numprocs-1,rankx
             y1dranks(i) = j
             i = i + 1
       enddo
 
-      call MPI_GROUP_INCL(orig_group,nodex,x1dranks,x1dgroup,ierr); check_err(ierr)
+      call MPI_GROUP_INCL(orig_group,rankx,x1dranks,x1dgroup,ierr); check_err(ierr)
       call MPI_COMM_CREATE(MPI_COMM_CM1,x1dgroup,x1dcomm,ierr); check_err(ierr)
       call MPI_GROUP_RANK(x1dgroup,x1drank,ierr); check_err(ierr)
-      call MPI_GROUP_INCL(orig_group,nodey,y1dranks,y1dgroup,ierr); check_err(ierr)
+      call MPI_GROUP_INCL(orig_group,ranky,y1dranks,y1dgroup,ierr); check_err(ierr)
       call MPI_COMM_CREATE(MPI_COMM_CM1,y1dgroup,y1dcomm,ierr); check_err(ierr)
       call MPI_GROUP_RANK(y1dgroup,y1drank,ierr); check_err(ierr)
       call MPI_GROUP_INCL(myMCMgroup,corex,myMCMxranks,myMCMbxgroup,ierr); check_err(ierr)
@@ -680,10 +699,10 @@ if(iprintinfo) print *,"Hello, myid = ",myid,"and I am going to be printing I/O 
       !e_id and n_id are ranks within x1dcomm and y1dcomm - starting with 0 and
       !incrementing by one.
       !e_id_world and n_id_world are the same ranks but within MPI_COMM_CM1 
-      e_id=nodex-1 !easternmost,  y=0
-      n_id=nodey-1 !northernmost, x=0
+      e_id=rankx-1 !easternmost,  y=0
+      n_id=ranky-1 !northernmost, x=0
       e_id_world = e_id
-      n_id_world = nodex*(nodey-1)
+      n_id_world = rankx*(ranky-1)
 
       ! Now, collect full x and y mesh values to the "appropriate" rank, and
       ! then broadcast to everyone

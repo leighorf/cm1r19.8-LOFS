@@ -342,10 +342,10 @@ write_3d_once:    if (wr3d_once) then
            call h5_write_val_iamio  (misc_group_id,intval=nkwrite_val)
         endif
 
-        varname='dt_long'
-        description='The model long time step. This is a 32 bit float in r16.'
-        units='s'
-        call h5_write_val_iamio  (misc_group_id,floatval=real(dtl_dbl_orf))
+!       varname='dt_long'
+!       description='The model long time step. This is a 32 bit float in r16.'
+!       units='s'
+!       call h5_write_val_iamio  (misc_group_id,floatval=real(dtl_dbl_orf))
     
         varname='kdiff6'
         description='Coefficient of sixth order diffusion filter (only written if used)'
@@ -383,12 +383,12 @@ write_3d_once:    if (wr3d_once) then
         call h5_write_val_iamio  (grid_group_id,intval=myMCMid)
     
         varname='myi'
-        description='east/west index of hdf5 file in 2d decomposition. (1 < myi <= nodex)'
+        description='east/west index of hdf5 file in 2d decomposition. (1 < myi <= rankx)'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMi)
     
         varname='myj'
-        description='north/south index of hdf5 file in 2d decomposition. (1 < myj <= nodej)'
+        description='north/south index of hdf5 file in 2d decomposition. (1 < myj <= ranky)'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMj)
     
@@ -402,12 +402,12 @@ write_3d_once:    if (wr3d_once) then
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=myMCMnj)
     
-        varname='nodex'
+        varname='rankx'
         description='number of hdf5 files spanning the full east/west extent of the model domain'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMnx)
     
-        varname='nodey'
+        varname='ranky'
         description='number of hdf5 files spanning the full north/south extent of the model domain'
         units='index'
         call h5_write_val_iamio  (grid_group_id,intval=MCMny)
@@ -438,7 +438,7 @@ write_3d_once:    if (wr3d_once) then
     
         varname='pres0'
         description='Pressure base state, (i.e., from sounding)'
-        units='dimensionless'
+        units='Pa'
         dims(1)=nz;count(1)=nz;offset(1)=0
         call h5_write_1d_float_iamio(basestate_group_id,prs0(1,1,1:nz),nz,dims,count,offset)
     
@@ -525,15 +525,15 @@ write_3d_once:    if (wr3d_once) then
         units='#'
         call h5_write_val_iamio(param0_group_id,intval=nz)
 
-        varname='nodex'
+        varname='rankx'
         description='number of MPI ranks x'
         units='#'
-        call h5_write_val_iamio(param0_group_id,intval=nodex)
+        call h5_write_val_iamio(param0_group_id,intval=rankx)
 
-        varname='nodey'
+        varname='ranky'
         description='number of MPI ranks y'
         units='#'
-        call h5_write_val_iamio(param0_group_id,intval=nodey)
+        call h5_write_val_iamio(param0_group_id,intval=ranky)
 
         varname='ppnode'
         description='number of cores per node'
@@ -596,10 +596,10 @@ write_3d_once:    if (wr3d_once) then
 
 !lofs
 
-        varname='dtl_dbl_orf' !ORF TODO shouldn't need this anymore
-        description='model time step'
-        units='s'
-        call h5_write_val_iamio(lofs_group_id,doubleval=dtl_dbl_orf)
+!       varname='dtl_dbl_orf' !ORF TODO shouldn't need this anymore
+!       description='model time step'
+!       units='s'
+!       call h5_write_val_iamio(lofs_group_id,doubleval=dtl_dbl_orf)
 
         varname='numconcfreq' !ORF TODO just forget this
         description='number concentration save interval'
@@ -651,9 +651,9 @@ write_3d_once:    if (wr3d_once) then
         description='Actual top (vertical) index saved (we often do not save up to nz)'
         units='index'
         if(save_full_vertical_extent) then
-           call h5_write_val_iamio  (lofs_group_id,intval=nk)
+           call h5_write_val_iamio  (grid_group_id,intval=nk)
         else
-           call h5_write_val_iamio  (lofs_group_id,intval=nkwrite_val)
+           call h5_write_val_iamio  (grid_group_id,intval=nkwrite_val)
         endif
 
         varname='prespert_swath_start_time'
