@@ -2155,44 +2155,6 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
 
       endif  ifsolve
 
-      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
-      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
-      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
-      if(iprcl.eq.1)then
-      IF( doprclout .and. mtime.ge.4200.0 )THEN
-        call     parcel_interp(dt,xh,uh,ruh,xf,uf,yh,vh,rvh,yf,vf,     &
-                               zh,mh,rmh,zf,mf,znt,ust,c1,c2,          &
-                               zs,sigma,sigmaf,rds,gz,                 &
-                               pi0,th0,thv0,qv0,qc0,qi0,rth0,          &
-                               dum1,dum2,dum3,dum4,dum5,dum6,prs,rho,  &
-                               dum7,dum8,wten,wten1,uten,vten,         &
-                               rru,rrv,rrw,pp3d,thten,thten1,th3d,q3d, &
-                               kmh,kmv,khh,khv,tke3d,pt3d,pdata,       &
-                               tdiag,qdiag,udiag,vdiag,wdiag,          &
-                               pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,        &
-                               nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,reqs_p, &
-                               tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2)
-        call parcel_write(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc)
-        prec = prec+1
-        if(prclfrq.gt.0.0)then
-          doit = .true.
-          do while( doit )
-            prcltim = prcltim+prclfrq
-            if( prcltim.gt.mtime )then
-              doit = .false.
-            endif
-          enddo
-        endif
-        if(timestats.ge.1) time_parcels=time_parcels+mytime()
-      ELSE
-        if( startup )then
-          if(myid.eq.0) print *
-          if(myid.eq.0) print *,'  NOTE:  skipping parcel_write '
-          if(myid.eq.0) print *
-        endif
-      ENDIF
-      endif
-
 
 
       !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -2520,6 +2482,44 @@ if(myid.eq.0)write(outfile,"('Done with history file output cycle.')"); call FFL
         if(timestats.ge.1) time_write=time_write+mytime()
       endif write_LOFS
 
+
+      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
+      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
+      !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
+      if(iprcl.eq.1)then
+      IF( doprclout .and. mtime-dbldt.ge.4200.0 )THEN
+        call     parcel_interp(dt,xh,uh,ruh,xf,uf,yh,vh,rvh,yf,vf,     &
+                               zh,mh,rmh,zf,mf,znt,ust,c1,c2,          &
+                               zs,sigma,sigmaf,rds,gz,                 &
+                               pi0,th0,thv0,qv0,qc0,qi0,rth0,          &
+                               dum1,dum2,dum3,dum4,dum5,dum6,prs,rho,  &
+                               dum7,dum8,wten,wten1,uten,vten,         &
+                               u3d,v3d,w3d,pp3d,thten,thten1,th3d,q3d, &
+                               kmh,kmv,khh,khv,tke3d,pt3d,pdata,       &
+                               tdiag,qdiag,udiag,vdiag,wdiag,          &
+                               pw1,pw2,pe1,pe2,ps1,ps2,pn1,pn2,        &
+                               nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,reqs_p, &
+                               tkw1,tkw2,tke1,tke2,tks1,tks2,tkn1,tkn2)
+        call parcel_write(prec,rtime,qname,name_prcl,desc_prcl,unit_prcl,pdata,ploc)
+        prec = prec+1
+        if(prclfrq.gt.0.0)then
+          doit = .true.
+          do while( doit )
+            prcltim = prcltim+prclfrq
+            if( prcltim.gt.mtime )then
+              doit = .false.
+            endif
+          enddo
+        endif
+        if(timestats.ge.1) time_parcels=time_parcels+mytime()
+      ELSE
+        if( startup )then
+          if(myid.eq.0) print *
+          if(myid.eq.0) print *,'  NOTE:  skipping parcel_write '
+          if(myid.eq.0) print *
+        endif
+      ENDIF
+      endif
 
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
       !cccccccccccccccccccccccccccccccccccccccccccccccccccccccc!
