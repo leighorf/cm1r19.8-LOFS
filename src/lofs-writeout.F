@@ -1,7 +1,7 @@
 #define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
 
       subroutine writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                                        &
-                          rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,             &
+                          rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,thv0,qv0,u0,v0,             &
                           zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,      &
                           dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,dum9,qa,                       &
                           t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                     &
@@ -15,7 +15,7 @@
       real, dimension(jb:je+1), intent(in) :: yf,vf
       real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: zh
       real, dimension(ib:ie,jb:je,kb:ke+1), intent(in) :: zf,mf
-      real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: pi0,prs0,rho0,th0,qv0
+      real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: pi0,prs0,rho0,th0,thv0,qv0
       real, dimension(ib:ie,jb:je,nrain), intent(in) :: rain,sws,svs,sps,srs,sgs,sus,shs
       real, dimension(ib:ie,jb:je,kb:ke), intent(inout) :: dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,dum9
       real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: ppi,prs,tha,rho,t11,t12
@@ -42,7 +42,7 @@
       integer i,j,k,n
 
     nkwrite=nk !ORF TODO fix
-    call h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
+    call h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,thv0,prs0,rho0,qv0,u0,v0)
 
 1101 format('DEBUG: myid = ',I2.2,' A')
 1102 format('DEBUG: myid = ',I2.2,' B')

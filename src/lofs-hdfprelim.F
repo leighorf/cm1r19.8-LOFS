@@ -1,6 +1,6 @@
 #define check_err(ierr) if(ierr.lt.0) print *,"Bad return value in ",__FILE__," line ",__LINE__," ierr = ",ierr
 
-subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
+subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,thv0,prs0,rho0,qv0,u0,v0)
     use ISO_C_BINDING !Why again??
     implicit none
 
@@ -8,7 +8,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,prs0,rho0,qv0,u0,v0)
     real, dimension(ib:ie+1), intent(in) :: xf
     real, dimension(jb:je),   intent(in) :: yh
     real, dimension(jb:je+1), intent(in) :: yf
-    real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: zh,pi0,prs0,rho0,th0,qv0
+    real, dimension(ib:ie,jb:je,kb:ke), intent(in) :: zh,pi0,prs0,rho0,th0,thv0,qv0
     real, dimension(ib:ie+1,jb:je,kb:ke), intent(in) :: u0
     real, dimension(ib:ie,jb:je+1,kb:ke), intent(in) :: v0
     real, dimension(ib:ie,jb:je,kb:ke+1) :: zf
@@ -453,6 +453,12 @@ write_3d_once:    if (wr3d_once) then
         units='K'
         dims(1)=nz;count(1)=nz;offset(1)=0
         call h5_write_1d_float_iamio(basestate_group_id,th0(1,1,1:nz),nz,dims,count,offset)
+
+        varname='thv0'
+        description='virtual potential temperature base state, (i.e., from sounding)'
+        units='K'
+        dims(1)=nz;count(1)=nz;offset(1)=0
+        call h5_write_1d_float_iamio(basestate_group_id,thv0(1,1,1:nz),nz,dims,count,offset)
     
         varname='rh0'
         description='density base state, (i.e., from sounding)'

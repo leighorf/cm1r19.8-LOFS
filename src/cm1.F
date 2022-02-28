@@ -2438,7 +2438,7 @@ endif
 !New call, with diagnostics and stuff.
 
          call writeout_hdf5(qname,xh,xf,uf,uh,yh,yf,vf,vh,                             &
-             rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,qv0,u0,v0,            &
+             rds,sigma,rdsf,sigmaf,zh,mh,zf,mf,pi0,prs0,rho0,th0,thv0,qv0,u0,v0,            &
              zs,gz,gzu,gzv,gxu,gyv,rgz,rgzu,rgzv,rain,sws,svs,sps,srs,sgs,sus,shs,     &
              dum1,dum2,dum3,dum4,dum5,dum6,dum7,dum8,sten,qa,                     &
              t11,t12,rho,prs,ua,va,wa,ppi,tha,tkea,kmh,kmv,khh,khv,                    &
