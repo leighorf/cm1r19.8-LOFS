@@ -929,6 +929,13 @@ call setvindices(zh,zf)
 !----------------------------------------------------------------------
 !  allocate the base state arrays, then call BASE
 
+#ifdef MICROBURST
+      allocate(    q1mb(ib:ie,jb:je,kb:ke) )
+      q1mb = 0.0
+      allocate(    q2mb(ib:ie,jb:je,kb:ke) )
+      q2mb = 0.0
+#endif
+
       allocate( rho0s(ib:ie,jb:je) )
       rho0s = 0.0
       allocate(  pi0s(ib:ie,jb:je) )
@@ -2111,8 +2118,8 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
                    gsw,glw,chklowq,capg,snowc,dsxy,wstar,delta,fm,fh,   &
                    mznt,smois,taux,tauy,hpbl2d,evap2d,heat2d,rc2d,    &
                    slab_zs,slab_dzs,tslb,tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml,        &
-                   pta,pt3d,ptten,pdata,                              &
-                   cfb,cfa,cfc, d1, d2,pdt,lgbth,lgbph,rhs,trans,flag,  &
+                   pta,pt3d,ptten,                                       &
+                   pdata,cfb,cfa,cfc, d1, d2,pdt,lgbth,lgbph,rhs,trans,flag,  &
                    reqs_u,reqs_v,reqs_w,reqs_s,reqs_p,               &
                    reqs_x,reqs_y,reqs_z,reqs_tk,reqs_q,reqs_t,       &
                    nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,                  &

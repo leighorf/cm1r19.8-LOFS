@@ -2650,6 +2650,7 @@
     if(dowr) write(outfile,*) '    (for lower-left corner of domain:  i=1,j=1)  '
   ENDIF
     if(dowr) write(outfile,*)
+#ifndef MICROBURST
     do n=1,3
       call getcape( n , nk+1 , pfoo , tfoo , qvfoo , cape , cin ,   &
                     zlcl, zlfc, zel , psource , tsource , qvsource )
@@ -2668,6 +2669,7 @@
 117   format('        CAPE,CIN (J/kg)            = ',2(4x,f6.1))
       if(dowr) write(outfile,*)
     enddo
+#endif
     if(dowr) write(outfile,*)
 
     deallocate(  pfoo )

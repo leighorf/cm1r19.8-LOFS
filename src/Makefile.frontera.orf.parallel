@@ -8,7 +8,7 @@ OPTS += -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -qopenmp
 CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
 OUTPUTOPT =  -DCOREX=2 -DCOREY=4
-OUTPUTOPT += -DFFLUSH=flush -DMPIO=H5FD_MPIO_COLLECTIVE_F -DUSE_ZFP_COMPRESSION -DNFILES_PER_WRITE=5000
+OUTPUTOPT += -DFFLUSH=flush -DMPIO=H5FD_MPIO_COLLECTIVE_F -DUSE_ZFP_COMPRESSION -DMICROBURST -DNFILES_PER_WRITE=5000
 
 LINKOPTS  = -L$(ZFP)/lib -L$(HDF5ZFP)/lib  -lh5zzfp -lzfp
 

@@ -140,7 +140,7 @@
       s10(i,j) = s1(i,j)*var
     enddo
     enddo
-
+!ORF this is where we set surface roughness directly for colliding microburst work (UWO)
   ELSEIF( cecd.eq.1 )THEN  sfc_options
     ! specify Cd (drag coefficient):
 
@@ -148,8 +148,9 @@
     !$omp private(i,j,wlast,n,var,rznt)
     do j=j1,j2
     do i=i1,i2
-      cd(i,j) = max(1.0e-10,cnstcd)
-      znt(i,j) = 10.0/(exp(karman/sqrt(cd(i,j)))-1.0)
+!     cd(i,j) = max(1.0e-10,cnstcd)
+!     znt(i,j) = 10.0/(exp(karman/sqrt(cd(i,j)))-1.0)
+      znt(i,j) = 0.01 * cnstcd !ORF cnstcd is really z0 in cm!
       rznt = 1.0/znt(i,j)
       var = alog((10.0+znt(i,j))*rznt)/alog((za(i,j)+znt(i,j))*rznt)
       u10(i,j) = u1(i,j)*var

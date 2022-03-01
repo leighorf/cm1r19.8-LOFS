@@ -85,8 +85,10 @@ real, dimension(:), allocatable :: MCMrootranks,x1dranks,y1dranks,myMCMxranks,my
 real, dimension (:,:), allocatable :: var2d
 real, dimension (:,:,:), allocatable :: var3d,lofstmp1
 !real, dimension (:,:,:), allocatable :: tmp1,dum5,dum6,dum7,dum8,dum9,dum10
+#ifdef MICROBURST
 real, dimension (:,:,:), allocatable :: q1mb,q2mb
-
+real, dimension(1) :: seed
+#endif
 integer, dimension(1) :: rootonlyranks
 
 real, dimension(:), allocatable :: xhfull, yhfull     ! 1d mesh arrays that span entire domain

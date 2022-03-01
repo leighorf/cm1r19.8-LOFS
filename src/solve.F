@@ -108,8 +108,8 @@
                    gsw,glw,chklowq,capg,snowc,dsxy,wstar,delta,fm,fh,  &
                    mznt,smois,taux,tauy,hpbl2d,evap2d,heat2d,rc2d,   &
                    slab_zs,slab_dzs,tslb,tmn,tml,t0ml,hml,h0ml,huml,hvml,tmoml,       &
-                   pta,pt3d,ptten,pdata,                             &
-                   cfb,cfa,cfc,ad1,ad2,pdt,lgbth,lgbph,rhs,trans,flag,  &
+                   pta,pt3d,ptten,                             &
+                   pdata,cfb,cfa,cfc,ad1,ad2,pdt,lgbth,lgbph,rhs,trans,flag,  &
                    reqs_u,reqs_v,reqs_w,reqs_s,reqs_p,               &
                    reqs_x,reqs_y,reqs_z,reqs_tk,reqs_q,reqs_t,       &
                    nw1,nw2,ne1,ne2,sw1,sw2,se1,se2,                  &
@@ -810,6 +810,30 @@
 
 !--------------------------------------------------------------------
 !  THETA-equation
+! ORF colliding microburst bits 
+#ifdef MICROBURST
+      rtime=sngl(mtime)
+
+      q1forc = 0.0;
+      q2forc = 0.0;
+
+! cm2.2
+! first mb
+      if (rtime > 0.0) q1forc = 0.5 * (1.0 - cos (3.14159 * rtime / 120.0));
+      if (rtime > 120.0) q1forc = 1.0;
+      if (rtime > 720.0) q1forc = 0.5 * (1.0 + cos (3.14159 * (rtime - 720.0) / 120.0));
+      if (rtime > 840.0) q1forc = 0.0;
+
+! second mb
+! 2 minutes after first (120 seconds):
+      ot = 120.0
+      if (rtime > 0.0+ot) q2forc = 0.5 * (1.0 - cos (3.14159 * (rtime-ot) / 120.0));
+      if (rtime > 120.0+ot) q2forc = 1.0;
+      if (rtime > 720.0+ot) q2forc = 0.5 * (1.0 + cos (3.14159 * ((rtime-ot) - 720.0) / 120.0));
+      if (rtime > 840.0+ot) q2forc = 0.0;
+
+#endif
+
 
       IF( irdamp.eq.1 )THEN
         !$omp parallel do default(shared)  &
@@ -1073,6 +1097,30 @@
           enddo
         ENDIF
       ENDIF
+#ifdef MICROBURST
+
+! ORF 2016-10-26
+! Add random perturbations at each grid point in q function.
+!
+! We will get different results on different hardware due to how pseudo
+! random numbers are calculated across compilers/machines. Also since
+! this is being called on a per-rank basis need to ensure different
+! sequences on each rank - the seed is set in init3d.F using a function of the MPI
+! rank number
+
+      do k=1,nk
+      do j=1,nj
+      do i=1,ni
+        call random_number(frand)
+        thrand = var9 * (frand - 0.5) !random perturbations, var9 is amplitude
+        ! Only q1mb contains perturbations here
+! ORF  2020-08-21 turn this off for now! var9 is used for something else!
+!       thten1(i,j,k)=thten1(i,j,k) + q1forc * q1mb(i,j,k) * (1.0 + thrand) + q2forc * q2mb(i,j,k)
+        thten1(i,j,k)=thten1(i,j,k) + q1forc * q1mb(i,j,k) + q2forc * q2mb(i,j,k)
+      enddo
+      enddo
+      enddo
+#endif
 
       !---- Rotunno-Emanuel "radiation" term
       !---- (currently capped at 2 K/day ... see RE87 p 546)
