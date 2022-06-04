@@ -151,7 +151,6 @@ subroutine bcast_lofs()
       call MPI_Bcast(output_zvort ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_vortmag ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
 
-#ifdef USE_ZFP_COMPRESSION
       call MPI_BCAST(u_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(v_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(w_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
@@ -190,7 +189,6 @@ subroutine bcast_lofs()
       call MPI_BCAST(vortmag_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(zvort_tilt_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
       call MPI_BCAST(zvort_stretch_acc,1,MPI_DOUBLE,0,MPI_COMM_CM1,ierr)
-#endif
 
       return
 end subroutine bcast_lofs

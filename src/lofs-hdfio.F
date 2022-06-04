@@ -183,79 +183,6 @@ end subroutine h5_gather_2d
 
 !-----------------------------------------------------------------------------------MARK
 
-subroutine h5_write_val_collective (f_id,intval,floatval)
-    implicit none
-
-    integer(HSIZE_T), DIMENSION(1) :: strdims
-    integer :: arank = 1
-    integer(HSIZE_T), DIMENSION(1) :: adims = (/1/)
-    integer(SIZE_T) :: stringlen
-
-    integer, intent(in), optional :: intval
-    real, intent(in), optional :: floatval
-    integer rank
-    integer(HSIZE_T), DIMENSION(1) :: dims,count
-    integer(HSSIZE_T), DIMENSION(1) :: offset
-    integer(HID_T) :: f_id,dset_id,filespace_id,memspace_id,aspace_id,desc_id,desctype_id,unitstype_id,units_id
-    integer(HID_T) :: plist_id
-
-    call h5screate_simple_f(arank,adims,aspace_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
-    stringlen = len_trim(description)
-    call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
-    stringlen = len_trim(units)
-    call h5tset_size_f(unitstype_id,stringlen,ierr);check_err(ierr)
-    rank=1
-    strdims(1)=1
-    dims(1)=1
-    count(1)=1
-    offset(1) = 0
-
-    call h5screate_simple_f(rank,dims,filespace_id,ierr);check_err(ierr)
-    if (present(intval)) then
-        call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_INTEGER,filespace_id,dset_id,ierr);check_err(ierr)
-    else if (present(floatval)) then
-        call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,filespace_id,dset_id,ierr);check_err(ierr)
-    endif
-    call h5sclose_f(filespace_id,ierr);check_err(ierr)
-    call h5screate_simple_f(rank,count,memspace_id,ierr);check_err(ierr)
-    call h5dget_space_f(dset_id,filespace_id,ierr);check_err(ierr)
-    if (myid.eq.0) then
-          call h5sselect_hyperslab_f(filespace_id,H5S_SELECT_SET_F,offset,count,ierr);check_err(ierr)
-    else
-          call h5sselect_none_f(filespace_id,ierr);check_err(ierr) ! the non zero collective ranks do nothing
-          call h5sselect_none_f(memspace_id,ierr);check_err(ierr)  ! the non zero collective ranks do nothing
-    endif
-    call h5pcreate_f(H5P_DATASET_XFER_F, plist_id, ierr);check_err(ierr)
-    call h5pset_dxpl_mpio_f(plist_id, MPIO, ierr);check_err(ierr)
-    if (present(intval)) then
-        call h5dwrite_f(dset_id, H5T_NATIVE_INTEGER, intval, dims, ierr, &
-            file_space_id = filespace_id, mem_space_id = memspace_id, xfer_prp = plist_id);check_err(ierr)
-    else if (present(floatval)) then
-        call h5dwrite_f(dset_id, H5T_NATIVE_REAL, floatval, dims, ierr, &
-            file_space_id = filespace_id, mem_space_id = memspace_id, xfer_prp = plist_id);check_err(ierr)
-    endif
-
-    call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(desc_id,desctype_id,trim(description),strdims,ierr);check_err(ierr)
-    call h5acreate_f(dset_id,"units",unitstype_id,aspace_id,units_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(units_id,unitstype_id,trim(units),strdims,ierr);check_err(ierr)
-    call H5aclose_f (desc_id,ierr);check_err(ierr)
-    call H5aclose_f (units_id,ierr);check_err(ierr)
-    call H5sclose_f (aspace_id,ierr);check_err(ierr)
-    call H5tclose_f (desctype_id,ierr);check_err(ierr)
-    call H5tclose_f (unitstype_id,ierr);check_err(ierr)
-    call h5dclose_f (dset_id,ierr);check_err(ierr)
-    call h5sclose_f (filespace_id,ierr);check_err(ierr)
-    call h5sclose_f (memspace_id,ierr);check_err(ierr)
-    call h5pclose_f (plist_id,ierr);check_err(ierr)
-    if(dbg)    print *,myid,"ORF: Wrote ",trim(varname)
-    return
-end subroutine h5_write_val_collective
-
-!-----------------------------------------------------------------------------------MARK
-
 subroutine h5_write_val_iamio (f_id,intval,floatval,doubleval)
     implicit none
 
@@ -392,150 +319,6 @@ subroutine h5_write_val_iamio (f_id,intval,floatval,doubleval)
 
 !-----------------------------------------------------------------------------------MARK
  
-    subroutine h5_write_1d_float_collective (f_id,local1darray,nlocal,dims,count,offset,localrank)
-    implicit none
-
-    integer(HSIZE_T), DIMENSION(1) :: strdims
-    integer :: arank = 1
-    integer(HSIZE_T), DIMENSION(1) :: adims = (/1/)
-    integer(SIZE_T) :: stringlen
-
-    integer :: nlocal
-    real, dimension(nlocal) ::  local1darray
-
-    integer rank,localrank
-    integer(HSIZE_T), DIMENSION(1) :: dims,count
-    integer(HSSIZE_T), DIMENSION(1) :: offset
-    integer(HID_T) :: f_id,dset_id,filespace_id,memspace_id,aspace_id,desc_id,desctype_id,unitstype_id,units_id
-    integer(HID_T) :: plist_id
-    
-!   if (iodebug2) call MPI_BARRIER(MPI_COMM_CM1,ierr)
-!   if (iodebug2) print *,myid,' Writing 1d float: ',trim(varname)
-!   if (iodebug2) call FFLUSH(6)
-!   if (iodebug2) call MPI_BARRIER(MPI_COMM_CM1,ierr)
-
-    call h5screate_simple_f(arank,adims,aspace_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
-    stringlen = len_trim(description)
-    call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
-    stringlen = len_trim(units)
-    call h5tset_size_f(unitstype_id,stringlen,ierr);check_err(ierr)
-
-    rank=1
-    strdims(1)=1
-
-    call h5screate_simple_f(rank,dims,filespace_id,ierr);check_err(ierr)
-    call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,filespace_id,dset_id,ierr);check_err(ierr)
-    call h5sclose_f(filespace_id,ierr);check_err(ierr)
-
-    call h5screate_simple_f(rank,count,memspace_id,ierr);check_err(ierr)
-    call h5dget_space_f(dset_id,filespace_id,ierr);check_err(ierr)
-
-    if (localrank .ne. MPI_UNDEFINED) then
-          call h5sselect_hyperslab_f(filespace_id,H5S_SELECT_SET_F,offset,count,ierr);check_err(ierr)
-    else
-          call h5sselect_none_f(filespace_id,ierr);check_err(ierr)
-          call h5sselect_none_f(memspace_id,ierr);check_err(ierr)
-    endif
-
-    CALL h5pcreate_f(H5P_DATASET_XFER_F, plist_id, ierr);check_err(ierr)
-    CALL h5pset_dxpl_mpio_f(plist_id, MPIO, ierr);check_err(ierr)
-    CALL h5dwrite_f(dset_id, H5T_NATIVE_REAL, local1darray, dims, ierr, &
-               file_space_id = filespace_id, mem_space_id = memspace_id, xfer_prp = plist_id); check_err(ierr)
-
-    call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(desc_id,desctype_id,trim(description),strdims,ierr);check_err(ierr)
-    call h5acreate_f(dset_id,"units",unitstype_id,aspace_id,units_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(units_id,unitstype_id,trim(units),strdims,ierr);check_err(ierr)
-
-    call H5aclose_f (desc_id,ierr);check_err(ierr)
-    call H5aclose_f (units_id,ierr);check_err(ierr)
-    call H5sclose_f (aspace_id,ierr);check_err(ierr)
-    call H5tclose_f (desctype_id,ierr);check_err(ierr)
-    call H5tclose_f (unitstype_id,ierr);check_err(ierr)
-    call h5dclose_f (dset_id,ierr);check_err(ierr)
-    call h5sclose_f (filespace_id,ierr);check_err(ierr)
-    call h5sclose_f (memspace_id,ierr);check_err(ierr)
-    call h5pclose_f (plist_id,ierr);check_err(ierr)
-    if(dbg)    print *,myid,"ORF: Wrote ",trim(varname)
-    return
-
-    end subroutine h5_write_1d_float_collective 
- 
-!-----------------------------------------------------------------------------------MARK
-
-    subroutine h5_write_2d_float_collective(f_id,core2d)
-    implicit none
- 
-    integer(HSIZE_T), DIMENSION(2) :: dims,count
-    integer(HSSIZE_T), DIMENSION(2) :: offset
-    integer(HSIZE_T), DIMENSION(1) :: strdims
-    integer :: arank = 1
-    integer :: rank = 2
-    integer(HSIZE_T), DIMENSION(1) :: adims = (/1/)
-    integer(SIZE_T) :: stringlen
-    integer(HID_T) :: f_id,dset_id,filespace_id,memspace_id,chunk_id,datatype_id
-    integer(HID_T) :: desctype_id,unitstype_id,desc_id,units_id,aspace_id,plist_id
-    integer :: i,j,iix,iiy,ixcore,iycore,ioffset,info
-    real, dimension(ni,nj) :: core2d
-    logical :: iscollective
-
-    if(dbg)    print *,myid,"ORF: Writing ",trim(varname)
-
-    strdims(1)=1
-
-    call h5screate_simple_f(arank,adims,aspace_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
-    call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
-    stringlen = len_trim(description)
-    call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
-    stringlen = len_trim(units)
-    call h5tset_size_f(unitstype_id,stringlen,ierr);check_err(ierr)
-
-
-    dims(1) = nx
-    dims(2) = ny
-
-    CALL h5screate_simple_f(rank, dims, filespace_id, ierr);check_err(ierr)
-    call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,filespace_id,dset_id,ierr);check_err(ierr)!removed chunk_id
-    call h5sclose_f(filespace_id,ierr);check_err(ierr)
-
-    !now memoryspace
-    count(1) = ni
-    count(2) = nj
-
-    offset(1) = (myi-1) * ni
-    offset(2) = (myj-1) * nj
-
-    call h5screate_simple_f(rank,count,memspace_id,ierr);check_err(ierr)
-    CALL h5dget_space_f(dset_id, filespace_id, ierr);check_err(ierr)
-    CALL h5sselect_hyperslab_f (filespace_id, H5S_SELECT_SET_F, offset, count, ierr);check_err(ierr)
-    CALL h5pcreate_f(H5P_DATASET_XFER_F, plist_id, ierr);check_err(ierr)
-    CALL h5pset_dxpl_mpio_f(plist_id, MPIO, ierr);check_err(ierr)
-    CALL h5dwrite_f(dset_id, H5T_NATIVE_REAL, core2d, dims, ierr, &
-         file_space_id = filespace_id, mem_space_id = memspace_id, xfer_prp = plist_id)
-    check_err(ierr)
-    call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(desc_id,desctype_id,description,strdims,ierr);check_err(ierr)
-    call h5acreate_f(dset_id,"units",unitstype_id,aspace_id,units_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-    call h5awrite_f(units_id,unitstype_id,units,strdims,ierr);check_err(ierr)
-
-    call H5aclose_f (desc_id,ierr);check_err(ierr)
-    call H5aclose_f (units_id,ierr);check_err(ierr)
-    call H5sclose_f (aspace_id,ierr);check_err(ierr)
-    call H5tclose_f (desctype_id,ierr);check_err(ierr)
-    call H5tclose_f (unitstype_id,ierr);check_err(ierr)
-    call h5dclose_f (dset_id,ierr);check_err(ierr)
-    call h5pclose_f (plist_id,ierr);check_err(ierr)
-    call h5sclose_f (memspace_id,ierr);check_err(ierr)
-
-    if(dbg)    print *,myid,"ORF: Wrote ",trim(varname)
-    return
-    end subroutine h5_write_2d_float_collective
-
-
-!-----------------------------------------------------------------------------------MARK
      subroutine h5_write_3d_float_scalar(f_id,core3d,mcmtype,accuracy)
      use ISO_C_BINDING
      use HDF5
@@ -556,6 +339,14 @@ subroutine h5_write_val_iamio (f_id,intval,floatval,doubleval)
      real localmax,localmin,globalmax,globalmin
      integer source, dest, tag
      integer, dimension(MPI_STATUS_SIZE) :: mpi_status
+     logical :: lossless,lossy
+
+     lossless=.false.
+     lossy=.true.
+     if(accuracy .lt. 0.0)  then
+         lossless = .true.
+         lossy = .false.
+     endif
 
      rank = 3
 
@@ -607,25 +398,23 @@ iamioandwrite3d: &
          call h5tcopy_f(H5T_NATIVE_CHARACTER,desctype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_CHARACTER,unitstype_id,ierr);check_err(ierr)
          call h5tcopy_f(H5T_NATIVE_REAL,maxmintype_id,ierr);check_err(ierr)
-#ifdef USE_ZFP_COMPRESSION
-         call h5tcopy_f(H5T_NATIVE_DOUBLE,zfpacctype_id,ierr);check_err(ierr)
-#endif
+         if (lossy) call h5tcopy_f(H5T_NATIVE_DOUBLE,zfpacctype_id,ierr);check_err(ierr)
          stringlen = len_trim(description)
          call h5tset_size_f(desctype_id,stringlen,ierr);check_err(ierr)
          stringlen = len_trim(units)
          call h5tset_size_f(unitstype_id,stringlen,ierr);check_err(ierr)
          call h5screate_simple_f(rank,dims,dspace_id,ierr);check_err(ierr)
-#ifdef USE_ZFP_COMPRESSION
          call h5pcreate_f(H5P_DATASET_CREATE_F,chunk_id,ierr);check_err(ierr)
          call h5pset_chunk_f(chunk_id,rank,chunkdims,ierr);check_err(ierr)
-         ierr = h5pset_zfp_accuracy(chunk_id,accuracy);check_err(ierr)
+         if (lossless) then ! gzip level 9
+             call h5pset_deflate_f(chunk_id,9,ierr);check_err(ierr) ! <---- gzip level 9
+         else ! zfp with fixed accuracy
+             ierr = h5pset_zfp_accuracy(chunk_id,accuracy);check_err(ierr)
+         endif
 1010 format(a20," accuracy = ",f10.6)
 !        if(myid.eq.0)write(*,1010)trim(varname),accuracy
 !        print*, myid, trim(varname)
          call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr,dcpl_id=chunk_id);check_err(ierr)
-#else
-         call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr);check_err(ierr)
-#endif
          call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(desc_id,desctype_id,description,strdims,ierr);check_err(ierr)
          call h5acreate_f(dset_id,"units",unitstype_id,aspace_id,units_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
@@ -635,10 +424,8 @@ iamioandwrite3d: &
          call h5acreate_f(dset_id,"localmin",maxmintype_id,aspace_id,localmin_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(localmin_id,maxmintype_id,localmin,strdims,ierr);check_err(ierr)
          call h5dwrite_f(dset_id, H5T_NATIVE_REAL, MCM3d,dims, ierr);check_err(ierr)
-#ifdef USE_ZFP_COMPRESSION
-         call h5acreate_f(dset_id,"zfp_accuracy",zfpacctype_id,aspace_id,zfpacc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
-         call h5awrite_f(zfpacc_id,zfpacctype_id,accuracy,strdims,ierr);check_err(ierr)
-#endif
+         if (lossy) call h5acreate_f(dset_id,"zfp_accuracy",zfpacctype_id,aspace_id,zfpacc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
+         if (lossy) call h5awrite_f(zfpacc_id,zfpacctype_id,accuracy,strdims,ierr);check_err(ierr)
          threedbytes = threedbytes + int(dims(1)*dims(2)*dims(3)*4,kind=8) 
          !4 byte floats, 3D array space. Note, compression will reduce actual space taken by data in file
 
@@ -646,19 +433,15 @@ iamioandwrite3d: &
          call h5aclose_f (units_id,ierr);check_err(ierr)
          call h5sclose_f (aspace_id,ierr);check_err(ierr)
          call h5tclose_f (desctype_id,ierr);check_err(ierr)
-#ifdef USE_ZFP_COMPRESSION
-         call h5aclose_f (zfpacc_id,ierr);check_err(ierr)
-         call h5tclose_f (zfpacctype_id,ierr);check_err(ierr)
-#endif
+         if(lossy) call h5aclose_f (zfpacc_id,ierr);check_err(ierr)
+         if(lossy) call h5tclose_f (zfpacctype_id,ierr);check_err(ierr)
          call h5tclose_f (unitstype_id,ierr);check_err(ierr)
          call h5tclose_f (maxmintype_id,ierr);check_err(ierr)
          call h5aclose_f (localmax_id,ierr);check_err(ierr)
          call h5aclose_f (localmin_id,ierr);check_err(ierr)
          call h5dclose_f (dset_id,ierr);check_err(ierr)
          call h5sclose_f (dspace_id,ierr);check_err(ierr)
-#ifdef USE_ZFP_COMPRESSION
          call h5pclose_f (chunk_id,ierr);check_err(ierr)
-#endif
          if(dbg)     print *,myid,"ORF: Wrote ",trim(varname)
      endif iamioandwrite3d
      return

@@ -821,10 +821,8 @@
       call h5open_f(ierr); check_err(ierr)
 ! You can actually use LOFS without ZFP compression, but it kind of defeats the purpose.
 ! This is also set in the makefile (-DUSE_ZFP_COMPRESSION)
-#ifdef USE_ZFP_COMPRESSION
 !ORF this is temporary to check the plugin approach
       ierr = H5Z_zfp_initialize(); check_err(ierr)
-#endif
 !end LOFS
 
 
