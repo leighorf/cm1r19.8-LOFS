@@ -774,6 +774,51 @@ write_3d_once:    if (wr3d_once) then
         units='/m3'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=ncg_acc)
 
+        varname='qhl_acc'
+        description='qhl zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=qhl_acc)
+
+        varname='ccn_acc'
+        description='ccn zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=ccn_acc)
+
+        varname='crw_acc'
+        description='crw zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=crw_acc)
+
+        varname='cci_acc'
+        description='cci zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=cci_acc)
+
+        varname='csw_acc'
+        description='csw zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=csw_acc)
+
+        varname='chw_acc'
+        description='chw zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=chw_acc)
+
+        varname='chl_acc'
+        description='chl zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=chl_acc)
+
+        varname='vhw_acc'
+        description='vhw zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=vhw_acc)
+
+        varname='vhl_acc'
+        description='vhl zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=vhl_acc)
+
         varname='uinterp_acc'
         description='uinterp zfp accuracy parameter'
         units='m/s'
