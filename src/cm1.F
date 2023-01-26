@@ -3440,7 +3440,8 @@ timestatsend:    IF(timestats.ge.1)THEN
       stop
 
 8778  print *
-      print *,'  8778: error opening namelist.input '
+!      print *,'  8778: error opening namelist.input '
+      print *,'  8778: error opening ', trim(namelist_cmdline)
       print *,'    ... stopping cm1 ... '
       print *
       call stopcm1
