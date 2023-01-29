@@ -630,6 +630,8 @@
         varname="qv"
         description = "total water vapor mixing ratio"
         units = "g/kg"
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
           do k=1,nk
           do j=1,nj
           do i=1,ni
@@ -644,6 +646,8 @@
         varname="qvpert"
         description = "perturbation water vapor mixing ratio"
         units = "g/kg"
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
           do k=1,nk
           do j=1,nj
           do i=1,ni
@@ -659,6 +663,8 @@
     if(imoist.eq.1)then
       do n=nql1,nqs2
       if(n.ne.nqv)then !ORF these are unnecessary calculations if not chosen to write
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
           do k=1,nk
           do j=1,nj
           do i=1,ni
@@ -675,7 +681,7 @@
           if (varname == "qs" .and. output_qs.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qs_acc)
           if (varname == "qg" .and. output_qg.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qg_acc)
 ! NSSL only
-          if (varname == "qhl" .and. output_qhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qg_acc)
+          if (varname == "qhl" .and. output_qhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,qhl_acc)
         endif
       enddo
     endif
@@ -687,6 +693,8 @@
 !ORF now we specify these separately, not as a group
     if(imoist.eq.1)then
       do n=nnc1,nnc2
+!$omp parallel do default(shared)  &
+!$omp private(i,j,k)
           do k=1,nk
           do j=1,nj
           do i=1,ni
@@ -702,15 +710,15 @@
           if (varname == "ncs" .and. output_ncs.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncs_acc)
           if (varname == "ncg" .and. output_ncg.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
 ! NSSL only
-          if (varname == "ccn" .and. output_ccn.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "ccw" .and. output_ccw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "crw" .and. output_crw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "cci" .and. output_cci.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "csw" .and. output_csw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "chw" .and. output_chw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "chl" .and. output_chl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "vhw" .and. output_vhw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
-          if (varname == "vhl" .and. output_vhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ncg_acc)
+          if (varname == "ccn" .and. output_ccn.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ccn_acc)
+          if (varname == "ccw" .and. output_ccw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,ccw_acc)
+          if (varname == "crw" .and. output_crw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,crw_acc)
+          if (varname == "cci" .and. output_cci.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,cci_acc)
+          if (varname == "csw" .and. output_csw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,csw_acc)
+          if (varname == "chw" .and. output_chw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,chw_acc)
+          if (varname == "chl" .and. output_chl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,chl_acc)
+          if (varname == "vhw" .and. output_vhw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vhw_acc)
+          if (varname == "vhl" .and. output_vhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vhl_acc)
 
       enddo
 !     if(myid.eq.0)print*,"We just dumped number concentration data"

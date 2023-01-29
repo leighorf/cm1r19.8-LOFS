@@ -784,6 +784,11 @@ write_3d_once:    if (wr3d_once) then
         units='/m3'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=ccn_acc)
 
+        varname='ccw_acc'
+        description='ccw zfp accuracy parameter'
+        units='/m3'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=ccw_acc)
+
         varname='crw_acc'
         description='crw zfp accuracy parameter'
         units='/m3'

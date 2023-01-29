@@ -9,6 +9,7 @@ CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
 OUTPUTOPT =  -DCOREX=2 -DCOREY=4
 OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000
+#OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000 -DMICROBURST
 
 LINKOPTS  = -L$(ZFP)/lib -L$(HDF5ZFP)/lib  -lh5zzfp -lzfp
 
