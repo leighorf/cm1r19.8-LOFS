@@ -39,7 +39,7 @@
       real, intent(in) , dimension(ibdv:iedv,jbdv:jedv,kbdv:kedv,nwdiag) :: wdiag
       real, intent(in) , dimension(ibdp:iedp,jbdp:jedp,kbdp:kedp,npdiag) :: pdiag !shared memory only
 
-      integer i,j,k,n
+      integer i,j,k,n,lastmphys
 
     nkwrite=nk !ORF TODO fix
     call h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,thv0,prs0,rho0,qv0,u0,v0)
@@ -564,6 +564,14 @@
         var3d(:,:,:) = tkea(1:ni,1:nj,1:nk)
         call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,tke_acc)
     endif
+!
+!    if(output_w.eq.1) then
+!        varname="w"
+!        description = "w, on native C grid"
+!        units = "m/s"
+!        var3d(:,:,:)=wa(1:ni,1:nj,1:nk)
+!        call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,w_acc)
+!    endif
 
     if(output_kh.eq.1) then
         varname="khh"
@@ -692,7 +700,9 @@
 
 !ORF now we specify these separately, not as a group
     if(imoist.eq.1)then
-      do n=nnc1,nnc2
+      lastmphys=nnc2!Morrison
+      if(ptype.eq.27)lastmphys=nvl2!NSSL, save volume data
+      do n=nnc1,lastmphys
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
           do k=1,nk
