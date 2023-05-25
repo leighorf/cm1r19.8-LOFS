@@ -1473,7 +1473,7 @@
         zr_wnudge     =   1500.0                   ! z_r (m), radius of nudging in z
 
         alpha_wnudge  =  var3                      ! alpha (1/s), inverse e-folding time for nudging
-        wmax_wnudge   =     10.0                   ! w_max (m/s), max value of w to nudge towards
+        wmax_wnudge   =  var5                      ! w_max (m/s), max value of w to nudge towards
 
 !ORF These are original
 !       t1_wnudge     =    900.0                   ! time (s) to start ramping down nudging
@@ -1481,8 +1481,8 @@
 
 !ORF This, I think, is what wforce.F did
 !Trying to reproduced Tusc04
-        t1_wnudge     =    900.0                   ! time (s) to start ramping down nudging
-        t2_wnudge     =    900.0                   ! time (s) to turn off nudging
+        t1_wnudge     =  var6                      ! time (s) to start ramping down nudging
+        t2_wnudge     =  var7                      ! time (s) to turn off nudging
 
 
         ! Don't change anything below here:

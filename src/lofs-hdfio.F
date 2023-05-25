@@ -117,6 +117,7 @@ end subroutine wr4dsimpler
 ! myMCMcomm is set correctly) and assembles it into a continuous chunk
 ! of memory that can be written to history files
 
+!ORF TODO OMP this again, check for sanity/performance improvement
 
 subroutine h5_gather_3d(core3d,mcmtype)
     implicit none
