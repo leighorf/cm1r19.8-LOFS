@@ -461,7 +461,7 @@
 
                         where:  1 = free slip
                                 2 = no slip
-                               11 = zero-flux (from cm1r16)
+                               11 = zero surface strain (from cm1r16)
 
  irbc - For bc=2, this is the type of radiative scheme to use:
                     1 = Klemp-Wilhelmson (1978) on large steps
