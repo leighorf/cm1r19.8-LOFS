@@ -3813,52 +3813,53 @@
                               ims = ib ,ime = ie , jms = jb ,jme = je, kms = kb,kme = ke,  &  
                               its = 1 ,ite = ni, jts = 1,jte = nj, kts = 1,kte = nk)
 
-!         ELSEIF ( ptype .eq. 29 ) THEN ! 3-moment
-!             call nssl_2mom_driver(                          &
-!                               th  = dum4,                   &
-!                               qv  = q3d(ib,jb,kb, 1),       &
-!                               qc  = q3d(ib,jb,kb, 2),       &
-!                               qr  = q3d(ib,jb,kb, 3),       &
-!                               qi  = q3d(ib,jb,kb, 4),       &
-!                               qs  = q3d(ib,jb,kb, 5),       &
-!                               qh  = q3d(ib,jb,kb, 6),       &
-!                               qhl = q3d(ib,jb,kb, 7),       &
-!                               cn  = q3d(ib,jb,kb, 8),       &
-!                               ccw = q3d(ib,jb,kb, 9),       &
-!                               crw = q3d(ib,jb,kb,10),       &
-!                               cci = q3d(ib,jb,kb, 11),      &
-!                               csw = q3d(ib,jb,kb, 12),      &
-!                               chw = q3d(ib,jb,kb, 13),      &
-!                               chl = q3d(ib,jb,kb, 14),      &
-!                               zrw = q3d(ib,jb,kb, 15),      &
-!                               zhw = q3d(ib,jb,kb, 16),      &
-!                               zhl = q3d(ib,jb,kb, 17),      &
-!                               vhw = q3d(ib,jb,kb, 18),      &
-!                               vhl = q3d(ib,jb,kb, 19),      &
-!                               pii = dum1,                   &
-!                               p   =  prs,                   &
-!                               w   =  w3d,                   &
-!                               dn  =  rho,                   &
-!                               dz  =  dum2,                  &
-!                               dtp = dt,                     &
-!                               itimestep = nstep,            &
-!                              RAIN = rain,                   &
-!                              nrain = nrain,                 &
-!                              prate = prate,                 &
-!                              dbz = qdiag(ibdq,jbdq,kbdq,qd_dbz), &
-!                              ruh = ruh, rvh = rvh, rmh = rmh, &
-!                              dx = dx, dy = dy,              &
-!                              tcond = qbudget(1),            &
-!                              tevac = qbudget(2),            &
-!                              tevar = qbudget(5),            &
-!                              train = qbudget(6),            &
-!                              rr    = dum3,                  &
-!                              diagflag = getdbz,             &
-!                  ib3d=ib3d,ie3d=ie3d,jb3d=jb3d,je3d=je3d,kb3d=kb3d,ke3d=ke3d, &
-!                  nout3d=nout3d,out3d=out3d,                                 &
-!                              ims = ib ,ime = ie , jms = jb ,jme = je, kms = kb,kme = ke,  &  
-!                              its = 1 ,ite = ni, jts = 1,jte = nj, kts = 1,kte = nk)
-!          
+!ORF 2023-08-03 uncommented, trying with latest code
+         ELSEIF ( ptype .eq. 29 ) THEN ! 3-moment
+             call nssl_2mom_driver(                          &
+                               th  = dum4,                   &
+                               qv  = q3d(ib,jb,kb, 1),       &
+                               qc  = q3d(ib,jb,kb, 2),       &
+                               qr  = q3d(ib,jb,kb, 3),       &
+                               qi  = q3d(ib,jb,kb, 4),       &
+                               qs  = q3d(ib,jb,kb, 5),       &
+                               qh  = q3d(ib,jb,kb, 6),       &
+                               qhl = q3d(ib,jb,kb, 7),       &
+                               cn  = q3d(ib,jb,kb, 8),       &
+                               ccw = q3d(ib,jb,kb, 9),       &
+                               crw = q3d(ib,jb,kb,10),       &
+                               cci = q3d(ib,jb,kb, 11),      &
+                               csw = q3d(ib,jb,kb, 12),      &
+                               chw = q3d(ib,jb,kb, 13),      &
+                               chl = q3d(ib,jb,kb, 14),      &
+                               zrw = q3d(ib,jb,kb, 15),      &
+                               zhw = q3d(ib,jb,kb, 16),      &
+                               zhl = q3d(ib,jb,kb, 17),      &
+                               vhw = q3d(ib,jb,kb, 18),      &
+                               vhl = q3d(ib,jb,kb, 19),      &
+                               pii = dum1,                   &
+                               p   =  prs,                   &
+                               w   =  w3d,                   &
+                               dn  =  rho,                   &
+                               dz  =  dum2,                  &
+                               dtp = dt,                     &
+                               itimestep = nstep,            &
+                              RAIN = rain,                   &
+                              nrain = nrain,                 &
+                              prate = prate,                 &
+                              dbz = qdiag(ibdq,jbdq,kbdq,qd_dbz), &
+                              ruh = ruh, rvh = rvh, rmh = rmh, &
+                              dx = dx, dy = dy,              &
+                              tcond = qbudget(1),            &
+                              tevac = qbudget(2),            &
+                              tevar = qbudget(5),            &
+                              train = qbudget(6),            &
+                              rr    = dum3,                  &
+                              diagflag = getdbz,             &
+                  ib3d=ib3d,ie3d=ie3d,jb3d=jb3d,je3d=je3d,kb3d=kb3d,ke3d=ke3d, &
+                  nout3d=nout3d,out3d=out3d,                                 &
+                              ims = ib ,ime = ie , jms = jb ,jme = je, kms = kb,kme = ke,  &  
+                              its = 1 ,ite = ni, jts = 1,jte = nj, kts = 1,kte = nk)
+          
           ENDIF
 
         IF(eqtset.eq.2)THEN
