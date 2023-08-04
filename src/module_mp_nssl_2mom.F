@@ -2574,9 +2574,9 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
      nx = ite-its+1
      ny = 1         ! set up as 2D slabs
      nz = kte-kts+1
+     ngs = Max(nz,64)
 !ORF 2023-08-04 Suggested by Ted M.
-!    ngs = Max(nz,64)
-     ngs = 64
+!    ngs = 64
      
      IF ( .not. flag_ccn ) THEN
        renucfrac = 1.0
@@ -2638,11 +2638,12 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
           thproclocal(:,:) = 0.0
           proctot(:) = 0
 
-!$OMP PARALLEL DO DEFAULT(SHARED) &
-!$OMP PRIVATE(ix,jy,kz,xfall,axtra2d,an,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, &
-!$OMP t00,t77,dbz2d,vzf2d,dn1,pn,wn,dz2d,dz2dinv,ltemq,ssival,dp1,    &
-!$OMP elec2,thproclocal,t8s,t9s,il,n,ssat,loopcnt,   &
-!$OMP qvapor,ssifac,ancuten,rainprod2d,evapprod2d,kediagloc)
+!   ORF      Comment out for now as we figure out how to do this right
+!   !$OMP PARALLEL DO DEFAULT(SHARED) &
+!   !$OMP PRIVATE(ix,jy,kz,xfall,axtra2d,an,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, &
+!   !$OMP t00,t77,dbz2d,vzf2d,dn1,pn,wn,dz2d,dz2dinv,ltemq,ssival,dp1,    &
+!   !$OMP elec2,thproclocal,t8s,t9s,il,n,ssat,loopcnt,   &
+!   !$OMP qvapor,ssifac,ancuten,rainprod2d,evapprod2d,kediagloc)
 
 ! need to figure out how to treat thproc: with a critical section?
 
@@ -3324,7 +3325,8 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
        ENDDO
 
       IF ( nproc > 1 ) THEN
-!$OMP CRITICAL      
+!ORF comment out for now
+!   !$OMP CRITICAL      
 
        DO k = kms,kme
         DO n = 1,nproc
@@ -3332,7 +3334,7 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
         ENDDO
        ENDDO
 
-!$OMP END CRITICAL
+!   !$OMP END CRITICAL
       ENDIF
 
      ENDDO ! jy
