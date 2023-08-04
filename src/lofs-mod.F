@@ -30,15 +30,38 @@ integer :: nkwrite
 !history writes undertaken, which is not really useful for anything
 integer :: wr3dindex
 
-namelist /lofs/ save_full_domain,save_full_vertical_extent, &
-save_all_times,save_x0,save_y0,save_y1,save_x1, nkwrite_val,wr2dfreq, &
-time_levels_per_histfile,save_start_time,prespert_swath_start_time,u_adjust,v_adjust,adjust_box_speed_from_restart
 
 !double precision :: dtl_dbl_orf
 logical :: save_full_domain,save_full_vertical_extent,save_all_times
 integer :: save_x0, save_y0, save_y1, save_x1
 integer :: nkwrite_val, time_levels_per_histfile
 real :: numconcfreq,save_start_time,prespert_swath_start_time,wr2dfreq
+real u_adjust,v_adjust
+logical :: firstvisit,newcycle,writingrestart,nobuffer,adjust_box_speed_from_restart
+
+namelist /lofs/ save_full_domain,save_full_vertical_extent, &
+save_all_times,save_x0,save_y0,save_y1,save_x1, nkwrite_val,wr2dfreq, &
+time_levels_per_histfile,save_start_time,prespert_swath_start_time,u_adjust,v_adjust,adjust_box_speed_from_restart
+
+double precision :: u_acc,v_acc,w_acc,uinterp_acc,vinterp_acc,winterp_acc, &
+upert_acc,vpert_acc,th_acc,thpert_acc,thrhopert_acc,prs_acc,prespert_acc,pi_acc,pipert_acc, &
+rho_acc,rhopert_acc,tke_acc,km_acc,kh_acc,qv_acc,qvpert_acc,dbz_acc, &
+qc_acc,qr_acc,qi_acc,qs_acc,qg_acc,nci_acc,ncr_acc,ncs_acc,ncg_acc, &
+qhl_acc,ccn_acc,ccw_acc,crw_acc,cci_acc,csw_acc,chw_acc,chl_acc,vhw_acc,vhl_acc,&
+xvort_acc,yvort_acc,zvort_acc,vortmag_acc,zvort_tilt_acc,zvort_stretch_acc,&
+wb_hadv_acc,wb_vadv_acc,wb_hturb_acc,wb_vturb_acc,wb_hidiff_acc,wb_vidiff_acc,&
+wb_hediff_acc,wb_vediff_acc,wb_pgrad_acc,wb_rdamp_acc,wb_buoy_acc,vb_hadv_acc,&
+vb_vadv_acc,vb_hturb_acc,vb_vturb_acc,vb_hidiff_acc,vb_vidiff_acc,vb_hediff_acc,&
+vb_vediff_acc,vb_pgrad_acc,vb_rdamp_acc,vb_cor_acc,vb_pbl_acc,vb_subs_acc,&
+ub_hadv_acc,ub_vadv_acc,ub_hturb_acc,ub_vturb_acc,ub_hidiff_acc,ub_vidiff_acc,&
+ub_hediff_acc,ub_vediff_acc,ub_pgrad_acc,ub_rdamp_acc,ub_cor_acc,ub_pbl_acc,&
+ub_subs_acc,qvb_hadv_acc,qvb_vadv_acc,qvb_hturb_acc,qvb_vturb_acc,qvb_hdiff_acc,&
+qvb_vdiff_acc,qvb_hediff_acc,qvb_vediff_acc,qvb_mp_acc,qvb_pbl_acc,qvb_subs_acc,&
+qt_cond_acc,qt_evac_acc,qt_evar_acc,qt_dep_acc,qt_subl_acc,ptb_hadv_acc,&
+ptb_vadv_acc,ptb_hturb_acc,ptb_vturb_acc,ptb_hidiff_acc,ptb_vidiff_acc,ptb_hediff_acc,&
+ptb_vediff_acc,ptb_mp_acc,ptb_rdamp_acc,ptb_rad_acc,ptb_div_acc,ptb_diss_acc,&
+ptb_pbl_acc,ptb_subs_acc,td_efall_acc,tt_cond_acc,tt_evac_acc,tt_evar_acc,&
+tt_dep_acc,tt_subl_acc,tt_melt_acc,tt_frz_acc
 
 namelist /zfp_accuracy/ u_acc,v_acc,w_acc,uinterp_acc,vinterp_acc,winterp_acc,&
 upert_acc,vpert_acc,th_acc,thpert_acc,thrhopert_acc,prs_acc,prespert_acc,pi_acc,pipert_acc,&
@@ -60,25 +83,6 @@ ptb_vediff_acc,ptb_mp_acc,ptb_rdamp_acc,ptb_rad_acc,ptb_div_acc,ptb_diss_acc,&
 ptb_pbl_acc,ptb_subs_acc,td_efall_acc,tt_cond_acc,tt_evac_acc,tt_evar_acc,&
 tt_dep_acc,tt_subl_acc,tt_melt_acc,tt_frz_acc
 
-double precision :: u_acc,v_acc,w_acc,uinterp_acc,vinterp_acc,winterp_acc, &
-upert_acc,vpert_acc,th_acc,thpert_acc,thrhopert_acc,prs_acc,prespert_acc,pi_acc,pipert_acc, &
-rho_acc,rhopert_acc,tke_acc,km_acc,kh_acc,qv_acc,qvpert_acc,dbz_acc, &
-qc_acc,qr_acc,qi_acc,qs_acc,qg_acc,nci_acc,ncr_acc,ncs_acc,ncg_acc, &
-qhl_acc,ccn_acc,ccw_acc,crw_acc,cci_acc,csw_acc,chw_acc,chl_acc,vhw_acc,vhl_acc,&
-xvort_acc,yvort_acc,zvort_acc,vortmag_acc,zvort_tilt_acc,zvort_stretch_acc,&
-wb_hadv_acc,wb_vadv_acc,wb_hturb_acc,wb_vturb_acc,wb_hidiff_acc,wb_vidiff_acc,&
-wb_hediff_acc,wb_vediff_acc,wb_pgrad_acc,wb_rdamp_acc,wb_buoy_acc,vb_hadv_acc,&
-vb_vadv_acc,vb_hturb_acc,vb_vturb_acc,vb_hidiff_acc,vb_vidiff_acc,vb_hediff_acc,&
-vb_vediff_acc,vb_pgrad_acc,vb_rdamp_acc,vb_cor_acc,vb_pbl_acc,vb_subs_acc,&
-ub_hadv_acc,ub_vadv_acc,ub_hturb_acc,ub_vturb_acc,ub_hidiff_acc,ub_vidiff_acc,&
-ub_hediff_acc,ub_vediff_acc,ub_pgrad_acc,ub_rdamp_acc,ub_cor_acc,ub_pbl_acc,&
-ub_subs_acc,qvb_hadv_acc,qvb_vadv_acc,qvb_hturb_acc,qvb_vturb_acc,qvb_hdiff_acc,&
-qvb_vdiff_acc,qvb_hediff_acc,qvb_vediff_acc,qvb_mp_acc,qvb_pbl_acc,qvb_subs_acc,&
-qt_cond_acc,qt_evac_acc,qt_evar_acc,qt_dep_acc,qt_subl_acc,ptb_hadv_acc,&
-ptb_vadv_acc,ptb_hturb_acc,ptb_vturb_acc,ptb_hidiff_acc,ptb_vidiff_acc,ptb_hediff_acc,&
-ptb_vediff_acc,ptb_mp_acc,ptb_rdamp_acc,ptb_rad_acc,ptb_div_acc,ptb_diss_acc,&
-ptb_pbl_acc,ptb_subs_acc,td_efall_acc,tt_cond_acc,tt_evac_acc,tt_evar_acc,&
-tt_dep_acc,tt_subl_acc,tt_melt_acc,tt_frz_acc
 
 logical :: we_are_dumping_hist_data,we_are_doing_new_cycle,we_are_saving_2d_data
 logical :: we_are_dumping_restarts
@@ -121,7 +125,6 @@ integer :: n_cmd_args
 real :: cm1D_b   ! we pass Morrison's D_b value from var4 in namelist
 real :: cm1NImax ! we pass Morrison's NImax from var5 in namelist
 
-logical :: firstvisit,newcycle,writingrestart,nobuffer,adjust_box_speed_from_restart
 
 integer :: i3d_time_index
 integer :: threedbytes  ! Keep track of how much raw 3D data written to buffered files
@@ -145,7 +148,6 @@ real thrand,frand
 
 !double precision dbldt
 
-real u_adjust,v_adjust
 
 ! ORF 3/13/18
 ! There is probably a more elegant way to handle this, but hey, it's
