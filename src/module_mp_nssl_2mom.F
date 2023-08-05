@@ -2638,12 +2638,11 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
           thproclocal(:,:) = 0.0
           proctot(:) = 0
 
-!   ORF      Comment out for now as we figure out how to do this right
-!   !$OMP PARALLEL DO DEFAULT(SHARED) &
-!   !$OMP PRIVATE(ix,jy,kz,xfall,axtra2d,an,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, &
-!   !$OMP t00,t77,dbz2d,vzf2d,dn1,pn,wn,dz2d,dz2dinv,ltemq,ssival,dp1,    &
-!   !$OMP elec2,thproclocal,t8s,t9s,il,n,ssat,loopcnt,   &
-!   !$OMP qvapor,ssifac,ancuten,rainprod2d,evapprod2d,kediagloc)
+!$OMP PARALLEL DO DEFAULT(SHARED) &
+!$OMP PRIVATE(ix,jy,kz,xfall,axtra2d,an,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, &
+!$OMP t00,t77,dbz2d,vzf2d,dn1,pn,wn,dz2d,dz2dinv,ltemq,ssival,dp1,    &
+!$OMP elec2,thproclocal,t8s,t9s,il,n,ssat,loopcnt,   &
+!$OMP qvapor,ssifac,ancuten,rainprod2d,evapprod2d,kediagloc,alpha2d,hailmax1d,hailmaxk1)
 
 ! need to figure out how to treat thproc: with a critical section?
 
@@ -3325,8 +3324,7 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
        ENDDO
 
       IF ( nproc > 1 ) THEN
-!ORF comment out for now
-!   !$OMP CRITICAL      
+!$OMP CRITICAL      
 
        DO k = kms,kme
         DO n = 1,nproc
@@ -3334,7 +3332,7 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
         ENDDO
        ENDDO
 
-!   !$OMP END CRITICAL
+!$OMP END CRITICAL
       ENDIF
 
      ENDDO ! jy
