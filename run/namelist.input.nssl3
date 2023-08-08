@@ -1,8 +1,3 @@
-!ORF 2023-03-01 Template file for 75m MKOW NSSL microphysics ensemble
-!ORF extended vertical domain to 30 km and used tall sounding
-!ORF forgot to extend zd upwards. Also, the short runs have no rayleigh
-!ORF damping at all
-
  &param0
  nx           =      162,
  ny           =      160,
@@ -48,7 +43,8 @@
  prespert_swath_start_time = 1200.0,
  /
 
-&zfp_accuracy
+! -1 is lossless zfp compression
+&zfp_accuracy 
 u_acc =           1.0e-2,
 v_acc =           1.0e-2,
 w_acc =           1.0e-2,
@@ -250,8 +246,8 @@ tt_frz_acc      = 1.0e-1,
  zd      = 25000.0,
  xhd     = 100000.0,
  alphobc = 60.0,
- umove   = 12.2, !mkow values
- vmove   = 12.5, !mkow values
+ umove   = 12.2,
+ vmove   = 12.5,
  v_t     =      7.0,
  l_h     =    100.0,
  lhref1  =    100.0,
@@ -337,7 +333,7 @@ tt_frz_acc      = 1.0e-1,
  var1      =   0.0,       !0.0
  var2      =   -10000.0,  !0.0
  var3      =   4.0,       !0.5 for alpha or warm bubble thpert max (iinit)
- var4      =   620.0e-6,  !300.0e-6
+ var4      =   620.0e-6,  !300.0e-6 - ignored for NSSL (Morrison only)
  var5      =   0.0,
  var6      =   0.0,
  var7      =   0.0,
@@ -372,10 +368,10 @@ tt_frz_acc      = 1.0e-1,
  output_qr        = 1,
  output_qs        = 1,
  output_qg        = 1,
- output_nci       = 0, !zero for NSSL
- output_ncr       = 0, !zero for NSSL
- output_ncs       = 0, !zero for NSSL
- output_ncg       = 0, !zero for NSSL
+ output_nci       = 0, !Morrison only
+ output_ncr       = 0, !Morrison only
+ output_ncs       = 0, !Morrison only
+ output_ncg       = 0, !Morrison only
 !nssl only
  output_qhl       = 1,
  output_ccn       = 1,
@@ -472,6 +468,7 @@ tt_frz_acc      = 1.0e-1,
  output_pdcomp    = 0,
  /
 
+!ORF this is ignored by cm1-LOFS
  &param16
  restart_format   = 1,
  restart_filetype = 2,
@@ -558,8 +555,7 @@ tt_frz_acc      = 1.0e-1,
  &nssl2mom_params
    alphah  = 0.0,     ! shape parameter of graupel
    alphahl = 0.0,   ! shape parameter of hail
-   ccn     = 0.5e9  ! base ccn conc (MKOW)
-   cnor    = 8.e6,  ! for single moment only (MKOW)
-   cnoh    = 4.e4,  ! for single moment only (MKOW)
+   ccn     = 0.5e9  ! base ccn conc
+   cnor    = 8.e6,  ! for single moment only
+   cnoh    = 4.e4,  ! for single moment only
  /
-
