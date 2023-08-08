@@ -106,7 +106,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,thv0,prs0,rho0,qv0,u0,v0)
             CALL h5pclose_f(plist_id, ierr); check_err(ierr)
             if(iprintinfo) write(6,1729) iotime
 !1729 format("New (empty) LOFS files created on disk at t = ",f9.3)
-            if(iprintinfo) call FFLUSH(6)
+!           if(iprintinfo) call FFLUSH(6)
     
             call h5gcreate_f(file_3d_id,grid_group_name,grid_group_id,ierr); check_err(ierr)
             if(ierr.lt.0) then
@@ -200,7 +200,7 @@ subroutine h5_prelim(xh,xf,yh,yf,zh,zf,pi0,th0,thv0,prs0,rho0,qv0,u0,v0)
             CALL h5pset_fapl_core_f(plist_id, blocksize, backing_store, ierr); check_err(ierr)
             if(iprintinfo) write(6,1729) iotime
 !1729 format("New (empty) LOFS files created on disk at t = ",f9.3)
-            if(iprintinfo) call FFLUSH(6)
+!           if(iprintinfo) call FFLUSH(6)
 
             call h5fcreate_f(trim(filename),H5F_ACC_TRUNC_F,file_3d_id,ierr,creation_prp=fcpl_id,access_prp=plist_id);check_err(ierr)
             CALL h5pclose_f(fcpl_id, ierr); check_err(ierr)

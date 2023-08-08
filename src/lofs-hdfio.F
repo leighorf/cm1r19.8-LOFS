@@ -6,7 +6,7 @@ subroutine wr1dsimpler (f_id,var,niwrite)
     real, intent(in), dimension(niwrite) :: var
     integer(HID_T) :: f_id,dspace_id,dset_id
     integer(HSIZE_T), DIMENSION(1) :: dims
-    if(myid.eq.0)print *,"varname = ",varname
+    if(iprintinfo)print *,"varname = ",varname
     rank=1
     dims(1)=niwrite
     call h5screate_simple_f(rank,dims,dspace_id,ierr); check_err(ierr)
@@ -416,8 +416,9 @@ iamioandwrite3d: &
              ierr = h5pset_zfp_accuracy(chunk_id,accuracy);check_err(ierr)
          endif
 1010 format(a20," accuracy = ",f10.6)
+1011 format(a)
 !        if(myid.eq.0)write(*,1010)trim(varname),accuracy
-         print*, myid, trim(varname)
+         if(iprintinfo) write(*,1011,advance="no") trim(varname)//' '
          call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr,dcpl_id=chunk_id);check_err(ierr)
          call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(desc_id,desctype_id,description,strdims,ierr);check_err(ierr)

@@ -2072,8 +2072,7 @@ ptype5b: if (ptype.eq.5) then
 
 endif thbudget
 
-
-
+if(iprintinfo)write(*,*) !Newline needed here, don't as ;)
 ! ORF this is freaking important... now with fixing restart/missing single
 ! time step problem. We also set firstvisit to .true. in solve.
 if (nobuffer.or.we_are_dumping_restarts) then
