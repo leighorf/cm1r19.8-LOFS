@@ -1167,7 +1167,7 @@ MODULE module_mp_nssl_2mom
 ! #####################################################################
 ! #####################################################################
        SUBROUTINE nssl_2mom_init(  &
-     & ipctmp, mixphase,ihvol,idoniconlytmp,eqtset_tmp, index_ccna, index_cina, outfile, &
+     & ipctmp, mixphase,ihvol,idoniconlytmp,eqtset_tmp,namelist_filename, index_ccna, index_cina, outfile, &
      & nssl_graupelfallfac, &
      & nssl_hailfallfac, &
      & nssl_ehw0, &
@@ -1214,6 +1214,11 @@ MODULE module_mp_nssl_2mom
 
    integer, intent(in) :: ipctmp,mixphase
    integer, optional, intent(in) :: ihvol
+      !ORF we need to pass the namelist file
+      !Just make sure strsize=512
+      integer,parameter::strsize=512
+      character(len=strsize) namelist_filename
+
    logical, optional, intent(in) :: idoniconlytmp
 
     integer :: igvol_local = 1
@@ -1238,7 +1243,6 @@ MODULE module_mp_nssl_2mom
 
       real :: alpjj, alpii, xnuii, xnujj
       integer :: ii, jj
-     
 
      turn_on_ccna = .false.
      turn_on_cina = .false.
@@ -1334,9 +1338,9 @@ MODULE module_mp_nssl_2mom
 
       
 
+!ORF need to pass namelist file name
 
-
-      open(15,file='namelist.input',status='old',form='formatted',action='read')
+      open(15,file=namelist_filename,status='old',form='formatted',action='read')
       rewind(15)
       read(15,NML=nssl_mp_params,iostat=istat)
       close(15)

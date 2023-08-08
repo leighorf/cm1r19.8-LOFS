@@ -3106,10 +3106,7 @@
           if(dowr) write(outfile,*) 'Calling index_module_init'
           if(dowr) write(outfile,*)
 
-!          write(0,*) 'option 26 currently not available'
-!          call stopcm1
-         CALL nssl_2mom_init(ipctmp=5,mixphase=0,ihvol=-1,eqtset_tmp=eqtset)
-!          call INDEX_MODULE_INIT(ptype)
+          CALL nssl_2mom_init(ipctmp=5,mixphase=0,ihvol=-1,eqtset_tmp=eqtset,namelist_filename=namelist_cmdline)
 
           if(dowr) write(outfile,*)
           if(dowr) write(outfile,*) 'Returned from index_module_init'
@@ -3263,18 +3260,7 @@
 
           budrain = 6
 
-          !----- initialize the ZVD scheme -----
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Calling graupel_init'
-!          if(dowr) write(outfile,*)
-
-!          call INDEX_MODULE_INIT(ptype)
-         CALL nssl_2mom_init(ipctmp=5,mixphase=0,ihvol=1,eqtset_tmp=eqtset)
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Returned from graupel_init'
-!          if(dowr) write(outfile,*)
+          CALL nssl_2mom_init(ipctmp=5,mixphase=0,ihvol=1,eqtset_tmp=eqtset,namelist_filename=namelist_cmdline)
 
           if(dowr) write(outfile,*)
           if(dowr) write(outfile,*) ' ----------------------------------------------- '
@@ -3379,18 +3365,7 @@
 
           budrain = 6
 
-          !----- initialize the ZVD scheme -----
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Calling graupel_init'
-!          if(dowr) write(outfile,*)
-
-         CALL nssl_2mom_init(ipctmp=0,mixphase=0,ihvol=-1,eqtset_tmp=eqtset)
-
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Returned from graupel_init'
-!          if(dowr) write(outfile,*)
+          CALL nssl_2mom_init(ipctmp=0,mixphase=0,ihvol=-1,eqtset_tmp=eqtset,namelist_filename=namelist_cmdline)
 
           if(dowr) write(outfile,*)
           if(dowr) write(outfile,*) ' ----------------------------------------------- '
@@ -3521,7 +3496,8 @@
 
           budrain = 6
 
-          CALL nssl_2mom_init(ipctmp=8,mixphase=0,ihvol=1,eqtset_tmp=eqtset)
+          CALL nssl_2mom_init(ipctmp=8,mixphase=0,ihvol=1,eqtset_tmp=eqtset,namelist_filename=namelist_cmdline)
+
           if(dowr) write(outfile,*)
           if(dowr) write(outfile,*) ' ----------------------------------------------- '
           if(dowr) write(outfile,*) '  using NSSL 3-moment scheme  '
