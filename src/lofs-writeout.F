@@ -698,10 +698,14 @@
 ! we_are_dumping_numconcdata is set in solve next to we_are_dumping_hist_data
 !write(*,1103)myid,we_are_dumping_numconc_data
 
-!ORF now we specify these separately, not as a group
+! ORF now we specify these separately, not as a group
+! I should really just make this one big microphyiscs loop instead of
+! two, this is legacy from back when I only saved groups of variables
+! (i.e., mixing ratios only, or number concentrations only), not individual
+! variables
     if(imoist.eq.1)then
       lastmphys=nnc2!Morrison
-      if(ptype.eq.27)lastmphys=nvl2!NSSL, save volume data
+      if(ptype.ge.27)lastmphys=nvl2!NSSL, save volume data
       do n=nnc1,lastmphys
 !$omp parallel do default(shared)  &
 !$omp private(i,j,k)
@@ -729,10 +733,10 @@
           if (varname == "chl" .and. output_chl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,chl_acc)
           if (varname == "vhw" .and. output_vhw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vhw_acc)
           if (varname == "vhl" .and. output_vhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,vhl_acc)
-
+          if (varname == "zrw" .and. output_zrw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,zrw_acc)
+          if (varname == "zhw" .and. output_zhw.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,zhw_acc)
+          if (varname == "zhl" .and. output_zhl.eq.1) call h5_write_3d_float_scalar(threed_group_id,var3d,ninjnktype,zhl_acc)
       enddo
-!     if(myid.eq.0)print*,"We just dumped number concentration data"
-!     if(myid.eq.0)call FFLUSH(6)
     endif
 
 ! Calc_dbz should be called of course, check for this in r18
@@ -759,6 +763,12 @@
 ! stagger points are duplicated on adjacent ranks anyway
 
 ! But, we should have the option interpolating to the scalar mesh when we read these into hdf2nc or whatever
+
+!ORF 2023-08-08
+!Note: LOFS (hdf2nc) offers the option of calculating these from model prognostics just
+!like CM1, so you may not need to save any of these, just save the variables that are
+!needed to calculate them.
+
 wbudget: if (output_wbudget.eq.1) then
 
 !$omp parallel do default(shared)  &

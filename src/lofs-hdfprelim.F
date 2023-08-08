@@ -786,43 +786,58 @@ write_3d_once:    if (wr3d_once) then
 
         varname='ccw_acc'
         description='ccw zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=ccw_acc)
 
         varname='crw_acc'
         description='crw zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=crw_acc)
 
         varname='cci_acc'
         description='cci zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=cci_acc)
 
         varname='csw_acc'
         description='csw zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=csw_acc)
 
         varname='chw_acc'
         description='chw zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=chw_acc)
 
         varname='chl_acc'
         description='chl zfp accuracy parameter'
-        units='/m3'
+        units='/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=chl_acc)
 
         varname='vhw_acc'
         description='vhw zfp accuracy parameter'
-        units='/m3'
+        units='m^3/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=vhw_acc)
 
         varname='vhl_acc'
         description='vhl zfp accuracy parameter'
-        units='/m3'
+        units='m^3/kg'
         call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=vhl_acc)
+
+        varname='zrw_acc'
+        description='zrw zfp accuracy parameter'
+        units='Z/m^3/kg'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=zrw_acc)
+
+        varname='zhw_acc'
+        description='zhw zfp accuracy parameter'
+        units='Z/m^3/kg'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=zhw_acc)
+
+        varname='zhl_acc'
+        description='zhl zfp accuracy parameter'
+        units='Z/m^3/kg'
+        call h5_write_val_iamio(zfp_accuracy_group_id,doubleval=zhl_acc)
 
         varname='uinterp_acc'
         description='uinterp zfp accuracy parameter'

@@ -147,9 +147,10 @@
               output_zeta_min_1000,output_zeta_min_2000, output_prespert,     &
               output_qc,output_qi,output_qr,output_qs,output_qg,              &
               output_nci,output_ncr,output_ncs,output_ncg,                    &
-!next two lines are for NSSL microphysics only
+!next three lines are for NSSL microphysics only
               output_qhl,output_ccn,output_ccw,output_crw,output_cci,         &
               output_csw,output_chw,output_chl,output_vhw,output_vhl,         &
+              output_zrw,output_zhw,output_zhl,                               &
               output_rain_accum,output_hwin_max_sfc,output_zeta_max_sfc,      &
               output_zeta_min_sfc,output_prespert_min_sfc,                    &
               output_snapshot_thrho_sfc,output_snapshot_prespert_sfc,         &
@@ -299,9 +300,10 @@
               output_zeta_min_1000,output_zeta_min_2000, output_prespert,     &
               output_qc,output_qi,output_qr,output_qs,output_qg,              &
               output_nci,output_ncr,output_ncs,output_ncg,                    &
-!next two lines are for NSSL microphysics only
+!next three lines are for NSSL microphysics only
               output_qhl,output_ccn,output_ccw,output_crw,output_cci,         &
               output_csw,output_chw,output_chl,output_vhw,output_vhl,         &
+              output_zrw,output_zhw,output_zhl,                               &
               output_rain_accum,output_hwin_max_sfc,output_zeta_max_sfc,      &
               output_zeta_min_sfc,output_prespert_min_sfc,                    &
               output_snapshot_thrho_sfc,output_snapshot_prespert_sfc,         &

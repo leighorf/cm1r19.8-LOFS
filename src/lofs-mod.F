@@ -48,6 +48,7 @@ upert_acc,vpert_acc,th_acc,thpert_acc,thrhopert_acc,prs_acc,prespert_acc,pi_acc,
 rho_acc,rhopert_acc,tke_acc,km_acc,kh_acc,qv_acc,qvpert_acc,dbz_acc, &
 qc_acc,qr_acc,qi_acc,qs_acc,qg_acc,nci_acc,ncr_acc,ncs_acc,ncg_acc, &
 qhl_acc,ccn_acc,ccw_acc,crw_acc,cci_acc,csw_acc,chw_acc,chl_acc,vhw_acc,vhl_acc,&
+zrw_acc,zhw_acc,zhl_acc,&
 xvort_acc,yvort_acc,zvort_acc,vortmag_acc,zvort_tilt_acc,zvort_stretch_acc,&
 wb_hadv_acc,wb_vadv_acc,wb_hturb_acc,wb_vturb_acc,wb_hidiff_acc,wb_vidiff_acc,&
 wb_hediff_acc,wb_vediff_acc,wb_pgrad_acc,wb_rdamp_acc,wb_buoy_acc,vb_hadv_acc,&
@@ -68,6 +69,7 @@ upert_acc,vpert_acc,th_acc,thpert_acc,thrhopert_acc,prs_acc,prespert_acc,pi_acc,
 rho_acc,rhopert_acc,tke_acc,km_acc,kh_acc,qv_acc,qvpert_acc,dbz_acc,&
 qc_acc,qr_acc,qi_acc,qs_acc,qg_acc,nci_acc,ncr_acc,ncs_acc,ncg_acc,&
 qhl_acc,ccn_acc,ccw_acc,crw_acc,cci_acc,csw_acc,chw_acc,chl_acc,vhw_acc,vhl_acc,&
+zrw_acc,zhw_acc,zhl_acc,&
 xvort_acc,yvort_acc,zvort_acc,vortmag_acc,zvort_tilt_acc,zvort_stretch_acc,&
 wb_hadv_acc,wb_vadv_acc,wb_hturb_acc,wb_vturb_acc,wb_hidiff_acc,wb_vidiff_acc,&
 wb_hediff_acc,wb_vediff_acc,wb_pgrad_acc,wb_rdamp_acc,wb_buoy_acc,vb_hadv_acc,&

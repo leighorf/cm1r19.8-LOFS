@@ -3479,7 +3479,7 @@
           qunit(14) = '#/kg'
           qunit(15) = 'Z/m^3/kg'
           qunit(16) = 'Z/m^3/kg'
-          qunit(17) = 'Z/m^3/lg'
+          qunit(17) = 'Z/m^3/kg'
           qunit(18) = 'm^3/kg'
           qunit(19) = 'm^3/kg'
 
@@ -3521,18 +3521,14 @@
 
           budrain = 6
 
-          !----- initialize the ZVD scheme -----
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Calling graupel_init'
-!          if(dowr) write(outfile,*)
-
-!          call INDEX_MODULE_INIT(ptype)
-         CALL nssl_2mom_init(ipctmp=8,mixphase=0,ihvol=1,eqtset_tmp=eqtset)
-
-!          if(dowr) write(outfile,*)
-!          if(dowr) write(outfile,*) 'Returned from graupel_init'
-!          if(dowr) write(outfile,*)
+          CALL nssl_2mom_init(ipctmp=8,mixphase=0,ihvol=1,eqtset_tmp=eqtset)
+          if(dowr) write(outfile,*)
+          if(dowr) write(outfile,*) ' ----------------------------------------------- '
+          if(dowr) write(outfile,*) '  using NSSL 3-moment scheme  '
+          if(dowr) write(outfile,*) '  Graupel and hail; graupel and hail density predicted '
+          if(dowr) write(outfile,*) '  Rain, graupel, hail reflectivity moments also predicted  '
+          if(dowr) write(outfile,*) ' ----------------------------------------------- '
+          if(dowr) write(outfile,*)
 
 !-----------------------------------------------------------------------
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

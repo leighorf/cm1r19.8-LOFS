@@ -125,6 +125,9 @@ subroutine bcast_lofs()
       call MPI_Bcast(output_chl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_vhw    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_vhl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_Bcast(output_zrw    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_Bcast(output_zhw    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
+      call MPI_Bcast(output_zhl    ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_rain_accum, 1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_hwin_max_sfc ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
       call MPI_Bcast(output_w_max_0500 ,1,MPI_INTEGER,0,MPI_COMM_CM1,ierr)
@@ -525,6 +528,7 @@ subroutine set_MCM_params(xh,yh,xf,yf)
     integer, dimension(:), allocatable :: MCMrootranks,MCMrootranks_old,myMCMxranks,myMCMyranks,x1dranks,y1dranks
     integer, dimension(1) :: rootonlyranks
     integer :: e_id, n_id, e_id_world, n_id_world
+    logical :: iwrite3d_global
 
     cores_per_MCM = corex * corey
     myfulloffseti = (myi-1)*ni !used in 2d collective write
@@ -574,6 +578,28 @@ if (iamio) then
             iwrite3d = .true.
       endif
 endif
+
+!Check to make sure we are actually writing output data (in case
+!we chose to not save the full domain and we miss everything...
+!yes, this has happened and caused me confusion LOL
+
+call MPI_REDUCE(iwrite3d,iwrite3d_global,1,MPI_LOGICAL,MPI_LOR,0,MPI_COMM_CM1,ierr)
+
+if(myid.eq.0) then
+	  if(.not.iwrite3d_global) then
+  	     print *,"Oh no! We are not saving any history data!"
+	     print *,"Make sure your save parameters in the LOFS block of the namelist file make sense"
+		 print *,"save_full_domain = ",save_full_domain
+		 print *,"save_x0 = ",save_x0
+		 print *,"save_x1 = ",save_x1
+		 print *,"save_y0 = ",save_y0
+		 print *,"save_y1 = ",save_y1
+		 print *,"nx = ",nx
+		 print *,"ny = ",ny
+		 call stopcm1
+	  endif
+endif
+
 
 ! Since I print I/O status info but don't always save at rank 0; hence
 ! in order to see from within the 3D save stuff you have to pick a

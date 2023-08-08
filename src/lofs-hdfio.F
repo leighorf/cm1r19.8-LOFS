@@ -117,8 +117,6 @@ end subroutine wr4dsimpler
 ! myMCMcomm is set correctly) and assembles it into a continuous chunk
 ! of memory that can be written to history files
 
-!ORF TODO OMP this again, check for sanity/performance improvement
-
 subroutine h5_gather_3d(core3d,mcmtype)
     implicit none
 
@@ -129,6 +127,9 @@ subroutine h5_gather_3d(core3d,mcmtype)
     call MPI_Gather(core3d,1,mcmtype,MCM3dbuf,1,mcmtype,0,myMCMcomm,ierr);check_err(ierr)
 
     if (iamio.and.iwrite3d) then
+!ORF this cannot be parallelized, as it reads a global (to a node) array sequentially. The
+!only way to do it in parallel would be to read from MCM3dbuf concurrently between
+!threads or to not do the gather first, but do normal message passing (bleah)
         do iycore=0,corey-1
             do ixcore=0,corex-1
                 ioffset=ni*nj*nk*(ixcore + iycore*corex)
@@ -416,7 +417,7 @@ iamioandwrite3d: &
          endif
 1010 format(a20," accuracy = ",f10.6)
 !        if(myid.eq.0)write(*,1010)trim(varname),accuracy
-!        print*, myid, trim(varname)
+         print*, myid, trim(varname)
          call h5dcreate_f(f_id,trim(varname),H5T_NATIVE_REAL,dspace_id,dset_id,ierr,dcpl_id=chunk_id);check_err(ierr)
          call h5acreate_f(dset_id,"description",desctype_id,aspace_id,desc_id,ierr,H5P_DEFAULT_F,H5P_DEFAULT_F);check_err(ierr)
          call h5awrite_f(desc_id,desctype_id,description,strdims,ierr);check_err(ierr)
