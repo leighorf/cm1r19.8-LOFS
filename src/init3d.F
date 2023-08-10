@@ -82,7 +82,7 @@
       use misclibs
       use cm1libs , only : rslf,rsif
       use bc_module
-      use module_mp_nssl_2mom, only: ccn, lccn
+      use module_mp_nssl_2mom, only: ccn, lccn, irenuc
       use poiss_module
       use parcel_module , only : getparcelzs
 !LOFS already above in module_lofs
@@ -261,8 +261,13 @@
       do k=kbm,kem
       do j=jbm,jem
       do i=ibm,iem
-       qa (i,j,k,lccn-1) = ccn/1.225
-       q3d(i,j,k,lccn-1) = ccn/1.225
+      IF ( irenuc < 5 ) THEN ! number of unactivated ccn
+         qa (i,j,k,lccn-1) = ccn/1.225
+         q3d(i,j,k,lccn-1) = ccn/1.225
+      ELSE ! treat as number of activated ccn
+         qa (i,j,k,lccn-1) = 0.0
+         q3d(i,j,k,lccn-1) = 0.0
+      ENDIF
       enddo
       enddo
       enddo
