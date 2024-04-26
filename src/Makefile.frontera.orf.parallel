@@ -4,12 +4,12 @@ ZFP=/home1/06618/orf/build/2020/zfp-0.5.5
 HDF5ZFP=/home1/06618/orf/H5Z-ZFP-install
 FC=h5pfc
 OPTS =  -I$(HDF5ZFP)/include
-OPTS += -O3 -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -qopenmp
+OPTS += -O3 -g -xHost -ip -assume byterecl -fp-model precise -ftz -no-fma -qopenmp
 CPP  = cpp -C -P -traditional -Wno-invalid-pp-token -ffreestanding
 DM = -DMPI 
 OUTPUTOPT =  -DCOREX=2 -DCOREY=4
-OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000
-#OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000 -DMICROBURST
+#OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000
+OUTPUTOPT += -DFFLUSH=flush -DNFILES_PER_WRITE=5000 -DMICROBURST
 
 LINKOPTS  = -L$(ZFP)/lib -L$(HDF5ZFP)/lib  -lh5zzfp -lzfp
 
