@@ -814,24 +814,29 @@
 #ifdef MICROBURST
       rtime=sngl(mtime)
 
-      q1forc = 0.0;
-      q2forc = 0.0;
+      q1forc = 0.0
+      q2forc = 0.0
 
 ! cm2.2
 ! first mb
-      if (rtime > 0.0) q1forc = 0.5 * (1.0 - cos (3.14159 * rtime / 120.0));
-      if (rtime > 120.0) q1forc = 1.0;
-      if (rtime > 720.0) q1forc = 0.5 * (1.0 + cos (3.14159 * (rtime - 720.0) / 120.0));
-      if (rtime > 840.0) q1forc = 0.0;
+      if (rtime > 0.0) q1forc = 0.5 * (1.0 - cos (3.14159 * rtime / 120.0))
+      if (rtime > 120.0) q1forc = 1.0
+      if (rtime > 720.0) q1forc = 0.5 * (1.0 + cos (3.14159 * (rtime - 720.0) / 120.0))
+      if (rtime > 840.0) q1forc = 0.0
+
+! ORF NEWRITE leave forcing on for gust 
+! Nope... gets too damned cold
 
 ! second mb
 ! 2 minutes after first (120 seconds):
       ot = 120.0
-      if (rtime > 0.0+ot) q2forc = 0.5 * (1.0 - cos (3.14159 * (rtime-ot) / 120.0));
-      if (rtime > 120.0+ot) q2forc = 1.0;
-      if (rtime > 720.0+ot) q2forc = 0.5 * (1.0 + cos (3.14159 * ((rtime-ot) - 720.0) / 120.0));
-      if (rtime > 840.0+ot) q2forc = 0.0;
+      if (rtime > 0.0+ot) q2forc = 0.5 * (1.0 - cos (3.14159 * (rtime-ot) / 120.0))
+      if (rtime > 120.0+ot) q2forc = 1.0
+      if (rtime > 720.0+ot) q2forc = 0.5 * (1.0 + cos (3.14159 * ((rtime-ot) - 720.0) / 120.0))
+      if (rtime > 840.0+ot) q2forc = 0.0
 
+!ORF turn off second forcing for NEWRITE stuff
+      q2forc = 0.0
 #endif
 
 

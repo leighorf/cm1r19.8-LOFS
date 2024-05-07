@@ -452,7 +452,7 @@
                         where:  1 = free slip
                                 2 = no slip
                                 3 = semi-slip (i.e., partial slip)
-                               11 = zero-flux (from cm1r16)
+                               11 = zero-strain (from cm1r16)
    (NOTE: for bbc=3, user must also set some options in param12 section below)
           [see variables that mention "bbc=3" below]
           

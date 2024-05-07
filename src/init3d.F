@@ -132,7 +132,7 @@
       integer i,j,k,kk,l,n,nn,nbub,nloop
       integer ic,jc,ifoo,jfoo
       real ric,rjc
-      real xc,yc,zc,bhrad,bvrad,bptpert,beta,tmp,zdep
+      real xc,yc,zc,bhrad,bxrad,byrad,bvrad,bptpert,beta,tmp,zdep
       real thvnew(nk),pinew(nk)
       real thl,ql,qt,th1,t1,ql2,rm,cpm,v1,v2,th2
 
@@ -735,7 +735,10 @@
         ric     =  var3 !Refer to namelist
         rjc     =  var4
         zc      =  var5
-        bhrad   =  1200.0
+!       bhrad   =  1200.0
+!       bvrad   =  1800.0
+        bxrad   =  var9
+        byrad   =  var10
         bvrad   =  1800.0
         bptpert =  var1 ! K/s not K
 
@@ -744,8 +747,8 @@
         do i=1,ni
         ! 3D
           beta=sqrt(                             &
-                    ((xh(i)-ric)/bhrad)**2       &
-                   +((yf(j)-rjc)/bhrad)**2       &
+                    ((xh(i)-ric)/bxrad)**2       &
+                   +((yf(j)-rjc)/byrad)**2       &
                    +((zh(i,j,k)-zc)/bvrad)**2)
 ! 2D
 !         beta=sqrt(                             &
