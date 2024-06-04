@@ -217,6 +217,12 @@
       double precision :: tstart,tend
 #endif
 
+! ORF 2024-06-04
+! Code to insert warm bubble after reading from restart
+! This is to allow a warm bubble to be added to a turbulent
+! boundary layer, read from restarts
+      real ric,rjc,zc,bhrad,bvrad,bptpert,beta
+
 !----------------------------------------------------------------------
 
       nstep = 0
@@ -1788,6 +1794,47 @@ dbldt=dble(dtl) ! dtl is thankfully only used in namelist.input file... all thes
 
       ENDIF read_restart
 
+!! ORF 2024-06-04 here is where we insert a warm bubble if iinit.eq.1
+!! For wforcing we don't need to add this extra code because the actual forcing happens as a function of time in sound.F
+!! Because init3d happens before read_restart, our bubble would get nuked by the restart file
+!! We add the bubble to the existing tha field
+
+      IF(iinit.eq.1)THEN
+
+        if(dowr) write(outfile,*)
+        if(dowr) write(outfile,*) '  Warm bubble'
+        if(dowr) write(outfile,*)
+! ORF put warm bubble location and amplitude parameters in var1-3 from namelist
+        ric     =  var1  ! center of bubble in x-direction (m)
+        rjc     =  var2  ! center of bubble in y-direction (m)
+        zc      =   1400.0  ! height of center of bubble above ground (m)
+        bhrad   =  10000.0  ! horizontal radius of bubble (m)
+        bvrad   =   1400.0  ! vertical radius of bubble (m)
+        bptpert =     var3  ! max potential temp perturbation (K)
+
+        ! By default, CM1 sets qv=constant at a constant height level for 
+        ! this value of iinit.  If you would rather have rh=constant at 
+        ! a constant height level, then set this to .true.
+!       maintain_rh = .false.
+
+        do k=1,nk
+        do j=1,nj
+        do i=1,ni
+          beta=sqrt(                             &
+                    ((xh(i)-ric)/bhrad)**2       &
+                   +((yh(j)-rjc)/bhrad)**2       &
+                   +((zh(i,j,k)-zc)/bvrad)**2)
+! ORF 2024-06-04 add to turbulent field, don't overwrite
+          if(beta.lt.1.0)then
+            tha(i,j,k)=tha(i,j,k)+bptpert*(cos(0.5*pi*beta)**2)
+!         else
+!           tha(i,j,k)=0.0
+          endif
+        enddo
+        enddo
+        enddo
+    endif
+!ORF 2024-06-04 END WARM BUBBLE CODE
 
       IF( doturbdiag )THEN
         IF( restarted .and. turbfrq.gt.1.0e-6 )THEN

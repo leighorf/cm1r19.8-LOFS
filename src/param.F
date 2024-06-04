@@ -689,10 +689,12 @@
         print *
         print *,'  This is a restart. '
         print *,'  so, setting iinit to 0 '
+        print *,'  ORF: Except this is modified code to iinit over a turbulent BL '
+        print *,'  ORF: Keeping iinit forcing '
         print *
         print *,'  -------------------------------- '
         endif
-        iinit = 0
+!       iinit = 0
       ENDIF
       !-----
       IF( (sfcmodel.eq.2.or.sfcmodel.eq.3.or.sfcmodel.eq.4) .and. isfcflx.eq.0 )THEN
