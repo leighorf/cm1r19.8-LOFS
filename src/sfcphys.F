@@ -148,9 +148,8 @@
     !$omp private(i,j,wlast,n,var,rznt)
     do j=j1,j2
     do i=i1,i2
-!     cd(i,j) = max(1.0e-10,cnstcd)
-!     znt(i,j) = 10.0/(exp(karman/sqrt(cd(i,j)))-1.0)
-      znt(i,j) = 0.01 * cnstcd !ORF cnstcd is really z0 in cm!
+      cd(i,j) = max(1.0e-10,cnstcd)
+      znt(i,j) = 10.0/(exp(karman/sqrt(cd(i,j)))-1.0)
       rznt = 1.0/znt(i,j)
       var = alog((10.0+znt(i,j))*rznt)/alog((za(i,j)+znt(i,j))*rznt)
       u10(i,j) = u1(i,j)*var
