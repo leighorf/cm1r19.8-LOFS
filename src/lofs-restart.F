@@ -602,6 +602,12 @@ endif
             read_2d_array_restart(pdata,H5T_NATIVE_REAL)
       endif
 
+! ORF 2024-06-04
+! If you want to switch from periodic to radiation boundary conditions
+! running from restarts, you need to comment out the following 4 blocks of code
+! This might be something to do when running on top of a turbulent boundary layer
+! that has already been spun up with periodic boundary conditions but you want radiative for the main simulation
+
       if (irbc.eq.4.and.ibw.eq.1) then
             read_2d_array_restart(radbcw,H5T_NATIVE_REAL)
       endif
